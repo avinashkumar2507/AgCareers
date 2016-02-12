@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="7702" systemVersion="14C1514" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7701"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="iN0-l3-epB">
+            <rect key="frame" x="0.0" y="0.0" width="480" height="480"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="FH8-6w-3R5">
+                    <rect key="frame" x="0.0" y="0.0" width="480" height="480"/>
+                    <subviews>
+                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Splash_bg" translatesAutoresizingMaskIntoConstraints="NO" id="4Hp-kk-JUl">
+                            <rect key="frame" x="0.0" y="0.0" width="480" height="480"/>
+                        </imageView>
+                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="logo_New" translatesAutoresizingMaskIntoConstraints="NO" id="acJ-Ii-44x">
+                            <rect key="frame" x="131" y="191" width="218" height="98"/>
+                            <constraints>
+                                <constraint firstAttribute="width" constant="255" id="Qdv-pU-w8c"/>
+                                <constraint firstAttribute="height" constant="110" id="Z0E-jF-bHf"/>
+                                <constraint firstAttribute="width" constant="218" id="aaL-Mo-Ook">
+                                    <variation key="heightClass=regular" constant="275"/>
+                                </constraint>
+                                <constraint firstAttribute="height" constant="98" id="p37-e2-jty">
+                                    <variation key="heightClass=regular" constant="130"/>
+                                </constraint>
+                                <constraint firstAttribute="height" constant="60" id="p4P-Tq-xMp"/>
+                                <constraint firstAttribute="width" constant="210" id="tji-A5-g4g"/>
+                            </constraints>
+                            <variation key="default">
+                                <mask key="constraints">
+                                    <exclude reference="Qdv-pU-w8c"/>
+                                    <exclude reference="Z0E-jF-bHf"/>
+                                    <exclude reference="p4P-Tq-xMp"/>
+                                    <exclude reference="tji-A5-g4g"/>
+                                </mask>
+                            </variation>
+                            <variation key="heightClass=regular-widthClass=regular">
+                                <mask key="constraints">
+                                    <include reference="Qdv-pU-w8c"/>
+                                    <include reference="Z0E-jF-bHf"/>
+                                    <exclude reference="p4P-Tq-xMp"/>
+                                    <exclude reference="tji-A5-g4g"/>
+                                </mask>
+                            </variation>
+                        </imageView>
+                    </subviews>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    <constraints>
+                        <constraint firstItem="4Hp-kk-JUl" firstAttribute="leading" secondItem="FH8-6w-3R5" secondAttribute="leading" id="PR0-jE-uAz"/>
+                        <constraint firstItem="4Hp-kk-JUl" firstAttribute="top" secondItem="FH8-6w-3R5" secondAttribute="top" id="QN7-kw-92a"/>
+                        <constraint firstAttribute="centerY" secondItem="acJ-Ii-44x" secondAttribute="centerY" id="QY1-SQ-xPX"/>
+                        <constraint firstAttribute="bottom" secondItem="4Hp-kk-JUl" secondAttribute="bottom" id="SgZ-ed-d79"/>
+                        <constraint firstAttribute="trailing" secondItem="4Hp-kk-JUl" secondAttribute="trailing" id="hin-8w-ybD"/>
+                        <constraint firstAttribute="centerX" secondItem="acJ-Ii-44x" secondAttribute="centerX" id="u3M-LF-sxV"/>
+                    </constraints>
+                </view>
+            </subviews>
+            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+            <constraints>
+                <constraint firstAttribute="bottom" secondItem="FH8-6w-3R5" secondAttribute="bottom" id="9se-yf-lgp"/>
+                <constraint firstItem="FH8-6w-3R5" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="DyI-Zj-EHK"/>
+                <constraint firstItem="FH8-6w-3R5" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="kDq-Od-B3y"/>
+                <constraint firstAttribute="trailing" secondItem="FH8-6w-3R5" secondAttribute="trailing" id="tHX-6y-fTe"/>
+            </constraints>
+            <nil key="simulatedStatusBarMetrics"/>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <point key="canvasLocation" x="548" y="455"/>
+        </view>
+    </objects>
+    <resources>
+        <image name="Splash_bg" width="750" height="1334"/>
+        <image name="logo_New" width="581" height="236"/>
+    </resources>
+</document>

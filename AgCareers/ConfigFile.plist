@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>WebServiceURL</key>
+	<string>http://dev.agcareers.farmsstaging.com/mobilews/WebService/NewJobSearch.asmx/</string>
+	<key>BaseHost</key>
+	<string>dev.agcareers.farmsstaging.com</string>
+	<key>MorePage</key>
+	<string>http://dev.m.agcareers.farmsstaging.com/</string>
+	<key>SearchThisForNewChange</key>
+	<string>agcareers.farmsstaging.com</string>
+</dict>
+</plist>
