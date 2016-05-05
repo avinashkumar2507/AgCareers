@@ -26,7 +26,7 @@ BOOL flagCareersTypeApplyDetails        = FALSE;
 BOOL flagIndustryTypeApplyDetails       = FALSE;
 BOOL flagGetApplyDetails                = FALSE;
 BOOL flagSaveMemberDetailsApplyDetails  = FALSE;
-
+BOOL flagApplyNewJobDetails = FALSE;
 NSString *stringIdExperienceApplyDetails       = @"";
 NSString *stringIdOccupationApplyDetails       = @"";
 NSString *stringIdMinimumEductionApplyDetails  = @"";
@@ -716,7 +716,7 @@ NSString *stringIdIndustryApplyDetails         = @"";
 - (IBAction)buttonActionApplyOnline:(id)sender {
     [self callWebServiceNewJobApply];
 }
-BOOL flagApplyNewJobDetails = FALSE;
+
 -(void)callWebServiceNewJobApply {
     
     Reachability *reach = [Reachability reachabilityForInternetConnection];

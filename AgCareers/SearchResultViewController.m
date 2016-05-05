@@ -22,7 +22,10 @@
 NSInteger selectedSegment        = 0;
 NSString *stringEmpRec = @"0";
 BOOL SAVE_FLAG = FALSE;
+int empoloyerJobCount;
+int recruiterJobCount;
 BOOL flagForgotPasswordSearchResult = FALSE;
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.title = @"Results";
@@ -117,7 +120,7 @@ BOOL flagForgotPasswordSearchResult = FALSE;
     } else if ([segue.identifier isEqualToString:@"SegueCreateJobSearchResult"] ){
         CreateProfileViewController *createProfileViewController = [segue destinationViewController];
         createProfileViewController.stringEmailIDCreateProfile = @"";
-
+        
     }else{
         
         JobDetailsViewController *jobDetailsViewController = [segue destinationViewController];
@@ -158,11 +161,11 @@ BOOL flagForgotPasswordSearchResult = FALSE;
             [self forgotPassword];
         }
         if (buttonIndex == 3) {
-
+            
             AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication]delegate];
             appDelegate.stringApplyWhileCreating = @"OnlyCreating";
             appDelegate.stringATSJob = @"";
-
+            
             [self performSegueWithIdentifier:@"SegueCreateJobSearchResult" sender:self];
         }
     }
@@ -390,6 +393,11 @@ BOOL flagLogin = FALSE;
 
 #pragma mark response
 -(void)receiveJsonResponse:(NSDictionary*)responseDict withSuccess:(BOOL)successBool{
+    
+    //    {
+    //        d = "{\"JobsList\":null,\"EMPJOBCOUNT\":null,\"RECJOBCOUNT\":null,\"ID\":0,\"ID2\":0,\"ReferredBy\":null,\"Success\":false,\"ErrorMsg\":\"Can not convert Integer to String.\"}";
+    //    }
+    
     if (SAVE_FLAG==TRUE) {
         SAVE_FLAG = FALSE;
         [HUD hide:YES];
@@ -418,6 +426,7 @@ BOOL flagLogin = FALSE;
         if ([[[JSONDict11 valueForKey:@"ErrorFlag"]objectAtIndex:0] isEqualToString:@"Success"]==TRUE) {
             [[NSUserDefaults standardUserDefaults]setObject:[[JSONDict11 valueForKey:@"ErrorFlag"]objectAtIndex:0] forKey:@"SuceessStatus"];
             [[NSUserDefaults standardUserDefaults]setObject:[[JSONDict11 valueForKey:@"Message"]objectAtIndex:0] forKey:@"UserId"];
+            [[NSUserDefaults standardUserDefaults]setObject:[[JSONDict11 valueForKey:@"Email"]objectAtIndex:0] forKey:@"UserEmail"];
             [[NSUserDefaults standardUserDefaults]synchronize];
             [self saveSearchFilter];
         }else{
@@ -444,111 +453,100 @@ BOOL flagLogin = FALSE;
         JSONDict = [NSJSONSerialization JSONObjectWithData: [[responseDict objectForKey:@"d"] dataUsingEncoding:NSUTF8StringEncoding]
                                                    options: NSJSONReadingMutableContainers
                                                      error: &error];
-        //[[arrayResult objectAtIndex:0]valueForKey:@"TOTALJOBS"]
-        //[[arrayResult objectAtIndex:0]valueForKey:@"EMPJOBCOUNT"]
-        //[[arrayResult objectAtIndex:0]valueForKey:@"RECJOBCOUNT"]
-        //if ([[JSONDict valueForKey:@"JobsList"]count]==0) {
-        // }else{
         
-        if ([stringEmpRec isEqualToString:@"0"]) {
-            [arrayResult addObjectsFromArray:[JSONDict valueForKey:@"JobsList"]];
-            if ([arrayResult count]==0) {
-                
-                NSString *stringEmployer = [NSString stringWithFormat:@"Employer Jobs (%@)", [JSONDict valueForKey:@"EMPJOBCOUNT"]];
-                NSString *stringRecruiter = [NSString stringWithFormat:@"Recruiter Jobs (%@)", [JSONDict valueForKey:@"RECJOBCOUNT"]];
-                
-                [segmentControl  setTitle:stringEmployer forSegmentAtIndex:0];
-                [segmentControl setTitle:stringRecruiter forSegmentAtIndex:1];
-                
-                int totalJobCount = [[JSONDict valueForKey:@"EMPJOBCOUNT"] intValue]+ [[JSONDict valueForKey:@"RECJOBCOUNT"] intValue];
-                
-                self.title = [NSString stringWithFormat:@" %d Results ",totalJobCount];//@"Results";
+        
+        if ([[JSONDict valueForKey:@"Success"]intValue]==1){
+            
+            
+            if ([stringEmpRec isEqualToString:@"0"]) {
+                [arrayResult addObjectsFromArray:[JSONDict valueForKey:@"JobsList"]];
+                if ([arrayResult count]==0) {
+                    
+                    NSString *stringEmployer = [NSString stringWithFormat:@"Employer Jobs (%@)", [JSONDict valueForKey:@"EMPJOBCOUNT"]];
+                    NSString *stringRecruiter = [NSString stringWithFormat:@"Recruiter Jobs (%@)", [JSONDict valueForKey:@"RECJOBCOUNT"]];
+                    
+                    [segmentControl  setTitle:stringEmployer forSegmentAtIndex:0];
+                    [segmentControl setTitle:stringRecruiter forSegmentAtIndex:1];
+                    
+                    int totalJobCount = [[JSONDict valueForKey:@"EMPJOBCOUNT"] intValue]+ [[JSONDict valueForKey:@"RECJOBCOUNT"] intValue];
+                    
+                    self.title = [NSString stringWithFormat:@" %d Results ",totalJobCount];//@"Results";
+                }else {
+                    
+                    int empoloyerJobCount = [[[arrayResult objectAtIndex:0]valueForKey:@"EMPJOBCOUNT"] intValue];
+                    int recruiterJobCount = [[[arrayResult objectAtIndex:0]valueForKey:@"RECJOBCOUNT"] intValue];
+                    
+                    if (empoloyerJobCount == 0 && recruiterJobCount == 0) {
+                        NSString *employerCountString = @"Employer Jobs";
+                        NSString *recruiterCountString = [NSString stringWithFormat:@"Recruiter Jobs (%d)",recruiterJobCount];
+                        
+                        [segmentControl  setTitle:employerCountString forSegmentAtIndex:0];
+                        [segmentRecruiter setTitle:recruiterCountString forSegmentAtIndex:1];
+                    }else {
+                        NSString *employerCountString = [NSString stringWithFormat:@"Employer Jobs (%d)",empoloyerJobCount];
+                        NSString *recruiterCountString = [NSString stringWithFormat:@"Recruiter Jobs (%d)",recruiterJobCount];
+                        
+                        [segmentControl  setTitle:employerCountString forSegmentAtIndex:0];
+                        [segmentControl setTitle:recruiterCountString forSegmentAtIndex:1];
+                    }
+                    
+                    long resultCount = empoloyerJobCount+recruiterJobCount;
+                    
+                    if (resultCount == 0) {
+                        self.title = @"Results";
+                    }else {
+                        self.title = [NSString stringWithFormat:@"%ld Results",resultCount];
+                    }
+                    
+                    [tableViewResult reloadData];
+                }
             }else {
                 
-                int empoloyerJobCount = [[[arrayResult objectAtIndex:0]valueForKey:@"EMPJOBCOUNT"] intValue];
-                int recruiterJobCount = [[[arrayResult objectAtIndex:0]valueForKey:@"RECJOBCOUNT"] intValue];
+                [arrayRecruiter addObjectsFromArray:[JSONDict valueForKey:@"JobsList"]];
                 
-                if (empoloyerJobCount == 0 && recruiterJobCount == 0) {
-                    NSString *employerCountString = @"Employer Jobs";
-                    NSString *recruiterCountString = [NSString stringWithFormat:@"Recruiter Jobs (%d)",recruiterJobCount];
+                if ([arrayRecruiter count]==0) {
                     
-                    [segmentControl  setTitle:employerCountString forSegmentAtIndex:0];
-                    [segmentRecruiter setTitle:recruiterCountString forSegmentAtIndex:1];
-                }else {
-                    NSString *employerCountString = [NSString stringWithFormat:@"Employer Jobs (%d)",empoloyerJobCount];
-                    NSString *recruiterCountString = [NSString stringWithFormat:@"Recruiter Jobs (%d)",recruiterJobCount];
+                    NSString *stringEmployer = [NSString stringWithFormat:@"Employer Jobs (%@)", [JSONDict valueForKey:@"EMPJOBCOUNT"]];
+                    NSString *stringRecruiter = [NSString stringWithFormat:@"Recruiter Jobs (%@)", [JSONDict valueForKey:@"RECJOBCOUNT"]];
                     
-                    [segmentControl  setTitle:employerCountString forSegmentAtIndex:0];
-                    [segmentControl setTitle:recruiterCountString forSegmentAtIndex:1];
-                }
-                
-                long resultCount = empoloyerJobCount+recruiterJobCount;
-                
-                if (resultCount == 0) {
-                    self.title = @"Results";
+                    [segmentRecruiter  setTitle:stringEmployer forSegmentAtIndex:0];
+                    [segmentRecruiter setTitle:stringRecruiter forSegmentAtIndex:1];
+                    int totalJobCount = [[JSONDict valueForKey:@"EMPJOBCOUNT"] intValue]+ [[JSONDict valueForKey:@"RECJOBCOUNT"] intValue];
+                    self.title = [NSString stringWithFormat:@" %d Results ",totalJobCount];//@"Results";
                 }else {
-                    self.title = [NSString stringWithFormat:@"%ld Results",resultCount];
+                    
+                    int empoloyerJobCount = [[[arrayRecruiter objectAtIndex:0]valueForKey:@"EMPJOBCOUNT"]intValue];
+                    int recruiterJobCount = [[[arrayRecruiter objectAtIndex:0]valueForKey:@"RECJOBCOUNT"]intValue];
+                    
+                    if (empoloyerJobCount == 0 && recruiterJobCount == 0) {
+                        NSString *employerCountString = @"Employer Jobs";
+                        NSString *recruiterCountString = [NSString stringWithFormat:@"Recruiter Jobs (%d)",recruiterJobCount];
+                        
+                        [segmentControl  setTitle:employerCountString forSegmentAtIndex:0];
+                        [segmentRecruiter setTitle:recruiterCountString forSegmentAtIndex:1];
+                    }else{
+                        NSString *employerCountString = [NSString stringWithFormat:@"Employer Jobs (%d)",empoloyerJobCount];
+                        NSString *recruiterCountString = [NSString stringWithFormat:@"Recruiter Jobs (%d)",recruiterJobCount];
+                        
+                        [segmentRecruiter  setTitle:employerCountString forSegmentAtIndex:0];
+                        [segmentRecruiter setTitle:recruiterCountString forSegmentAtIndex:1];
+                    }
+                    
+                    long resultCount = empoloyerJobCount+recruiterJobCount;
+                    if (resultCount == 0) {
+                        self.title = @"Results";
+                    }else {
+                        self.title = [NSString stringWithFormat:@"%ld Results",resultCount];
+                    }
+                    [tableViewRecruiter reloadData];
                 }
-                
-                [tableViewResult reloadData];
             }
-        }else {
+        }else{
             
-            [arrayRecruiter addObjectsFromArray:[JSONDict valueForKey:@"JobsList"]];
-            
-            if ([arrayRecruiter count]==0) {
-                //buttonLoadMoreRecruiter.titleLabel.text = @"No result found for given keyword";
-                NSString *stringEmployer = [NSString stringWithFormat:@"Employer Jobs (%@)", [JSONDict valueForKey:@"EMPJOBCOUNT"]];
-                NSString *stringRecruiter = [NSString stringWithFormat:@"Recruiter Jobs (%@)", [JSONDict valueForKey:@"RECJOBCOUNT"]];
-                
-                [segmentRecruiter  setTitle:stringEmployer forSegmentAtIndex:0];
-                [segmentRecruiter setTitle:stringRecruiter forSegmentAtIndex:1];
-                int totalJobCount = [[JSONDict valueForKey:@"EMPJOBCOUNT"] intValue]+ [[JSONDict valueForKey:@"RECJOBCOUNT"] intValue];
-                self.title = [NSString stringWithFormat:@" %d Results ",totalJobCount];//@"Results";
-                
-                
-                
-            }else {
-                //buttonLoadMoreRecruiter.titleLabel.text = @"Load More Results";
-                int empoloyerJobCount = [[[arrayRecruiter objectAtIndex:0]valueForKey:@"EMPJOBCOUNT"]intValue];
-                int recruiterJobCount = [[[arrayRecruiter objectAtIndex:0]valueForKey:@"RECJOBCOUNT"]intValue];
-                
-                if (empoloyerJobCount == 0 && recruiterJobCount == 0) {
-                    NSString *employerCountString = @"Employer Jobs";
-                    NSString *recruiterCountString = [NSString stringWithFormat:@"Recruiter Jobs (%d)",recruiterJobCount];
-                    
-                    [segmentControl  setTitle:employerCountString forSegmentAtIndex:0];
-                    [segmentRecruiter setTitle:recruiterCountString forSegmentAtIndex:1];
-                }else{
-                    NSString *employerCountString = [NSString stringWithFormat:@"Employer Jobs (%d)",empoloyerJobCount];
-                    NSString *recruiterCountString = [NSString stringWithFormat:@"Recruiter Jobs (%d)",recruiterJobCount];
-                    
-                    [segmentRecruiter  setTitle:employerCountString forSegmentAtIndex:0];
-                    [segmentRecruiter setTitle:recruiterCountString forSegmentAtIndex:1];
-                }
-                
-                long resultCount = empoloyerJobCount+recruiterJobCount;
-                if (resultCount == 0) {
-                    self.title = @"Results";
-                }else {
-                    self.title = [NSString stringWithFormat:@"%ld Results",resultCount];
-                }
-                [tableViewRecruiter reloadData];
-            }
         }
-        //}
+        
     }
-    //[JSONDict valueForKey:@"JobsList"]
-    //NSArray* contents = [JSONDict valueForKey:@"CategorysList"];
-    //    if ([arrayResult count]<13) {
-    //        [viewFooter setHidden:YES];
-    //    }else{
-    //        [viewFooter setHidden:NO];
-    //    }
 }
-
-int empoloyerJobCount;
-int recruiterJobCount;
 
 #pragma mark tableview delegate methods
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
@@ -680,7 +678,7 @@ int recruiterJobCount;
                     NSLog(@"index path : %ld %lu",(long)indexPath.row,(unsigned long)([arrayResult count]-1));
                     [self loadMore];
                 }
-
+                
                 [viewFooterRecruiter setHidden:NO];
             }
             return cell;
@@ -715,11 +713,11 @@ int recruiterJobCount;
         [myAlert show];
     }
     else{
-//        if ([stringEmpRec isEqualToString:@"0"]) {
-//            NSLog(@"%@",[[arrayResult objectAtIndex:indexPath.row]valueForKey:@"TITLE"]);//JOBID
-//        }else{
-//            NSLog(@"%@",[[arrayRecruiter objectAtIndex:indexPath.row]valueForKey:@"TITLE"]);
-//        }
+        //        if ([stringEmpRec isEqualToString:@"0"]) {
+        //            NSLog(@"%@",[[arrayResult objectAtIndex:indexPath.row]valueForKey:@"TITLE"]);//JOBID
+        //        }else{
+        //            NSLog(@"%@",[[arrayRecruiter objectAtIndex:indexPath.row]valueForKey:@"TITLE"]);
+        //        }
         if (tableView == tableViewResult) {
             if ([arrayResult count]>0) {
                 [self performSegueWithIdentifier:@"JobDetailsSegue" sender:self];
@@ -748,7 +746,7 @@ int recruiterJobCount;
         if (indexPath.row == [arrayResult count] - 1)
         {
             NSLog(@"index path : %ld %lu",(long)indexPath.row,(unsigned long)([arrayResult count]-1));
-//            [self loadMore];
+            //            [self loadMore];
         }
     }
 }

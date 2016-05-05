@@ -2,10 +2,12 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>myTest</key>
+	<string>Avin</string>
 	<key>WebServiceURL</key>
-	<string>http://dev.agcareers.farmsstaging.com/mobilews/WebService/NewJobSearch.asmx/</string>
+	<string>http://staging.agcareers.com/mobilews/WebService/NewJobSearch.asmx/</string>
 	<key>BaseHost</key>
-	<string>dev.agcareers.farmsstaging.com</string>
+	<string>staging.agcareers.com</string>
 	<key>MorePage</key>
 	<string>http://dev.m.agcareers.farmsstaging.com/</string>
 	<key>SearchThisForNewChange</key>

@@ -290,10 +290,23 @@ NSString *stringResumeIdUpload                  = @"";
                     stringUploadName =  [NSString stringWithFormat:@"%@_%@",[[NSUserDefaults standardUserDefaults]valueForKey:@"UserId"],[filePathsArrayName objectAtIndex:0]];
                 }
                 
-                uploadFile1.path = [NSString stringWithFormat:@"root\\dev.agcareers.farmsstaging.com\\www\\AgUploads\\%@",stringUploadName]; // Resume path
-                uploadFile1.hostname = @"192.168.24.45";
-                uploadFile1.username = @"Rohit.singh";
-                uploadFile1.password = @"P@ssw0rd2012";
+//                uploadFile1.path = [NSString stringWithFormat:@"root\\dev.agcareers.farmsstaging.com\\www\\AgUploads\\%@",stringUploadName]; // Resume path
+//                uploadFile1.hostname = @"192.168.24.45";
+//                uploadFile1.username = @"Rohit.singh";
+//                uploadFile1.password = @"P@ssw0rd2012";
+
+//                uploadFile1.path = [NSString stringWithFormat:@"root\\agcareers.farmsstaging.com\\www\\AgUploads\\%@",stringUploadName]; // Resume path
+//                
+//                uploadFile1.hostname = @"216.220.44.186";
+//                uploadFile1.username = @"Rohit.singh";
+//                uploadFile1.password = @"P@ssw0rd2012";
+                
+                uploadFile1.path = [NSString stringWithFormat:@"aguploads\\%@",stringUploadName]; // Resume path
+                
+                uploadFile1.hostname = [[NSUserDefaults standardUserDefaults] valueForKey:@"GlobalFTP"];//@"216.220.44.186";
+                uploadFile1.username = @"mobileuploads";
+                uploadFile1.password = @"yeuEYrLiBk3OPSMlmLQG!";
+
                 
                 //we start the request
                 [uploadFile1 start];
@@ -515,6 +528,18 @@ NSString *stringResumeIdUpload                  = @"";
     }else{
         stringmemberId = [[NSUserDefaults standardUserDefaults]valueForKey:@"UserId"];
     }
+    
+    NSString *stringUserEmail;
+    //[[NSUserDefaults standardUserDefaults]valueForKey:@"UserEmail"]
+    //[dictProfile valueForKey:@"email"],@"Email",
+    if ([[[NSUserDefaults standardUserDefaults]valueForKey:@"UserEmail"] length]==0) {
+        stringUserEmail = [dictProfile valueForKey:@"email"];
+    }else{
+        stringUserEmail = [[NSUserDefaults standardUserDefaults]valueForKey:@"UserEmail"];
+    }
+        
+    
+    
     NSDictionary* parameterDict = [NSDictionary dictionaryWithObjectsAndKeys:strinJobId,@"JobID",
                                    stringmemberId,@"MemberID",
                                    [dictProfile valueForKey:@"firstname"],@"firstname",
@@ -525,7 +550,7 @@ NSString *stringResumeIdUpload                  = @"";
                                    [dictProfile valueForKey:@"countryid"],@"CountryID",
                                    [dictProfile valueForKey:@"stateid"],@"StateID",
                                    [dictProfile valueForKey:@"postalcode"],@"PostalCode",
-                                   [dictProfile valueForKey:@"email"],@"Email",
+                                   stringUserEmail,@"Email",
                                    [dictProfile valueForKey:@"PhoneWork"],@"PhoneWork",
                                    [dictDetails valueForKey:@"ExpYears"],@"ExperienceID",
                                    [dictDetails valueForKey:@"EduLevel"],@"MinEducationID",

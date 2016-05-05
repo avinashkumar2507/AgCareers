@@ -14,6 +14,10 @@
 
 @end
 
+// http://stackoverflow.com/questions/32137582/how-to-install-ios-7-and-onwards-simulators-in-xcode-7-beta-5
+
+// https://developer.apple.com/support/app-store/
+
 @implementation AppDelegate
 @synthesize loginCheck,loginDetails;
 @synthesize applyDetailsDictionary,applyProfileDictionary,applySubmitDictionary,stringCompany,stringATSJob;
@@ -76,66 +80,72 @@
 //    DBSession *dbSession = [[DBSession alloc] initWithAppKey:@"0boomhae7ass0bd"
 //                                                   appSecret:@"ittagygx1m5a9pd"
 //                                                        root:kDBRootDropbox]; // either kDBRootAppFolder or kDBRootDropbox
+
     
-    DBSession *dbSession = [[DBSession alloc] initWithAppKey:@"38dgfl7idwht60y"
-                                                   appSecret:@"7353ka8vwf9ymg1"
+    /*** 29 Feb 2016 ***/
+//    DBSession *dbSession = [[DBSession alloc] initWithAppKey:@"38dgfl7idwht60y"
+//                                                   appSecret:@"7353ka8vwf9ymg1"
+//                                                        root:kDBRootDropbox]; // either kDBRootAppFolder or kDBRootDropbox
+    
+    DBSession *dbSession = [[DBSession alloc] initWithAppKey:@"fz8gdm3y3k4cg13"
+                                                   appSecret:@"hvfingk6bsf20cc"
                                                         root:kDBRootDropbox]; // either kDBRootAppFolder or kDBRootDropbox
 
     [DBSession setSharedSession:dbSession];
     
     /****************** Push Notificaton ********************/
     
-#ifdef __IPHONE_8_0
-    
-    UIRemoteNotificationType myTypes = UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeAlert | UIRemoteNotificationTypeSound;
-    [[UIApplication sharedApplication] registerForRemoteNotificationTypes:myTypes];
-    
-#else
-    //register to receive notifications
-    //Right, that is the point
-    UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:(UIRemoteNotificationTypeBadge
-                                                                                         |UIRemoteNotificationTypeSound
-                                                                                         |UIRemoteNotificationTypeAlert) categories:nil];
-    [[UIApplication sharedApplication] registerUserNotificationSettings:settings];
-    
-#endif
+//#ifdef __IPHONE_8_0
+//    
+//    UIRemoteNotificationType myTypes = UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeAlert | UIRemoteNotificationTypeSound;
+//    [[UIApplication sharedApplication] registerForRemoteNotificationTypes:myTypes];
+//    
+//#else
+//    //register to receive notifications
+//    //Right, that is the point
+//    UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:(UIRemoteNotificationTypeBadge
+//                                                                                         |UIRemoteNotificationTypeSound
+//                                                                                         |UIRemoteNotificationTypeAlert) categories:nil];
+//    [[UIApplication sharedApplication] registerUserNotificationSettings:settings];
+//    
+//#endif
     
     return YES;
 }
 
 
-#pragma mark Push notification for Device token
-#ifdef __IPHONE_8_0
-- (void)application:(UIApplication *)application didRegisterUserNotificationSettings:(UIUserNotificationSettings *)notificationSettings {
-    //register to receive notifications
-    [application registerForRemoteNotifications];
-}
-
-- (void)application:(UIApplication *)application handleActionWithIdentifier:(NSString *)identifier forRemoteNotification:(NSDictionary *)userInfo completionHandler:(void(^)())completionHandler
-{
-    //handle the actions
-    if ([identifier isEqualToString:@"declineAction"]){
-    }
-    else if ([identifier isEqualToString:@"answerAction"]){
-    }
-}
-#endif
-- (void)application:(UIApplication *)app didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
-    // Prepare the Device Token for Registration (remove spaces and < >)
-    NSString *devToken = [[[[deviceToken description]
-                            stringByReplacingOccurrencesOfString:@"<"withString:@""]
-                           stringByReplacingOccurrencesOfString:@">" withString:@""]
-                          stringByReplacingOccurrencesOfString: @" " withString: @""];
-    
-    NSString* tokenString = [NSString stringWithFormat:@"Device Token=%@",devToken];
-    NSLog(@"%@",tokenString);// e13b81b38b38d455ca636c33a495fc699fabd953de00826a3f725cbc784f0f89 - iPhone 5c
-    // 3f5a8da292316bf75e3f4768d1458c2907f339c0da63b0f71a2a150938ce7a57 - iPad
-}
-
-- (void)application:(UIApplication *)app didFailToRegisterForRemoteNotificationsWithError:(NSError *)err {
-    NSString *str = [NSString stringWithFormat: @"Error: %@", err];
-    NSLog(@"%@",str);
-}
+//#pragma mark Push notification for Device token
+//#ifdef __IPHONE_8_0
+//- (void)application:(UIApplication *)application didRegisterUserNotificationSettings:(UIUserNotificationSettings *)notificationSettings {
+//    //register to receive notifications
+//    [application registerForRemoteNotifications];
+//}
+//
+//- (void)application:(UIApplication *)application handleActionWithIdentifier:(NSString *)identifier forRemoteNotification:(NSDictionary *)userInfo completionHandler:(void(^)())completionHandler
+//{
+//    //handle the actions
+//    if ([identifier isEqualToString:@"declineAction"]){
+//    }
+//    else if ([identifier isEqualToString:@"answerAction"]){
+//    }
+//}
+//#endif
+//- (void)application:(UIApplication *)app didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
+//    // Prepare the Device Token for Registration (remove spaces and < >)
+//    NSString *devToken = [[[[deviceToken description]
+//                            stringByReplacingOccurrencesOfString:@"<"withString:@""]
+//                           stringByReplacingOccurrencesOfString:@">" withString:@""]
+//                          stringByReplacingOccurrencesOfString: @" " withString: @""];
+//    
+//    NSString* tokenString = [NSString stringWithFormat:@"Device Token=%@",devToken];
+//    NSLog(@"%@",tokenString);// e13b81b38b38d455ca636c33a495fc699fabd953de00826a3f725cbc784f0f89 - iPhone 5c
+//    // 3f5a8da292316bf75e3f4768d1458c2907f339c0da63b0f71a2a150938ce7a57 - iPad
+//}
+//
+//- (void)application:(UIApplication *)app didFailToRegisterForRemoteNotificationsWithError:(NSError *)err {
+//    NSString *str = [NSString stringWithFormat: @"Error: %@", err];
+//    NSLog(@"%@",str);
+//}
 
 
 - (void)applicationWillResignActive:(UIApplication *)application {
@@ -157,7 +167,41 @@
 
 - (void)applicationDidBecomeActive:(UIApplication *)application {
     // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
+    
+    //[self ShowAlert];
+    
 }
+
+//-(void)ShowAlert{
+//    
+//    if([[[NSUserDefaults standardUserDefaults]valueForKey:@"CriticalUpdateValue"]isEqualToString:@"TRUE"]) {
+//        
+//        alertForCriticalUpdate = [[UIAlertView alloc] initWithTitle:@"Update required" message:@"critical" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+//        [alertForCriticalUpdate show];
+//    }else if ([[[NSUserDefaults standardUserDefaults]valueForKey:@"CriticalUpdateValue"]isEqualToString:@"FALSE"]) {
+//        alertForUpdate = [[UIAlertView alloc] initWithTitle:@"Update available" message:@"my message " delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"OK",nil];
+//        [alertForUpdate show];
+//    }else{
+//        
+//    }
+//}
+//
+//- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex NS_DEPRECATED_IOS(2_0, 9_0);{
+//    
+//    if (alertView == alertForCriticalUpdate){
+//        if(buttonIndex == 0){
+//            NSString *iTunesLink = @"https://itunes.apple.com/ca/app/farms.com-used-farm-equipment/id908984991?mt=8";
+//            [[UIApplication sharedApplication] openURL:[NSURL URLWithString:iTunesLink]];
+//        }
+//    }else if(alertView == alertForUpdate){
+//        if(buttonIndex == 0){
+//            NSLog(@"Cancel");
+//        }else{
+//            NSLog(@"OK");
+//        }
+//    }
+//
+//}
 
 - (void)applicationWillTerminate:(UIApplication *)application {
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.

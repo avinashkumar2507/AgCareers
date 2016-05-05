@@ -245,7 +245,6 @@ NSString *stringStateIdMyProfile = @"";
             self.view.frame = CGRectMake(self.view.frame.origin.x, (self.view.frame.origin.y - 50.0), self.view.frame.size.width, self.view.frame.size.height);
         [UIView commitAnimations];
     }
-    
     if (textField==textfieldUsername || textField == textfieldPassword) {
         textFieldFlag = TRUE;
     }
@@ -500,9 +499,10 @@ BOOL flagUpdate = FALSE;
         [NSJSONSerialization JSONObjectWithData: [[responseDict objectForKey:@"d"] dataUsingEncoding:NSUTF8StringEncoding]
                                         options: NSJSONReadingMutableContainers
                                           error: &error];
-        if ([[[JSONDict11 valueForKey:@"ErrorFlag"]objectAtIndex:0] isEqualToString:@"Success"]==TRUE) {
+        if ([[[JSONDict11 valueForKey:@"ErrorFlag"]objectAtIndex:0] isEqualToString:@"Success"]==TRUE) { //Email
             [[NSUserDefaults standardUserDefaults]setObject:[[JSONDict11 valueForKey:@"ErrorFlag"]objectAtIndex:0] forKey:@"SuceessStatus"];
             [[NSUserDefaults standardUserDefaults]setObject:[[JSONDict11 valueForKey:@"Message"]objectAtIndex:0] forKey:@"UserId"];
+            [[NSUserDefaults standardUserDefaults]setObject:[[JSONDict11 valueForKey:@"Email"]objectAtIndex:0] forKey:@"UserEmail"];
             [[NSUserDefaults standardUserDefaults]synchronize];
             
             [self.navigationItem.rightBarButtonItem setTintColor:[UIColor whiteColor]];

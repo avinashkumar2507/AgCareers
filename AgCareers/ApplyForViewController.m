@@ -339,6 +339,7 @@ NSString *stringApplyCondition = @"";
             
             [[NSUserDefaults standardUserDefaults]setObject:[[JSONDict valueForKey:@"ErrorFlag"]objectAtIndex:0] forKey:@"SuceessStatus"];
             [[NSUserDefaults standardUserDefaults]setObject:[[JSONDict valueForKey:@"Message"]objectAtIndex:0] forKey:@"UserId"];
+            [[NSUserDefaults standardUserDefaults]setObject:[[JSONDict valueForKey:@"Email"]objectAtIndex:0] forKey:@"UserEmail"];
             [[NSUserDefaults standardUserDefaults]synchronize];
             stringApplyCondition = @"ApplyWithLogin";
             
@@ -375,6 +376,9 @@ NSString *stringApplyCondition = @"";
                                                    options: NSJSONReadingMutableContainers
                                                      error: &error];
         if ([[JSONDict valueForKey:@"ErrorMsg"] isEqualToString:@"User exists."]) {
+            
+            [[NSUserDefaults standardUserDefaults]setObject:textFieldEmailAddress.text forKey:@"UserEmail"];
+            
             textFieldEmailAddress.userInteractionEnabled = NO;
             [viewContinue setHidden:YES];
             [viewCreateProfile setHidden:YES];

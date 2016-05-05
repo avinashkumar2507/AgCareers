@@ -19,7 +19,6 @@
 }
 @property (weak, nonatomic) IBOutlet UIButton *buttonLoadMoreRecruiter;
 @property (weak, nonatomic) IBOutlet UIButton *buttonLoadMoreEmpoloyer;
-
 @property (weak, nonatomic) IBOutlet UITextField *textFieldKeywordEmployer;
 @property (weak, nonatomic) IBOutlet UITextField *textFieldKeywordRecruiter;
 @property (weak, nonatomic) IBOutlet UIView *viewFooter;

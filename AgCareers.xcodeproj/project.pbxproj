@@ -118,6 +118,7 @@
 		15A365631B00BCEA00C7954B /* SelectTypesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 15A365621B00BCEA00C7954B /* SelectTypesViewController.m */; };
 		15AE06391B67C04E008086C7 /* SearchEditViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 15AE06381B67C04E008086C7 /* SearchEditViewController.m */; };
 		15AF14F21B54FB8F001BBCB5 /* EmployerDetailsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 15AF14F11B54FB8F001BBCB5 /* EmployerDetailsViewController.m */; };
+		15AF20E61C96A61800D58F08 /* APParserBase.m in Sources */ = {isa = PBXBuildFile; fileRef = 15AF20E51C96A61800D58F08 /* APParserBase.m */; };
 		15BA76F61B01E41100CA5D82 /* SearchResultViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 15BA76F51B01E41100CA5D82 /* SearchResultViewController.m */; };
 		15BA76F91B01FC4000CA5D82 /* APParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 15BA76F81B01FC4000CA5D82 /* APParser.m */; };
 		15BC4D591B985DFA00D02814 /* ApplyForViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 15BC4D581B985DFA00D02814 /* ApplyForViewController.m */; };
@@ -229,6 +230,7 @@
 		153942D91BB42C1000F7D78C /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		153DFFBF1B187AA2001B851C /* LoginPopOverViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginPopOverViewController.h; sourceTree = "<group>"; };
 		153DFFC01B187AA2001B851C /* LoginPopOverViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginPopOverViewController.m; sourceTree = "<group>"; };
+		15430CE31C744E8300B6C46C /* AgCareers.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = AgCareers.entitlements; sourceTree = "<group>"; };
 		154392D01AE0D2CB005776DA /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		154392D21AE0D65E005776DA /* CanadaLatLong.gpx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = CanadaLatLong.gpx; sourceTree = "<group>"; };
 		154392D71AE10ACF005776DA /* SelectSectorsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SelectSectorsViewController.h; sourceTree = "<group>"; };
@@ -367,6 +369,8 @@
 		15AE06381B67C04E008086C7 /* SearchEditViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SearchEditViewController.m; sourceTree = "<group>"; };
 		15AF14F01B54FB8F001BBCB5 /* EmployerDetailsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EmployerDetailsViewController.h; sourceTree = "<group>"; };
 		15AF14F11B54FB8F001BBCB5 /* EmployerDetailsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EmployerDetailsViewController.m; sourceTree = "<group>"; };
+		15AF20E41C96A61800D58F08 /* APParserBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APParserBase.h; sourceTree = "<group>"; };
+		15AF20E51C96A61800D58F08 /* APParserBase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APParserBase.m; sourceTree = "<group>"; };
 		15BA76F41B01E41100CA5D82 /* SearchResultViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SearchResultViewController.h; sourceTree = "<group>"; };
 		15BA76F51B01E41100CA5D82 /* SearchResultViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SearchResultViewController.m; sourceTree = "<group>"; };
 		15BA76F71B01FC4000CA5D82 /* APParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APParser.h; sourceTree = "<group>"; };
@@ -545,6 +549,8 @@
 				15BA76F81B01FC4000CA5D82 /* APParser.m */,
 				1560FA821ADE88620056507C /* Parser.h */,
 				1560FA831ADE88620056507C /* Parser.m */,
+				15AF20E41C96A61800D58F08 /* APParserBase.h */,
+				15AF20E51C96A61800D58F08 /* APParserBase.m */,
 			);
 			name = ParserClasses;
 			sourceTree = "<group>";
@@ -722,6 +728,7 @@
 		1597AAB61ADB94CB00B9BCEA /* AgCareers */ = {
 			isa = PBXGroup;
 			children = (
+				15430CE31C744E8300B6C46C /* AgCareers.entitlements */,
 				159321F91B09EA0A00CF0750 /* GoogleDrive */,
 				1560FA811ADE88220056507C /* ParserClasses */,
 				15DDC0B61ADBD8FC0047A3CF /* AppDelegate */,
@@ -961,10 +968,16 @@
 				TargetAttributes = {
 					1597AAB31ADB94CA00B9BCEA = {
 						CreatedOnToolsVersion = 6.2;
-						DevelopmentTeam = Y44NMWY76J;
+						DevelopmentTeam = Y98X5746AM;
+						SystemCapabilities = {
+							com.apple.Keychain = {
+								enabled = 0;
+							};
+						};
 					};
 					1597AACF1ADB94CB00B9BCEA = {
 						CreatedOnToolsVersion = 6.2;
+						DevelopmentTeam = Y98X5746AM;
 						TestTargetID = 1597AAB31ADB94CA00B9BCEA;
 					};
 				};
@@ -1164,6 +1177,7 @@
 				1597B0001B4A6A980045F258 /* NewsletterViewController.m in Sources */,
 				15A042831B04DE1C00822915 /* AFURLResponseSerialization.m in Sources */,
 				15A0427C1B04DE1C00822915 /* AFHTTPRequestOperation.m in Sources */,
+				15AF20E61C96A61800D58F08 /* APParserBase.m in Sources */,
 				15CD19A11AEE548000F24FA8 /* BRRequestDownload.m in Sources */,
 				159322301B09EBD100CF0750 /* GTLDriveRevisionList.m in Sources */,
 				1511D22C1B09F06100546488 /* GTLObject.m in Sources */,
@@ -1225,7 +1239,8 @@
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: JobHog Inc (Y98X5746AM)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: JobHog Inc (Y98X5746AM)";
 				COPY_PHASE_STRIP = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -1245,6 +1260,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
+				PROVISIONING_PROFILE = "8bb19b59-3f53-416f-b84c-4989e0e95768";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -1267,7 +1283,8 @@
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: JobHog Inc (Y98X5746AM)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: JobHog Inc (Y98X5746AM)";
 				COPY_PHASE_STRIP = NO;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -1280,6 +1297,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
 				MTL_ENABLE_DEBUG_INFO = NO;
+				PROVISIONING_PROFILE = "8bb19b59-3f53-416f-b84c-4989e0e95768";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
@@ -1292,8 +1310,8 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Farms Dot Com (Y44NMWY76J)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Farms Dot Com (Y44NMWY76J)";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: JobHog Inc (Y98X5746AM)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: JobHog Inc (Y98X5746AM)";
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1304,8 +1322,9 @@
 				INFOPLIST_FILE = AgCareers/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.agcareers.iphone;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "e959bae5-6ada-47e5-bef4-7864e946a100";
+				PROVISIONING_PROFILE = "4f954dd7-5aed-4a09-9a2d-ac57f18723fd";
 			};
 			name = Debug;
 		};
@@ -1315,8 +1334,8 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Farms Dot Com (Y44NMWY76J)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Farms Dot Com (Y44NMWY76J)";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: JobHog Inc (Y98X5746AM)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: JobHog Inc (Y98X5746AM)";
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1327,8 +1346,9 @@
 				INFOPLIST_FILE = AgCareers/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.agcareers.iphone;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "e959bae5-6ada-47e5-bef4-7864e946a100";
+				PROVISIONING_PROFILE = "4f954dd7-5aed-4a09-9a2d-ac57f18723fd";
 			};
 			name = Release;
 		};
@@ -1336,6 +1356,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(SDKROOT)/Developer/Library/Frameworks",
 					"$(inherited)",
@@ -1347,6 +1369,7 @@
 				INFOPLIST_FILE = AgCareersTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/AgCareers.app/AgCareers";
 			};
 			name = Debug;
@@ -1355,6 +1378,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(SDKROOT)/Developer/Library/Frameworks",
 					"$(inherited)",
@@ -1362,6 +1387,7 @@
 				INFOPLIST_FILE = AgCareersTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/AgCareers.app/AgCareers";
 			};
 			name = Release;

@@ -31,21 +31,35 @@ NSString *currentLat           = @"";
 NSString *currentLog           = @"";
 NSString *stringEmpoloyerId;
 
+int heightForScrollView = 450;
+BOOL isShowMessage = FALSE;
+BOOL isActive = FALSE;
+BOOL isCriticalUpdate = FALSE;
+BOOL isOnetime        = FALSE;
+NSString *Message        = @"";
+NSString *newVersion     = @"";
+NSString *Success        = @"";
+
 - (void)viewDidLoad {
     
     [super viewDidLoad];
     
-    NSUserActivity *newact = [[NSUserActivity alloc]initWithActivityType:@"com.vlwebtek.agcareers"];
+    [self setGlobalValues];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(applicationHasBecomeActive)
+                                                 name:UIApplicationDidBecomeActiveNotification
+                                               object:nil];
+    
+    NSUserActivity *newact = [[NSUserActivity alloc]initWithActivityType:@"com.agcareers.iphone"];
     newact.title = @"AgCareers";
     newact.eligibleForSearch = YES;
     
-    NSSet *mySet = [[NSSet alloc]initWithObjects:@"Ag",@"AgCareer",@"Agriculture",@"Resume",@"mynewresume1",@"mohan.batchu", nil];
+    NSSet *mySet = [[NSSet alloc]initWithObjects:@"Ag",@"AgCareer",@"Agriculture",@"Resume",@"Dropbox",@"Google Drive", nil];
     
     [newact setKeywords:mySet];
     self.userActivity = newact;
     newact.eligibleForHandoff = false;
     [newact becomeCurrent];
-
     
     NSError *error;
     NSString *documentsPath = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)[0];
@@ -78,9 +92,9 @@ NSString *stringEmpoloyerId;
     [self viewDidLayoutSubviews];
     //[buttonLocation setHidden:YES];
     arraySectors = [[NSMutableArray alloc]init];
-    dictionarySectors = [[NSMutableDictionary alloc]init];
-    dictionaryTypes = [[NSMutableDictionary alloc]init];
-    dictionaryCareers = [[NSMutableDictionary alloc]init];
+    dictionarySectors = [[NSMutableDictionary alloc] init];
+    dictionaryTypes = [[NSMutableDictionary alloc] init];
+    dictionaryCareers = [[NSMutableDictionary alloc] init];
     ////////////////////////////////////////////////////////////////////
     locationManager = [[CLLocationManager alloc] init];
     geocoder = [[CLGeocoder alloc] init];
@@ -94,13 +108,78 @@ NSString *stringEmpoloyerId;
     }
     [locationManager startUpdatingLocation];
     //////////////////////////////////////////////////////////////////////
-    
     textFieldEmployer.delegate = self;
+    
+    [self callWebService];
+}
+
+-(void)applicationHasBecomeActive{
+    [self callWebService];
+}
+
+-(void)setGlobalValues {
+    /* Staging */
+    [[NSUserDefaults standardUserDefaults]setValue:@"http://staging.agcareers.com/mobilewsnative/webservice/newjobsearch.asmx/" forKey:@"GlobalURL"];
+    [[NSUserDefaults standardUserDefaults]setValue:@"http://staging.agcareers.com" forKey:@"JobShare"];
+    [[NSUserDefaults standardUserDefaults]setValue:@"http://mstaging.agcareers.com/" forKey:@"MorePageURL"];
+    [[NSUserDefaults standardUserDefaults]setValue:@"staging.agcareers.com" forKey:@"GlobalHost"];
+    [[NSUserDefaults standardUserDefaults]setValue:@"216.220.44.186" forKey:@"GlobalFTP"];
+
+    /* Production */
+//    [[NSUserDefaults standardUserDefaults]setValue:@"http://www.agcareers.com/mobilewsnative/WebService/newjobsearch.asmx/" forKey:@"GlobalURL"];
+//    [[NSUserDefaults standardUserDefaults]setValue:@"http://www.agcareers.com" forKey:@"JobShare"];
+//    [[NSUserDefaults standardUserDefaults]setValue:@"http://m.agcareers.com/" forKey:@"MorePageURL"];
+//    [[NSUserDefaults standardUserDefaults]setValue:@"www.agcareers.com" forKey:@"GlobalHost"];
+//    [[NSUserDefaults standardUserDefaults]setValue:@"216.220.44.165" forKey:@"GlobalFTP"];
+}
+
+- (void)getWebDomain{
+    HUD = [[MBProgressHUD alloc] initWithView:self.navigationController.view];
+    [self.navigationController.view addSubview:HUD];
+    HUD.delegate = self;
+    HUD.labelText = @"Loading";
+    [HUD show:YES];
+    NSString *urlAsString = [NSString stringWithFormat:@"http://m.agcareers.com/webservice/agcareers.domains.cfc?method=getDomains"];
+    NSURL *url = [[NSURL alloc] initWithString:urlAsString];
+    NSLog(@"%@", urlAsString);
+    
+    [NSURLConnection sendAsynchronousRequest:[[NSURLRequest alloc] initWithURL:url] queue:[[NSOperationQueue alloc] init] completionHandler:^(NSURLResponse *response, NSData *data, NSError *error) {
+        
+        if (error) {
+            //[self.delegate fetchingGroupsFailedWithError:error];
+        }else {
+            //[self.delegate receivedGroupsJSON:data];
+            
+            //NSDictionary* returnDict = [NSJSONSerialization JSONObjectWithData:data  options:kNilOptions error:nil];
+            
+            //NSString *someString = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+            
+            JSONDict = [NSJSONSerialization JSONObjectWithData: data
+                                                       options: NSJSONReadingMutableContainers
+                                                         error: &error];
+            
+            NSString *webURLString = [NSString stringWithFormat:@"http://%@/mobilews/WebService/NewJobSearch.asmx/",[JSONDict valueForKey:@"WEB"]];
+            NSString *moreURLString = [NSString stringWithFormat:@"http://%@/",[JSONDict valueForKey:@"MOBILE"]];
+            [[NSUserDefaults standardUserDefaults]setValue:webURLString forKey:@"GlobalURL"];
+            [[NSUserDefaults standardUserDefaults]setValue:moreURLString forKey:@"MorePageURL"];
+            [[NSUserDefaults standardUserDefaults]setValue:[JSONDict valueForKey:@"WEB"] forKey:@"GlobalHost"];
+            [[NSUserDefaults standardUserDefaults]setValue:[JSONDict valueForKey:@"FTP"] forKey:@"GlobalFTP"];
+            
+            
+            //http://staging.agcareers.com/mobilewsnative/webservice/newjobsearch.asmx
+            // host : staging.agcareers.com
+            // FTP : 216.220.44.186
+            // More page url : http://mstaging.agcareers.com/
+            // web url : http://staging.agcareers.com/mobilews/WebService/NewJobSearch.asmx/
+            [HUD hide:YES];
+        }
+    }];
 }
 
 -(void)viewWillAppear:(BOOL)animated{
     
     NSDateFormatter *format = [[NSDateFormatter alloc] init];
+    
     [format setDateFormat:@"MMM dd, yyyy HH:mm"];
     
     NSDate *now = [[NSDate alloc] init];
@@ -128,7 +207,6 @@ NSString *stringEmpoloyerId;
         return @"Avinash";
     };
     
-    
     NSLog(@"%@",myName());
     
     int (^addition)(int,int);
@@ -138,7 +216,6 @@ NSString *stringEmpoloyerId;
     };
     
     NSLog(@"%d",addition(2,3));
-    
     
     _addition = ^(int a,int b){
         return a+b;
@@ -151,7 +228,6 @@ NSString *stringEmpoloyerId;
     };
     
     NSLog(@"%@",_printHi());
-    
     
     NSString *(^returnMyName)(void) = ^(void){
         return @"a";
@@ -178,11 +254,142 @@ NSString *stringEmpoloyerId;
     self.navigationController.navigationBar.backgroundColor = [UIColor clearColor];
 }
 
-int heightForScrollView = 450;
+#pragma mark Call web service
+-(void)callWebService {
+    
+    jsonParser = [APParser sharedParser];
+    jsonParser.delegate = self;
+    
+    [self.tabBarController.view setUserInteractionEnabled:NO ];
+    HUD = [[MBProgressHUD alloc] initWithView:self.navigationController.view];
+    [self.navigationController.view addSubview:HUD];
+    HUD.delegate = self;
+    HUD.labelText = @"Loading";
+    //[HUD show:YES];
+    
+    NSString* methodName = @"GetCurrentVersion";
+    NSString* soapAction = @"http://tempuri.org/GetCurrentVersion";
+    
+    NSDictionary* parameterDict = [NSDictionary dictionaryWithObjectsAndKeys:@"iOS",@"platform", nil];
+    
+    NSDictionary* dictToSend = [NSDictionary dictionaryWithObjectsAndKeys:methodName,@"methodName",soapAction,@"soapAction",parameterDict,@"parameterDict", nil];
+    
+    [self performSelector:@selector(hideHUDandWebservice) withObject:nil afterDelay:20];
+    [jsonParser parseSoapWithJSONSoapContents:dictToSend];
+}
+
+
+-(void)receiveJsonResponse:(NSDictionary*)responseDict withSuccess:(BOOL)successBool {
+    
+    //[HUD hide:YES];
+    
+    //[HUD hide:YES];
+    
+    [self.tabBarController.view setUserInteractionEnabled:YES];
+    
+    NSError *error;
+    JSONDict3433 = [NSJSONSerialization JSONObjectWithData: [[responseDict objectForKey:@"d"] dataUsingEncoding:NSUTF8StringEncoding]
+                                                   options: NSJSONReadingMutableContainers
+                                                     error: &error];
+    if ([[JSONDict3433 valueForKey:@"IsActive"]intValue]==1)
+        isActive = TRUE;
+    else
+        isActive = FALSE;
+    
+    if (isActive == TRUE) {
+        if ([[JSONDict3433 valueForKey:@"isShowMessage"]intValue]==1)
+            isShowMessage = TRUE;
+        else
+            isShowMessage = FALSE;
+        
+        if ([[JSONDict3433 valueForKey:@"IsCriticalUpdate"]intValue]==1){
+            isCriticalUpdate = TRUE;
+            [[NSUserDefaults standardUserDefaults]setValue:@"TRUE" forKey:@"CriticalUpdateValue"];
+            
+        }else{
+            isCriticalUpdate = FALSE;
+            [[NSUserDefaults standardUserDefaults]setValue:@"FALSE" forKey:@"CriticalUpdateValue"];
+        }
+        
+        if ([[JSONDict3433 valueForKey:@"Onetime"]intValue]==1){
+            //[[NSUserDefaults standardUserDefaults] setValue:@"O" forKey:@"ONE_TIME"];
+            isOnetime = TRUE;
+        }else{
+            isOnetime = FALSE;
+            [[NSUserDefaults standardUserDefaults] setValue:@"O" forKey:@"ONE_TIME"];
+        }
+        Message = [JSONDict3433 valueForKey:@"Message"];
+        newVersion = [JSONDict3433 valueForKey:@"Version"];
+        Success = [JSONDict3433 valueForKey:@"Success"];
+        
+        NSString *appVersion = [[[NSBundle mainBundle] infoDictionary]valueForKey:@"CFBundleShortVersionString"];
+        
+        NSString *v1 = appVersion;
+        NSString *v2 = newVersion;
+        
+        NSComparisonResult r = [v1 compare:v2 options:NSNumericSearch];
+        
+        if (r == NSOrderedSame || r == NSOrderedDescending) {
+            NSLog(@"true");
+        }else {
+            NSLog(@"false");
+            if (isShowMessage) {
+                [self ShowAlert];
+            }
+        }
+    }else{
+        
+    }
+}
+
+-(void)hideHUDandWebservice{
+    [HUD hide:YES];
+}
+
+-(void)ShowAlert{
+    
+    if(isCriticalUpdate) {
+        
+        alertForCriticalUpdate = [[UIAlertView alloc] initWithTitle:@"Update required" message:Message delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        [alertForCriticalUpdate show];
+    }else {
+        if (isOnetime == TRUE) {
+            if ([[[NSUserDefaults standardUserDefaults] valueForKey:@"ONE_TIME"]isEqualToString:@"ONE"]) {
+
+            } else {
+                [[NSUserDefaults standardUserDefaults] setValue:@"ONE" forKey:@"ONE_TIME"];
+                [[NSUserDefaults standardUserDefaults] synchronize];
+                
+                alertForUpdate = [[UIAlertView alloc] initWithTitle:@"Update available" message:Message delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"OK",nil];
+                [alertForUpdate show];
+            }
+        }else{
+            alertForUpdate = [[UIAlertView alloc] initWithTitle:@"Update available" message:Message delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"OK",nil];
+            [alertForUpdate show];
+        }
+    }
+}
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex NS_DEPRECATED_IOS(2_0, 9_0);{
+    
+    if (alertView == alertForCriticalUpdate){
+        if(buttonIndex == 0){
+            NSString *iTunesLink = @"https://itunes.apple.com/us/app/agcareers.com-jobs/id760266340?ls=1&mt=8";
+            [[UIApplication sharedApplication] openURL:[NSURL URLWithString:iTunesLink]];
+        }
+    }else if(alertView == alertForUpdate){
+        if(buttonIndex == 0){
+            
+        }else{
+            NSString *iTunesLink = @"https://itunes.apple.com/us/app/agcareers.com-jobs/id760266340?ls=1&mt=8";
+            [[UIApplication sharedApplication] openURL:[NSURL URLWithString:iTunesLink]];
+        }
+    }
+}
+
 
 -(void)viewWillLayoutSubviews {
     [super viewDidLayoutSubviews];
-    //        heightForScrollView = 500;
     if (UIDeviceOrientationIsLandscape([[UIApplication sharedApplication] statusBarOrientation])) {
         [scrollViewSearch setContentSize:CGSizeMake(300, heightForScrollView)];
     }else{
@@ -237,6 +444,7 @@ int heightForScrollView = 450;
 
 #pragma mark - CLLocationManagerDelegate
 - (void)locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error {
+    
     [manager stopUpdatingLocation];
     
     switch([error code]) {
@@ -329,11 +537,11 @@ int heightForScrollView = 450;
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)text {
     
     if (textField==textField) {
-        
+        stringEmpoloyerId = nil;
         if ( [text length] > 0 ) return YES; // adding = OK
         if ( range.length == 1 ){
             return YES; // removing one = OK
-        } else {
+        }else {
         }
         if ( [text length] == range.length ) return NO; // remove all != OK
         return YES; // all else is ok (this includes autocorrection, cut/paste things)
@@ -355,14 +563,14 @@ int heightForScrollView = 450;
         NSDictionary *dictRoot = [NSDictionary dictionaryWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"ConfigFile" ofType:@"plist" ]];
         NSString *webServiceString = [dictRoot objectForKey:@"WebServiceURL"];
         NSString *baseHost = [dictRoot objectForKey:@"BaseHost"];
-
+        
         
         data1 = [[NSMutableArray alloc] init];
-//        static NSString* base_url = @"http://agcareers-ws.farmsstaging.com/mobilews/webservice/newJobSearch.asmx/"; //live
-//        static NSString* base_host = @"agcareers-ws.farmsstaging.com";
+        //        static NSString* base_url = @"http://agcareers-ws.farmsstaging.com/mobilews/webservice/newJobSearch.asmx/"; //live
+        //        static NSString* base_host = @"agcareers-ws.farmsstaging.com";
         NSString* base_url = webServiceString;
         NSString* base_host = baseHost;
-
+        
         
         NSString * soapActionString = @"http://tempuri.org/GetMemberByKeyWords";
         NSDictionary* parameterDict = [NSDictionary dictionaryWithObjectsAndKeys:textFieldEmployer.text,@"SearchText", nil];
@@ -387,11 +595,11 @@ int heightForScrollView = 450;
                 //[ fetchingGroupsFailedWithError:error];
             } else {
                 NSDictionary* returnDict = [NSJSONSerialization JSONObjectWithData:data  options:kNilOptions error:nil];
-                NSDictionary *JSONDict =
+                NSDictionary *JSONDict1 =
                 [NSJSONSerialization JSONObjectWithData: [[returnDict objectForKey:@"d"] dataUsingEncoding:NSUTF8StringEncoding]
                                                 options: NSJSONReadingMutableContainers
                                                   error: &error];
-                NSArray* contents = [JSONDict valueForKey:@"MemberAutoCompletesList"];
+                NSArray* contents = [JSONDict1 valueForKey:@"MemberAutoCompletesList"];
                 dispatch_async( dispatch_get_main_queue(), ^{
                     // results of the background processing
                     [contents enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
@@ -425,6 +633,7 @@ int heightForScrollView = 450;
         selectCareersViewController.stringId = [[dictionaryCareers objectForKey:@"arraySectorIds"] componentsJoinedByString:@","];
     }
     if ([segue.identifier isEqualToString:@"searchResultSegue"]) {
+        
         SearchResultViewController *searchResultViewController = [segue destinationViewController];
         
         if (stringEmpoloyerId ==nil) {
@@ -436,6 +645,7 @@ int heightForScrollView = 450;
                 searchResultViewController.stringEmpoloyer = stringEmpoloyerId;
             }
         }
+        
         searchResultViewController.stringKeyword = textFieldKeyword.text;
         searchResultViewController.stringLocation = textFieldLocation.text;
         
@@ -524,7 +734,37 @@ int heightForScrollView = 450;
             UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"Error" message:@"Special characters are not allowed in Location field." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
             [alert show];
         }else {
-            [self performSegueWithIdentifier:@"searchResultSegue" sender:self];
+            //&& stringEmpoloyerId == nil
+            if ([textFieldEmployer.text length] > 0 && stringEmpoloyerId == nil ) {
+                
+                UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"Error" message:@"You have entered Invalid employer." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+                [alert show];
+            }else{
+                [self performSegueWithIdentifier:@"searchResultSegue" sender:self];
+            }
+            
+            //            if ([textFieldEmployer.text length] > 0 && stringEmpoloyerId !=0 ) {
+            //                [self performSegueWithIdentifier:@"searchResultSegue" sender:self];
+            //            }else{
+            //
+            //                UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"Error" message:@"You have entered Invalid employer." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+            //                [alert show];
+            //
+            //            }
+            
+            /*
+             
+             if (stringEmpoloyerId ==nil) {
+             searchResultViewController.stringEmpoloyer = @"0";
+             }else{
+             if ([textFieldEmployer.text length]==0) {
+             searchResultViewController.stringEmpoloyer = @"0";
+             }else{
+             searchResultViewController.stringEmpoloyer = stringEmpoloyerId;
+             }
+             }
+             */
+            
         }
     }
 }

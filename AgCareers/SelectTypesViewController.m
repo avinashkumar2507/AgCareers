@@ -163,7 +163,7 @@ NSMutableDictionary *dataDictionary;
 -(void)hideHUDandWebservice{
     [HUD hide:YES];
     [self.tabBarController.view setUserInteractionEnabled:YES];
-    [[Parser sharedParser]connectionCancel];
+    //[[Parser sharedParser]connectionCancel];
 }
 
 -(void)viewWillDisappear:(BOOL)animated{

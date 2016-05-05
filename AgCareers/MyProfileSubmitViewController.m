@@ -220,11 +220,23 @@ NSString *stringCoverFileNameText   = @"";
                 
                 NSString *stringUploadName =  [NSString stringWithFormat:@"%@_%@",[[NSUserDefaults standardUserDefaults]valueForKey:@"UserId"],[filePathsArrayName objectAtIndex:0]];
                 
-                uploadFile.path = [NSString stringWithFormat:@"root\\dev.agcareers.farmsstaging.com\\www\\AgUploads\\%@",stringUploadName]; // Resume path
-                uploadFile.hostname = @"192.168.24.45";
-                uploadFile.username = @"Rohit.singh";
-                uploadFile.password = @"P@ssw0rd2012";
+//                uploadFile.path = [NSString stringWithFormat:@"root\\dev.agcareers.farmsstaging.com\\www\\AgUploads\\%@",stringUploadName]; // Resume path
+//                uploadFile.hostname = @"192.168.24.45";
+//                uploadFile.username = @"Rohit.singh";
+//                uploadFile.password = @"P@ssw0rd2012";
                 
+//                uploadFile.path = [NSString stringWithFormat:@"root\\agcareers.farmsstaging.com\\www\\AgUploads\\%@",stringUploadName]; // Resume path
+//                
+//                uploadFile.hostname = @"216.220.44.186";
+//                uploadFile.username = @"Rohit.singh";
+//                uploadFile.password = @"P@ssw0rd2012";
+                
+                uploadFile.path = [NSString stringWithFormat:@"aguploads\\%@",stringUploadName]; // Resume path
+                
+                uploadFile.hostname = [[NSUserDefaults standardUserDefaults] valueForKey:@"GlobalFTP"];//@"216.220.44.186";
+                uploadFile.username = @"mobileuploads";
+                uploadFile.password = @"yeuEYrLiBk3OPSMlmLQG!";
+
                 //we start the request
                 [uploadFile start];
             }

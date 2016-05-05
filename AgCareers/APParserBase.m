@@ -6,11 +6,11 @@
 //  
 //
 
-#import "APParser.h"
+#import "APParserBase.h"
 
 // BASE DECLARATIONS
 
-static NSString* base_url =  @"http://staging.agcareers.com/mobilews/WebService/NewJobSearch.asmx/";
+static NSString* base_url = @"http://staging.agcareers.com/mobilews/WebService/NewJobSearch.asmx/";
 static NSString* base_host = @"staging.agcareers.com";
 
 static  NSString* userNameString = @"";
@@ -21,18 +21,18 @@ static  NSString* passwordString = @"";
 static int timeOutInt = 100;
 
 
-static APParser *parserInstance = nil;
+static APParserBase *parserInstance = nil;
 
-@implementation APParser
+@implementation APParserBase
 @synthesize delegate;
 
 // setting singletion class
 
-+ (APParser *) sharedParser{
++ (APParserBase *) sharedParser{
     @synchronized(self){
         if (parserInstance == nil){
             
-            parserInstance = [[APParser alloc] init];
+            parserInstance = [[APParserBase alloc] init];
             
         }
     }
@@ -57,7 +57,7 @@ static APParser *parserInstance = nil;
     
     NSDictionary* parameterDict = [soapDict objectForKey:@"parameterDict"];
     
-    NSString * base = [[NSUserDefaults standardUserDefaults] valueForKey:@"GlobalURL"];
+    NSString * base = base_url;
     
     NSLog(@"soapactionstring - %@",soapActionString);
     
@@ -108,7 +108,7 @@ static APParser *parserInstance = nil;
     NSString* parameterString = @"";
     
     methodName = [jsonDict objectForKey:@"methodName"];
-    urlString = [NSString stringWithFormat:@"%@%@&",[[NSUserDefaults standardUserDefaults] valueForKey:@"GlobalURL"],methodName];
+    urlString = [NSString stringWithFormat:@"%@%@&",base_url,methodName];
     parameterDict = [jsonDict objectForKey:@"parameterDict"];
 
     
@@ -180,7 +180,7 @@ static APParser *parserInstance = nil;
     
     NSString* methodName = [jsonDict objectForKey:@"methodName"];
     
-    NSString* finalUrlString = [NSString stringWithFormat:@"%@%@",[[NSUserDefaults standardUserDefaults] valueForKey:@"GlobalURL"],methodName];
+    NSString* finalUrlString = [NSString stringWithFormat:@"%@%@",base_url,methodName];
     
     NSURL* finalUrl = [NSURL URLWithString:finalUrlString];
     
@@ -218,7 +218,7 @@ static APParser *parserInstance = nil;
     // set max count
     maxCount = (int)elementNamesArray.count;
     // XML parsing prepartion
-    NSString * base = [[NSUserDefaults standardUserDefaults] valueForKey:@"GlobalURL"];;
+    NSString * base = base_url;
     NSString* soapMessage = [soapDict objectForKey:@"soapMessage"];
     NSString* contentType = [soapDict objectForKey:@"contenttype"];
     NSString *msgLength = [NSString stringWithFormat:@"%d", (int)[soapMessage length]];
@@ -270,7 +270,7 @@ static APParser *parserInstance = nil;
     
     NSDictionary* parameterDict = [jsonDict objectForKey:@"parameterDict"];
     
-    NSString* finalUrlString = [NSString stringWithFormat:@"%@%@",[[NSUserDefaults standardUserDefaults] valueForKey:@"GlobalURL"],methodName];
+    NSString* finalUrlString = [NSString stringWithFormat:@"%@%@",base_url,methodName];
     
     NSURL* finalUrl = [NSURL URLWithString:finalUrlString];
 

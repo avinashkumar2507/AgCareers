@@ -10,25 +10,25 @@
 #import <CoreData/CoreData.h>
 #import <DropboxSDK/DropboxSDK.h>
 
-@interface AppDelegate : UIResponder <UIApplicationDelegate,DBSessionDelegate,DBNetworkRequestDelegate>{
+@interface AppDelegate : UIResponder <UIApplicationDelegate,DBSessionDelegate,DBNetworkRequestDelegate,UIAlertViewDelegate>{
     NSMutableDictionary *loginDetails;
     NSString *relinkUserId;
+    UIAlertView *alertForUpdate,*alertForCriticalUpdate;
 }
 
-@property (nonatomic,retain) NSDictionary  *applyProfileDictionary;
-@property (nonatomic,retain) NSDictionary  *applyDetailsDictionary;
-@property (nonatomic,retain) NSDictionary  *applySubmitDictionary;
-@property (nonatomic,retain) NSString      *stringApplyWhileCreating;
-@property (nonatomic,retain) NSString      *stringJobIdCreateProfile;
-@property (nonatomic,retain) NSString      *stringATSJob;
-@property (nonatomic,retain) NSString      *stringCompany;
+@property (nonatomic,retain) NSDictionary               *applyProfileDictionary;
+@property (nonatomic,retain) NSDictionary               *applyDetailsDictionary;
+@property (nonatomic,retain) NSDictionary               *applySubmitDictionary;
+@property (nonatomic,retain) NSString                   *stringApplyWhileCreating;
+@property (nonatomic,retain) NSString                   *stringJobIdCreateProfile;
+@property (nonatomic,retain) NSString                   *stringATSJob;
+@property (nonatomic,retain) NSString                   *stringCompany;
+@property (nonatomic,strong) NSString                   *loginSuccessStatus;
+@property (nonatomic,strong) NSString                   *loginMemberId;
 
-@property (nonatomic,strong) NSString      *loginSuccessStatus;
-@property (nonatomic,strong) NSString      *loginMemberId;
-
-@property (nonatomic, retain) NSMutableDictionary  *loginDetails;
-@property (nonatomic, assign) BOOL loginCheck;
-@property (strong, nonatomic) UIWindow *window;
+@property (nonatomic, retain) NSMutableDictionary       *loginDetails;
+@property (nonatomic, assign) BOOL                      loginCheck;
+@property (strong, nonatomic) UIWindow                  *window;
 
 @property (readonly, strong, nonatomic) NSManagedObjectContext *managedObjectContext;
 @property (readonly, strong, nonatomic) NSManagedObjectModel *managedObjectModel;

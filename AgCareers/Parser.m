@@ -17,16 +17,14 @@
  
  */
 
-// Production
-//static NSString* base_url = @"http://buyerws.vlinteractive.com/web-services/dealerappservice.asmx/";
-//static NSString* base_host = @"buyerws.vlinteractive.com";
+// Staging url
 
-// Stagging
-//static NSString* base_url = @"http://agcareers-ws.farmsstaging.com/mobilews/webservice/newJobSearch.asmx/"; //live
-//static NSString* base_host = @"agcareers-ws.farmsstaging.com";
+static NSString* base_url = @"http://staging.agcareers.com/mobilews/WebService/NewJobSearch.asmx/";
+static NSString* base_host = @"staging.agcareers.com";
 
-static NSString* base_url = @"http://dev.agcareers.farmsstaging.com/mobilews/WebService/NewJobSearch.asmx/"; //live
-static NSString* base_host = @"dev.agcareers.farmsstaging.com";
+// Dev URL
+//static NSString* base_url = @"http://dev.agcareers.farmsstaging.com/mobilews/WebService/NewJobSearch.asmx/"; //live
+//static NSString* base_host = @"dev.agcareers.farmsstaging.com";
 
 
 static Parser *parserInstance = nil;
@@ -64,7 +62,7 @@ static Parser *parserInstance = nil;
     
     NSDictionary* parameterDict = [soapDict objectForKey:@"parameterDict"];
     
-    NSString * base = base_url;
+    NSString * base = [[NSUserDefaults standardUserDefaults] valueForKey:@"GlobalURL"];
     
     NSLog(@"soapactionstring - %@",soapActionString);
     
@@ -86,7 +84,7 @@ static Parser *parserInstance = nil;
     
     [request addValue: [soapDict objectForKey:@"soapAction"] forHTTPHeaderField:@"SOAPAction"];
     
-    [request addValue:base_host forHTTPHeaderField:@"Host"];
+    [request addValue:[[NSUserDefaults standardUserDefaults] valueForKey:@"GlobalHost"] forHTTPHeaderField:@"Host"];
     
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:[soapDict objectForKey:@"parameterDict"] options:kNilOptions error:&error];
     NSString *msgLength = [NSString stringWithFormat:@"%d", [jsonData length]];
@@ -131,7 +129,7 @@ static Parser *parserInstance = nil;
     
     
     NSString * soapActionString = [soapDict objectForKey:@"soapAction"];
-    NSString * base = base_url;
+    NSString * base = [[NSUserDefaults standardUserDefaults] valueForKey:@"GlobalURL"];
     NSString* soapMessage = [soapDict objectForKey:@"soapMessage"];
     NSString* contentType = [soapDict objectForKey:@"contenttype"];
     NSString *msgLength = [NSString stringWithFormat:@"%d", [soapMessage length]];
@@ -155,7 +153,7 @@ static Parser *parserInstance = nil;
                                                                cachePolicy:NSURLRequestUseProtocolCachePolicy
                                                            timeoutInterval:20.0];
     [request addValue: [soapDict objectForKey:@"soapAction"] forHTTPHeaderField:@"SOAPAction"];
-    [request addValue:base_host forHTTPHeaderField:@"Host"];
+    [request addValue:[[NSUserDefaults standardUserDefaults] valueForKey:@"GlobalHost"] forHTTPHeaderField:@"Host"];
     [request addValue: contentType forHTTPHeaderField:@"Content-Type"];
     [request addValue: msgLength forHTTPHeaderField:@"Content-Length"];
     [request setHTTPMethod:@"POST"];
@@ -192,12 +190,12 @@ static Parser *parserInstance = nil;
 }
 -(void)connectionDidFinishLoading:(NSURLConnection *)connection {
     
-    NSLog(@"Done. received Bytes %d", [webData length]);
+    //NSLog(@"Done. received Bytes %d", [webData length]);
     
     if (isJson) {
         NSDictionary* returnDict = [NSJSONSerialization JSONObjectWithData:webData  options:kNilOptions error:nil];
         //NSDictionary* returnDict = [NSJSONSerialization JSONObjectWithData:data  options:0 error:nil];
-        NSLog(@"%@",returnDict);
+        //NSLog(@"%@",returnDict);
         
         [delegate receiveJsonResponse:returnDict];
     }else {
@@ -207,7 +205,7 @@ static Parser *parserInstance = nil;
         xmlParser.delegate = self;
         
         // Run the parser
-        BOOL parsingResult = [xmlParser parse];
+        //BOOL parsingResult = [xmlParser parse];
         
     }
     

@@ -276,6 +276,7 @@ BOOL flagForgotPasswordEmpDetails       = FALSE;
         if ([[[JSONDict12 valueForKey:@"ErrorFlag"]objectAtIndex:0] isEqualToString:@"Success"]==TRUE) {
             [[NSUserDefaults standardUserDefaults]setObject:[[JSONDict12 valueForKey:@"ErrorFlag"]objectAtIndex:0] forKey:@"SuceessStatus"];
             [[NSUserDefaults standardUserDefaults]setObject:[[JSONDict12 valueForKey:@"Message"]objectAtIndex:0] forKey:@"UserId"];
+            [[NSUserDefaults standardUserDefaults]setObject:[[JSONDict12 valueForKey:@"Email"]objectAtIndex:0] forKey:@"UserEmail"];
             [[NSUserDefaults standardUserDefaults]synchronize];
             [self addToFavourite];
             
@@ -319,7 +320,7 @@ BOOL flagForgotPasswordEmpDetails       = FALSE;
             }
             _labelCurrentJobsListing.text = @"Current Jobs Listings";//http://dev.agcareers.farmsstaging.com
 //            NSString *stringImageURL = [NSString stringWithFormat:@"http://agcareers-ws.farmsstaging.com/uploads/companyLogos/%@",[[JSONDict valueForKey:@"LogoName"] stringByReplacingOccurrencesOfString:@" " withString:@"%20"]];
-            NSString *stringImageURL = [NSString stringWithFormat:@"http://dev.agcareers.farmsstaging.com/uploads/companyLogos/%@",[[JSONDict valueForKey:@"LogoName"] stringByReplacingOccurrencesOfString:@" " withString:@"%20"]];
+            NSString *stringImageURL = [NSString stringWithFormat:@"http://%@/uploads/companyLogos/%@",[[NSUserDefaults standardUserDefaults] valueForKey:@"GlobalHost"],[[JSONDict valueForKey:@"LogoName"] stringByReplacingOccurrencesOfString:@" " withString:@"%20"]];
 
             imageViewLogo.image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:stringImageURL]]];
             arrayJobsListing = [JSONDict valueForKey:@"JobsList"];

@@ -346,15 +346,15 @@ NSString *descriptionString;
         SLComposeViewController *controller = [SLComposeViewController composeViewControllerForServiceType:SLServiceTypeFacebook];
         
         NSString *stringFinalURL;
-        
+
         if ([[JSONDict valueForKey:@"isConfidential"]intValue]==1) {
             
             NSArray *itemArr = [urlString componentsSeparatedByString:@"/"];
             NSString *str = [itemArr objectAtIndex:2];
-            stringFinalURL = [NSString stringWithFormat: @"%@confidential/%@",urlStringConfig,str];
+            stringFinalURL = [NSString stringWithFormat: @"%@confidential/%@",[[NSUserDefaults standardUserDefaults] valueForKey:@"JobShare"],str];
             
         }else{
-            stringFinalURL = [NSString stringWithFormat: @"%@%@",urlStringConfig,urlString];
+            stringFinalURL = [NSString stringWithFormat: @"%@%@",[[NSUserDefaults standardUserDefaults] valueForKey:@"JobShare"],urlString];
         }
         
         
@@ -431,10 +431,10 @@ NSString *descriptionString;
             
             NSArray *itemArr = [urlString componentsSeparatedByString:@"/"];
             NSString *str = [itemArr objectAtIndex:2];
-            stringFinalURL = [NSString stringWithFormat: @"%@confidential/%@",urlStringConfig,str];
+            stringFinalURL = [NSString stringWithFormat: @"%@confidential/%@",[[NSUserDefaults standardUserDefaults] valueForKey:@"JobShare"],str];
             
         }else{
-            stringFinalURL = [NSString stringWithFormat: @"%@%@",urlStringConfig,urlString];
+            stringFinalURL = [NSString stringWithFormat: @"%@%@",[[NSUserDefaults standardUserDefaults] valueForKey:@"JobShare"],urlString];
         }
         
         [tweetSheet setInitialText:stringTitle];
@@ -495,9 +495,9 @@ NSString *descriptionString;
         
         NSArray *itemArr = [urlString componentsSeparatedByString:@"/"];
         NSString *str = [itemArr objectAtIndex:2];
-        stringFinalURL = [NSString stringWithFormat: @"%@confidential/%@",urlStringConfig,str];
+        stringFinalURL = [NSString stringWithFormat: @"%@confidential/%@",[[NSUserDefaults standardUserDefaults] valueForKey:@"JobShare"],str];
     }else{
-        stringFinalURL = [NSString stringWithFormat: @"%@%@",urlStringConfig,urlString];
+        stringFinalURL = [NSString stringWithFormat: @"%@%@",[[NSUserDefaults standardUserDefaults] valueForKey:@"JobShare"],urlString];
     }
     
     if ([MFMailComposeViewController canSendMail]) {
@@ -898,6 +898,7 @@ NSString *descriptionString;
         if ([[[JSONDict12 valueForKey:@"ErrorFlag"]objectAtIndex:0] isEqualToString:@"Success"]==TRUE) {
             [[NSUserDefaults standardUserDefaults]setObject:[[JSONDict12 valueForKey:@"ErrorFlag"]objectAtIndex:0] forKey:@"SuceessStatus"];
             [[NSUserDefaults standardUserDefaults]setObject:[[JSONDict12 valueForKey:@"Message"]objectAtIndex:0] forKey:@"UserId"];
+            [[NSUserDefaults standardUserDefaults]setObject:[[JSONDict12 valueForKey:@"Email"]objectAtIndex:0] forKey:@"UserEmail"];
             [[NSUserDefaults standardUserDefaults]synchronize];
             [self addToFavourite];
             
@@ -1079,10 +1080,6 @@ NSString *descriptionString;
                                 otherButtonTitles:nil];
         [myAlert show];
     }else {
-//        if ([[JSONDict valueForKey:@"ApplyLink"]length]>0) {
-//            alertForOpenBrowser = [[UIAlertView alloc]initWithTitle:@"Sucess" message:@"This will open in iPhone's browser" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"OK", nil];
-//            [alertForOpenBrowser show];
-//        }else {
         
         if ([[[NSUserDefaults standardUserDefaults]valueForKey:@"SuceessStatus"]isEqualToString:@"Success"]) {
             AppDelegate *appDelegate = (AppDelegate *) [[UIApplication sharedApplication]delegate];
@@ -1113,7 +1110,7 @@ NSString *descriptionString;
     NSString* soapAction = @"http://tempuri.org/IsJobApplied";
     NSDictionary* parameterDict = [NSDictionary dictionaryWithObjectsAndKeys:stringJobId,@"JobId",
                                                                             [[NSUserDefaults standardUserDefaults]valueForKey:@"UserId"],@"memberid",
-                                                                            @"",@"email",nil];
+                                                                            [[NSUserDefaults standardUserDefaults]valueForKey:@"UserEmail"],@"email",nil];
     NSDictionary* dictToSend = [NSDictionary dictionaryWithObjectsAndKeys:methodName,@"methodName",soapAction,@"soapAction",parameterDict,@"parameterDict", nil];
     [self performSelector:@selector(hideHUDandWebservice) withObject:nil afterDelay:20];
     [jsonParser7 parseSoapWithJSONSoapContents:dictToSend];

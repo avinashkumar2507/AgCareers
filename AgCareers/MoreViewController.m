@@ -97,7 +97,7 @@ int numberOfRows;
             
             NSDictionary *dictRoot = [NSDictionary dictionaryWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"ConfigFile" ofType:@"plist" ]];
             NSString *webServiceString = [dictRoot objectForKey:@"MorePage"];
-            NSString *stringURL = [NSString stringWithFormat:@"%@about-us.cfm",webServiceString];
+            NSString *stringURL = [NSString stringWithFormat:@"%@about-us.cfm",[[NSUserDefaults standardUserDefaults] valueForKey:@"MorePageURL"]];
             
             strURL = stringURL;
             strTitleName = @"About Us";
@@ -122,7 +122,7 @@ int numberOfRows;
             
             NSDictionary *dictRoot = [NSDictionary dictionaryWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"ConfigFile" ofType:@"plist" ]];
             NSString *webServiceString = [dictRoot objectForKey:@"MorePage"];
-            NSString *stringURL = [NSString stringWithFormat:@"%@privacy-policy.cfm",webServiceString];
+            NSString *stringURL = [NSString stringWithFormat:@"%@privacy-policy.cfm",[[NSUserDefaults standardUserDefaults] valueForKey:@"MorePageURL"]];
             strURL = stringURL;
             strTitleName = @"Privacy Policy";
             [self performSegueWithIdentifier:@"SegueDetailsFromMore" sender:self];
@@ -131,7 +131,7 @@ int numberOfRows;
             
             NSDictionary *dictRoot = [NSDictionary dictionaryWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"ConfigFile" ofType:@"plist" ]];
             NSString *webServiceString = [dictRoot objectForKey:@"MorePage"];
-            NSString *stringURL = [NSString stringWithFormat:@"%@terms-service.cfm",webServiceString];
+            NSString *stringURL = [NSString stringWithFormat:@"%@terms-service.cfm",[[NSUserDefaults standardUserDefaults] valueForKey:@"MorePageURL"]];
             strURL = stringURL;
             strTitleName = @"Terms of Agreement";
             [self performSegueWithIdentifier:@"SegueDetailsFromMore" sender:self];
@@ -293,6 +293,7 @@ int numberOfRows;
                 
                 [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"SuceessStatus"];
                 [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"UserId"];
+                [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"UserEmail"];
                 [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"FirstLoad"];
                 [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"email"];
                 [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"ResumeIdFromCreate"];

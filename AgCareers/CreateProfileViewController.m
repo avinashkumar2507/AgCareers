@@ -29,8 +29,6 @@
 BOOL flagCountryCreateProfile = FALSE;
 BOOL flagStateCreateProfile = FALSE;
 
-
-
 -(void)viewWillAppear:(BOOL)animated{
     //#import <Google/Analytics.h>
     id<GAITracker> tracker = [[GAI sharedInstance] defaultTracker];
@@ -450,6 +448,7 @@ NSString *stringStateIdCreateProfile = @"";
             }else{
                 [[NSUserDefaults standardUserDefaults]setObject:@"Success" forKey:@"SuceessStatus"];
                 [[NSUserDefaults standardUserDefaults]setObject:[JSONDict valueForKey:@"ID"] forKey:@"UserId"];
+                [[NSUserDefaults standardUserDefaults]setObject:textFieldEmail.text forKey:@"UserEmail"];
                 [[NSUserDefaults standardUserDefaults]synchronize];
                 
                 [self performSegueWithIdentifier:@"SegueCreateProfileNext" sender:self];

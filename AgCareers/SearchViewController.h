@@ -11,7 +11,7 @@
 #import <CoreLocation/CoreLocation.h>
 
 
-@interface SearchViewController : UIViewController <MPGTextFieldDelegate,CLLocationManagerDelegate,DBRestClientDelegate,UITextFieldDelegate>{
+@interface SearchViewController : UIViewController <MPGTextFieldDelegate,CLLocationManagerDelegate,DBRestClientDelegate,UITextFieldDelegate,UIAlertViewDelegate>{
     
     CLLocationManager *locationManager;
     CLGeocoder *geocoder;
@@ -22,7 +22,15 @@
     NSMutableDictionary *dictionaryTypes;
     NSMutableDictionary *dictionaryCareers;
     NSMutableArray *arraySectors;
+    
+    MBProgressHUD *HUD;
+    NSDictionary *JSONDict3433;
+    APParser *jsonParser;
+    NSDictionary *JSON_Dict;
+    NSDictionary *JSONDict;
+    UIAlertView *alertForUpdate,*alertForCriticalUpdate;
 }
+
 @property (weak, nonatomic) IBOutlet UILabel *labelh;
 
 @property (weak, nonatomic) IBOutlet UIView *viewNavigation;

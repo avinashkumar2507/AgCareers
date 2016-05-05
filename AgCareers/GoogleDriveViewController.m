@@ -13,8 +13,8 @@
 
 // Constants used for OAuth 2.0 authorization.
 static NSString *const kKeychainItemName = @"iOSDriveSample: Google Drive";
-static NSString *const kClientId = @"826331608693-h8q7u9cjo5pmpdbllej45i6cn0mtdcng.apps.googleusercontent.com";
-static NSString *const kClientSecret = @"Kb0oqsw5YGuKk-14_n2jgqAQ";
+static NSString *const kClientId = @"815397403816-j54p4ugt430gio35hpg2ap246n5rfnb4.apps.googleusercontent.com";//@"826331608693-h8q7u9cjo5pmpdbllej45i6cn0mtdcng.apps.googleusercontent.com";
+static NSString *const kClientSecret = @"VDbJcHYI3r_XxwEZwG5jxVdM";//@"Kb0oqsw5YGuKk-14_n2jgqAQ";
 
 @interface GoogleDriveViewController ()
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *addButton;
@@ -277,27 +277,19 @@ static NSString *const kClientSecret = @"Kb0oqsw5YGuKk-14_n2jgqAQ";
         
         cell.textLabel.text = file.title;
         
-        //UILabel *labelTitle = (UILabel *)[cell viewWithTag:576];
-        //labelTitle.text = file.title;
-        //UIImageView *imageViewType = (UIImageView *)[cell viewWithTag:575];
         if ([file.title rangeOfString:@".doc" ].location != NSNotFound || [file.title rangeOfString:@".docx" ].location != NSNotFound) {
-            //imageViewType.image = [UIImage imageNamed:@"page_white_word.png"];
             cell.imageView.image =[UIImage imageNamed:@"page_white_word.png"];
         }
         else if ([file.title rangeOfString:@".txt" ].location != NSNotFound) {
-            //imageViewType.image = [UIImage imageNamed:@"page_white_text.png"];
             cell.imageView.image = [UIImage imageNamed:@"page_white_text.png"];
         }
         else if ([file.title rangeOfString:@".pdf" ].location != NSNotFound) {
-            //imageViewType.image = [UIImage imageNamed:@"page_white_acrobat_import.png"];
             cell.imageView.image = [UIImage imageNamed:@"page_white_acrobat.png"];
         }
         else if ([file.title rangeOfString:@".xls" ].location != NSNotFound || [file.title rangeOfString:@".xlsx" ].location != NSNotFound) {
-            //imageViewType.image = [UIImage imageNamed:@"page_white_excel.png"];
             cell.imageView.image = [UIImage imageNamed:@"page_white_excel.png"];
         }
         else {
-            //imageViewType.image = [UIImage imageNamed:@"page_white_import.png"];
             cell.imageView.image = [UIImage imageNamed:@"page_white_import.png"];
         }
         return cell;

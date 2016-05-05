@@ -728,7 +728,7 @@ int heightForScrollViewUpdate = 480;
         data1 = [[NSMutableArray alloc] init];
         
         NSDictionary *dictRoot = [NSDictionary dictionaryWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"ConfigFile" ofType:@"plist" ]];
-        NSString *webServiceString = [dictRoot objectForKey:@"WebServiceURL"];
+        NSString *webServiceString = [[NSUserDefaults standardUserDefaults] valueForKey:@"GlobalURL"];//[dictRoot objectForKey:@"WebServiceURL"];
         NSString *baseHost = [dictRoot objectForKey:@"BaseHost"];
         
         
