@@ -325,7 +325,9 @@ NSString *stringApplyCondition = @"";
 
 #pragma mark response
 -(void)receiveJsonResponse:(NSDictionary*)responseDict withSuccess:(BOOL)successBool{
+    if (successBool == YES) {
     [HUD hide:YES];
+    
     [self.tabBarController.view setUserInteractionEnabled:YES];
     
     if (flagLoginApply == TRUE) {
@@ -388,6 +390,11 @@ NSString *stringApplyCondition = @"";
             [viewPassword setHidden:YES];
             [viewCreateProfile setHidden:NO];
         }
+    }
+    }else{ //if (successBool == YES) {
+        [HUD hide:YES];
+        UIAlertView *alertSuccessStatus = [[UIAlertView alloc]initWithTitle:@"Error" message:@"Some error occured. Please try again" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+        [alertSuccessStatus show];
     }
 }
 

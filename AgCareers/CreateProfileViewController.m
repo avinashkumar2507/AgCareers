@@ -404,58 +404,64 @@ NSString *stringStateIdCreateProfile = @"";
 
 #pragma mark response
 -(void)receiveJsonResponse:(NSDictionary*)responseDict withSuccess:(BOOL)successBool{
-    
-    if (flagCountryCreateProfile == TRUE) {
-        [HUD hide:YES];
-        [self.tabBarController.view setUserInteractionEnabled:YES];
-        NSError *error;
-        JSONDict = [NSJSONSerialization JSONObjectWithData: [[responseDict objectForKey:@"d"] dataUsingEncoding:NSUTF8StringEncoding]
-                                                   options: NSJSONReadingMutableContainers
-                                                     error: &error];
-        arrayPickerData = [JSONDict valueForKey:@"Rows"];
-        pickerParentView.hidden = NO;
-        [myPicker reloadAllComponents];
-        
-        
-    }else if (flagStateCreateProfile == TRUE){
-        [HUD hide:YES];
-        [self.tabBarController.view setUserInteractionEnabled:YES];
-        NSError *error;
-        JSONDict = [NSJSONSerialization JSONObjectWithData: [[responseDict objectForKey:@"d"] dataUsingEncoding:NSUTF8StringEncoding]
-                                                   options: NSJSONReadingMutableContainers
-                                                     error: &error];
-        arrayPickerData = [JSONDict valueForKey:@"Rows"];
-        if ([arrayPickerData count]==0) {
-            [textFieldState setText:@"None"];
-            stringStateIdCreateProfile = @"0";
-            pickerParentView.hidden = YES;
-            flagStateCreateProfile = FALSE;
-        }else{
+    if (successBool == YES) {
+        if (flagCountryCreateProfile == TRUE) {
+            [HUD hide:YES];
+            [self.tabBarController.view setUserInteractionEnabled:YES];
+            NSError *error;
+            JSONDict = [NSJSONSerialization JSONObjectWithData: [[responseDict objectForKey:@"d"] dataUsingEncoding:NSUTF8StringEncoding]
+                                                       options: NSJSONReadingMutableContainers
+                                                         error: &error];
+            arrayPickerData = [JSONDict valueForKey:@"Rows"];
             pickerParentView.hidden = NO;
             [myPicker reloadAllComponents];
-        }
-    }else{
-        [HUD hide:YES];
-        [self.tabBarController.view setUserInteractionEnabled:YES];
-        NSError *error;
-        JSONDict = [NSJSONSerialization JSONObjectWithData: [[responseDict objectForKey:@"d"] dataUsingEncoding:NSUTF8StringEncoding]
-                                                   options: NSJSONReadingMutableContainers
-                                                     error: &error];
-        if ([[JSONDict valueForKey:@"Success"]intValue]==1) {
             
-            if ([[JSONDict valueForKey:@"ErrorMsg"]isEqualToString:@"User name and email already exists."]==TRUE) {
-                [self showAlertViewWithMessage:@"Email is already in use"];
+            
+        }else if (flagStateCreateProfile == TRUE){
+            [HUD hide:YES];
+            [self.tabBarController.view setUserInteractionEnabled:YES];
+            NSError *error;
+            JSONDict = [NSJSONSerialization JSONObjectWithData: [[responseDict objectForKey:@"d"] dataUsingEncoding:NSUTF8StringEncoding]
+                                                       options: NSJSONReadingMutableContainers
+                                                         error: &error];
+            arrayPickerData = [JSONDict valueForKey:@"Rows"];
+            if ([arrayPickerData count]==0) {
+                [textFieldState setText:@"None"];
+                stringStateIdCreateProfile = @"0";
+                pickerParentView.hidden = YES;
+                flagStateCreateProfile = FALSE;
             }else{
-                [[NSUserDefaults standardUserDefaults]setObject:@"Success" forKey:@"SuceessStatus"];
-                [[NSUserDefaults standardUserDefaults]setObject:[JSONDict valueForKey:@"ID"] forKey:@"UserId"];
-                [[NSUserDefaults standardUserDefaults]setObject:textFieldEmail.text forKey:@"UserEmail"];
-                [[NSUserDefaults standardUserDefaults]synchronize];
-                
-                [self performSegueWithIdentifier:@"SegueCreateProfileNext" sender:self];
+                pickerParentView.hidden = NO;
+                [myPicker reloadAllComponents];
             }
-        }else {
-            [self showAlertViewWithMessage:[JSONDict valueForKey:@"ErrorMsg"]];
+        }else{
+            [HUD hide:YES];
+            [self.tabBarController.view setUserInteractionEnabled:YES];
+            NSError *error;
+            JSONDict = [NSJSONSerialization JSONObjectWithData: [[responseDict objectForKey:@"d"] dataUsingEncoding:NSUTF8StringEncoding]
+                                                       options: NSJSONReadingMutableContainers
+                                                         error: &error];
+            if ([[JSONDict valueForKey:@"Success"]intValue]==1) {
+                
+                if ([[JSONDict valueForKey:@"ErrorMsg"]isEqualToString:@"User name and email already exists."]==TRUE) {
+                    [self showAlertViewWithMessage:@"Email is already in use"];
+                }else{
+                    [[NSUserDefaults standardUserDefaults]setObject:@"Success" forKey:@"SuceessStatus"];
+                    [[NSUserDefaults standardUserDefaults]setObject:[JSONDict valueForKey:@"ID"] forKey:@"UserId"];
+                    [[NSUserDefaults standardUserDefaults]setObject:textFieldEmail.text forKey:@"UserEmail"];
+                    [[NSUserDefaults standardUserDefaults]synchronize];
+                    
+                    [self performSegueWithIdentifier:@"SegueCreateProfileNext" sender:self];
+                }
+            }else {
+                [self showAlertViewWithMessage:[JSONDict valueForKey:@"ErrorMsg"]];
+            }
         }
+    }else{ // if (successBool == YES) {
+        [HUD hide:YES];
+        //[HUD1 hide:YES];
+        UIAlertView *alertSuccessStatus = [[UIAlertView alloc]initWithTitle:@"Error" message:@"Some error occured. Please try again." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+        [alertSuccessStatus show];
     }
 }
 

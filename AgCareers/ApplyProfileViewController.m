@@ -207,7 +207,7 @@ BOOL flagLoginApplyProfileView = FALSE;
                                         if ([textFieldEmail.text isEqualToString:textFieldEmailConfirm.text]) {
                                             
                                             if ([self NSStringIsValidEmail:textFieldEmail.text]) {
-
+                                                
                                                 NSDictionary* parameterDict = [NSDictionary dictionaryWithObjectsAndKeys:
                                                                                textFieldEmail.text,@"email",
                                                                                textFieldFirstName.text,@"firstname",
@@ -402,92 +402,97 @@ BOOL flagLoginApplyProfileView = FALSE;
 
 #pragma mark response
 -(void)receiveJsonResponse:(NSDictionary*)responseDict withSuccess:(BOOL)successBool{
-    
-    if (flagCountryApplyProfile == TRUE) {
-        [HUD hide:YES];
-        [self.tabBarController.view setUserInteractionEnabled:YES];
-        NSError *error;
-        JSONDict = [NSJSONSerialization JSONObjectWithData: [[responseDict objectForKey:@"d"] dataUsingEncoding:NSUTF8StringEncoding]
-                                                   options: NSJSONReadingMutableContainers
-                                                     error: &error];
-        arrayPickerData = [JSONDict valueForKey:@"Rows"];
-        pickerParentView.hidden = NO;
-        [myPicker reloadAllComponents];
-    }else if (flagStateApplyProfile == TRUE){
-        [HUD hide:YES];
-        [self.tabBarController.view setUserInteractionEnabled:YES];
-        NSError *error;
-        JSONDict = [NSJSONSerialization JSONObjectWithData: [[responseDict objectForKey:@"d"] dataUsingEncoding:NSUTF8StringEncoding]
-                                                   options: NSJSONReadingMutableContainers
-                                                     error: &error];
-        arrayPickerData = [JSONDict valueForKey:@"Rows"];
-        if ([arrayPickerData count]==0) {
-            [textFieldState setText:@"None"];
-            stringStateIdApplyProfile = @"0";
-            pickerParentView.hidden = YES;
-            flagStateApplyProfile = FALSE;
-        }else{
-            pickerParentView.hidden = NO;
-            [myPicker reloadAllComponents];
-        }
-        
-    }else if (flagApplyUpdate == TRUE){
-        flagApplyUpdate = FALSE;
-        [HUD hide:YES];
-        [self.tabBarController.view setUserInteractionEnabled:YES];
-        NSError *error;
-        JSONDict = [NSJSONSerialization JSONObjectWithData: [[responseDict objectForKey:@"d"] dataUsingEncoding:NSUTF8StringEncoding]
-                                                   options: NSJSONReadingMutableContainers
-                                                     error: &error];
-        if ([[JSONDict valueForKey:@"Success"]intValue]==1) {
-            [self showAlertViewWithMessage:@"Your profile has been updated successfully" withTitle:@"Success."];
-        }else{
-            [self showAlertViewWithMessage:@"There is some error updating your profile. Please try again later." withTitle:@"Error"];
-        }
-    }else if (flagLoginApplyProfileView == TRUE){
-        [HUD hide:YES];
-        flagLoginApplyProfileView = FALSE;
-        NSError *error;
-        NSDictionary *JSONDict11 =
-        [NSJSONSerialization JSONObjectWithData: [[responseDict objectForKey:@"d"] dataUsingEncoding:NSUTF8StringEncoding]
-                                        options: NSJSONReadingMutableContainers
-                                          error: &error];
-        if ([[[JSONDict11 valueForKey:@"ErrorFlag"]objectAtIndex:0] isEqualToString:@"Success"]==TRUE) {
-            [[NSUserDefaults standardUserDefaults]setObject:[[JSONDict11 valueForKey:@"ErrorFlag"]objectAtIndex:0] forKey:@"SuceessStatus"];
-            [[NSUserDefaults standardUserDefaults]setObject:[[JSONDict11 valueForKey:@"Message"]objectAtIndex:0] forKey:@"UserId"];
-            [[NSUserDefaults standardUserDefaults]setObject:[[JSONDict11 valueForKey:@"Email"]objectAtIndex:0] forKey:@"UserEmail"];
-            [[NSUserDefaults standardUserDefaults]synchronize];
-            
-            [self.navigationItem.rightBarButtonItem setTintColor:[UIColor whiteColor]];
-            [self.navigationItem.rightBarButtonItem setEnabled:YES];
-            
-            [self callMyProfileWebService];
-        }else{
-            UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"Error" message:@"You have entered an incorrect username/password and/or you are not approved to use the site.If you continue to have problems, please contact agcareers@agcareers.com." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
-            [alert show];
-        }
-    }else{
-        [HUD hide:YES];
-        [self.tabBarController.view setUserInteractionEnabled:YES];
-        
-        if ([[responseDict objectForKey:@"Message"]isEqualToString:@"There was an error processing the request."]) {
-            
-        }else{
+    if (successBool == YES) {
+        if (flagCountryApplyProfile == TRUE) {
+            [HUD hide:YES];
+            [self.tabBarController.view setUserInteractionEnabled:YES];
             NSError *error;
             JSONDict = [NSJSONSerialization JSONObjectWithData: [[responseDict objectForKey:@"d"] dataUsingEncoding:NSUTF8StringEncoding]
                                                        options: NSJSONReadingMutableContainers
                                                          error: &error];
-            textFieldFirstName.text = [JSONDict objectForKey:@"FirstName"];
-            textFieldLastName.text = [JSONDict objectForKey:@"LastName"];
-            textFieldAddress1.text = [JSONDict objectForKey:@"Address"];
-            textFieldAddress2.text = @"";[JSONDict objectForKey:@"LastName"];
-            textFieldEmail.text = [JSONDict objectForKey:@"Email"];
-            textFieldEmailConfirm.text = [JSONDict objectForKey:@"Email"];
-            textFieldCountry.text = [JSONDict objectForKey:@"CountryName"];
-            stringCountryIdApplyProfile = [JSONDict objectForKey:@"CountryID"];
-            textFieldState.text = [JSONDict objectForKey:@"StateName"];
-            stringStateIdApplyProfile = [JSONDict objectForKey:@"StateID"];
+            arrayPickerData = [JSONDict valueForKey:@"Rows"];
+            pickerParentView.hidden = NO;
+            [myPicker reloadAllComponents];
+        }else if (flagStateApplyProfile == TRUE){
+            [HUD hide:YES];
+            [self.tabBarController.view setUserInteractionEnabled:YES];
+            NSError *error;
+            JSONDict = [NSJSONSerialization JSONObjectWithData: [[responseDict objectForKey:@"d"] dataUsingEncoding:NSUTF8StringEncoding]
+                                                       options: NSJSONReadingMutableContainers
+                                                         error: &error];
+            arrayPickerData = [JSONDict valueForKey:@"Rows"];
+            if ([arrayPickerData count]==0) {
+                [textFieldState setText:@"None"];
+                stringStateIdApplyProfile = @"0";
+                pickerParentView.hidden = YES;
+                flagStateApplyProfile = FALSE;
+            }else{
+                pickerParentView.hidden = NO;
+                [myPicker reloadAllComponents];
+            }
+            
+        }else if (flagApplyUpdate == TRUE){
+            flagApplyUpdate = FALSE;
+            [HUD hide:YES];
+            [self.tabBarController.view setUserInteractionEnabled:YES];
+            NSError *error;
+            JSONDict = [NSJSONSerialization JSONObjectWithData: [[responseDict objectForKey:@"d"] dataUsingEncoding:NSUTF8StringEncoding]
+                                                       options: NSJSONReadingMutableContainers
+                                                         error: &error];
+            if ([[JSONDict valueForKey:@"Success"]intValue]==1) {
+                [self showAlertViewWithMessage:@"Your profile has been updated successfully" withTitle:@"Success."];
+            }else{
+                [self showAlertViewWithMessage:@"There is some error updating your profile. Please try again later." withTitle:@"Error"];
+            }
+        }else if (flagLoginApplyProfileView == TRUE){
+            [HUD hide:YES];
+            flagLoginApplyProfileView = FALSE;
+            NSError *error;
+            NSDictionary *JSONDict11 =
+            [NSJSONSerialization JSONObjectWithData: [[responseDict objectForKey:@"d"] dataUsingEncoding:NSUTF8StringEncoding]
+                                            options: NSJSONReadingMutableContainers
+                                              error: &error];
+            if ([[[JSONDict11 valueForKey:@"ErrorFlag"]objectAtIndex:0] isEqualToString:@"Success"]==TRUE) {
+                [[NSUserDefaults standardUserDefaults]setObject:[[JSONDict11 valueForKey:@"ErrorFlag"]objectAtIndex:0] forKey:@"SuceessStatus"];
+                [[NSUserDefaults standardUserDefaults]setObject:[[JSONDict11 valueForKey:@"Message"]objectAtIndex:0] forKey:@"UserId"];
+                [[NSUserDefaults standardUserDefaults]setObject:[[JSONDict11 valueForKey:@"Email"]objectAtIndex:0] forKey:@"UserEmail"];
+                [[NSUserDefaults standardUserDefaults]synchronize];
+                
+                [self.navigationItem.rightBarButtonItem setTintColor:[UIColor whiteColor]];
+                [self.navigationItem.rightBarButtonItem setEnabled:YES];
+                
+                [self callMyProfileWebService];
+            }else{
+                UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"Error" message:@"You have entered an incorrect username/password and/or you are not approved to use the site.If you continue to have problems, please contact agcareers@agcareers.com." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+                [alert show];
+            }
+        }else{
+            [HUD hide:YES];
+            [self.tabBarController.view setUserInteractionEnabled:YES];
+            
+            if ([[responseDict objectForKey:@"Message"]isEqualToString:@"There was an error processing the request."]) {
+                
+            }else{
+                NSError *error;
+                JSONDict = [NSJSONSerialization JSONObjectWithData: [[responseDict objectForKey:@"d"] dataUsingEncoding:NSUTF8StringEncoding]
+                                                           options: NSJSONReadingMutableContainers
+                                                             error: &error];
+                textFieldFirstName.text = [JSONDict objectForKey:@"FirstName"];
+                textFieldLastName.text = [JSONDict objectForKey:@"LastName"];
+                textFieldAddress1.text = [JSONDict objectForKey:@"Address"];
+                textFieldAddress2.text = @"";[JSONDict objectForKey:@"LastName"];
+                textFieldEmail.text = [JSONDict objectForKey:@"Email"];
+                textFieldEmailConfirm.text = [JSONDict objectForKey:@"Email"];
+                textFieldCountry.text = [JSONDict objectForKey:@"CountryName"];
+                stringCountryIdApplyProfile = [JSONDict objectForKey:@"CountryID"];
+                textFieldState.text = [JSONDict objectForKey:@"StateName"];
+                stringStateIdApplyProfile = [JSONDict objectForKey:@"StateID"];
+            }
         }
+    }else{ //if (successBool == YES) {
+        [HUD hide:YES];
+        UIAlertView *alertSuccessStatus = [[UIAlertView alloc]initWithTitle:@"Error" message:@"Some error occured. Please try again" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+        [alertSuccessStatus show];
     }
 }
 

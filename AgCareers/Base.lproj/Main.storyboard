@@ -5052,7 +5052,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="S31-WI-sgS" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2795" y="2382"/>
+            <point key="canvasLocation" x="2786" y="2376"/>
         </scene>
         <!--Newsletter-->
         <scene sceneID="Ei4-fY-Ngw">
@@ -5267,7 +5267,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="LcJ-Uc-cbo" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3443" y="2376"/>
+            <point key="canvasLocation" x="3449" y="2376"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="xbu-IE-v55">
@@ -5437,7 +5437,7 @@
                                                 <action selector="segmentAction:" destination="nJa-qF-Ec7" eventType="valueChanged" id="06Q-oG-2wm"/>
                                             </connections>
                                         </segmentedControl>
-                                        <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Job Title, Keywords" minimumFontSize="17" background="27CEFEFE-BC94-4BA8-9D25-F654A133772E" disabledBackground="F26BCD6F-EA43-47D1-93CE-F6EE6F51792E" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="fbn-JX-jFL">
+                                        <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Job Title, Keywords" minimumFontSize="17" background="E5D0F019-DF31-41B3-83E2-02EDC026585A" disabledBackground="73C363F6-FCC7-432E-BBA1-D9D4B3EB8FB3" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="fbn-JX-jFL">
                                             <rect key="frame" x="155" y="2" width="290" height="40"/>
                                             <color key="backgroundColor" red="0.9914378157" green="0.9914378157" blue="0.9914378157" alpha="1" colorSpace="calibratedRGB"/>
                                             <constraints>
@@ -5650,7 +5650,7 @@
                                                 <action selector="segmentAction:" destination="nJa-qF-Ec7" eventType="valueChanged" id="ksF-da-E6o"/>
                                             </connections>
                                         </segmentedControl>
-                                        <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Job Title, Keywords" minimumFontSize="17" background="27CEFEFE-BC94-4BA8-9D25-F654A133772E" disabledBackground="F26BCD6F-EA43-47D1-93CE-F6EE6F51792E" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="2sa-3H-Ane">
+                                        <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Job Title, Keywords" minimumFontSize="17" background="E5D0F019-DF31-41B3-83E2-02EDC026585A" disabledBackground="73C363F6-FCC7-432E-BBA1-D9D4B3EB8FB3" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="2sa-3H-Ane">
                                             <rect key="frame" x="155" y="2" width="290" height="40"/>
                                             <color key="backgroundColor" red="0.99143781565656564" green="0.99143781565656564" blue="0.99143781565656564" alpha="1" colorSpace="calibratedRGB"/>
                                             <constraints>
@@ -13221,11 +13221,11 @@ es within the specified crop segments and to co-ordinate regional  </string>
         </scene>
     </scenes>
     <resources>
-        <image name="27CEFEFE-BC94-4BA8-9D25-F654A133772E" width="322" height="46">
+        <image name="73C363F6-FCC7-432E-BBA1-D9D4B3EB8FB3" width="350" height="41">
             <mutableData key="keyedArchiveRepresentation">
 YnBsaXN0MDDUAQIDBAUGOzxYJHZlcnNpb25YJG9iamVjdHNZJGFyY2hpdmVyVCR0b3ASAAGGoK0HCBMU
 GR4fJSYsLzU4VSRudWxs1QkKCwwNDg8QERJWTlNTaXplViRjbGFzc1xOU0ltYWdlRmxhZ3NWTlNSZXBz
-V05TQ29sb3KAAoAMEiTAAACAA4AKWXszMjIsIDQ2fdIVChYYWk5TLm9iamVjdHOhF4AEgAnSFQoaGKIb
+V05TQ29sb3KAAoAMEiTAAACAA4AKWXszNTAsIDQxfdIVChYYWk5TLm9iamVjdHOhF4AEgAnSFQoaGKIb
 HIAFgAaACRAF0yAKISIjJFdOUy5iYXNlW05TLnJlbGF0aXZlgACACIAHXxB8ZmlsZTovLy9BcHBsaWNh
 dGlvbnMvWGNvZGUuYXBwL0NvbnRlbnRzL1BsdWdJbnMvSURFSW50ZXJmYWNlQnVpbGRlcktpdC5pZGVw
 bHVnaW4vQ29udGVudHMvUmVzb3VyY2VzL0lCTWlzc2luZ0ltYWdlR2x5cGgudGlmZtInKCkqWiRjbGFz
@@ -13237,11 +13237,11 @@ mAGfAacBtAG5AbsBvQHCAcoBzQHSAdoB3QHvAfIB9wAAAAAAAAIBAAAAAAAAAD8AAAAAAAAAAAAAAAAA
 AAH5A
 </mutableData>
         </image>
-        <image name="F26BCD6F-EA43-47D1-93CE-F6EE6F51792E" width="350" height="41">
+        <image name="E5D0F019-DF31-41B3-83E2-02EDC026585A" width="322" height="46">
             <mutableData key="keyedArchiveRepresentation">
 YnBsaXN0MDDUAQIDBAUGOzxYJHZlcnNpb25YJG9iamVjdHNZJGFyY2hpdmVyVCR0b3ASAAGGoK0HCBMU
 GR4fJSYsLzU4VSRudWxs1QkKCwwNDg8QERJWTlNTaXplViRjbGFzc1xOU0ltYWdlRmxhZ3NWTlNSZXBz
-V05TQ29sb3KAAoAMEiTAAACAA4AKWXszNTAsIDQxfdIVChYYWk5TLm9iamVjdHOhF4AEgAnSFQoaGKIb
+V05TQ29sb3KAAoAMEiTAAACAA4AKWXszMjIsIDQ2fdIVChYYWk5TLm9iamVjdHOhF4AEgAnSFQoaGKIb
 HIAFgAaACRAF0yAKISIjJFdOUy5iYXNlW05TLnJlbGF0aXZlgACACIAHXxB8ZmlsZTovLy9BcHBsaWNh
 dGlvbnMvWGNvZGUuYXBwL0NvbnRlbnRzL1BsdWdJbnMvSURFSW50ZXJmYWNlQnVpbGRlcktpdC5pZGVw
 bHVnaW4vQ29udGVudHMvUmVzb3VyY2VzL0lCTWlzc2luZ0ltYWdlR2x5cGgudGlmZtInKCkqWiRjbGFz
@@ -13273,17 +13273,17 @@ AAH5A
         <image name="news_Logo" width="100" height="100"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="M3V-yN-f5B"/>
-        <segue reference="9Fu-Kv-DsL"/>
-        <segue reference="U7Z-0T-q5a"/>
-        <segue reference="2dv-w0-Fn0"/>
-        <segue reference="dQx-gn-V6D"/>
         <segue reference="Ki8-tD-bNn"/>
-        <segue reference="d3f-We-iBM"/>
-        <segue reference="3Tl-UZ-e1P"/>
-        <segue reference="PGr-66-30S"/>
+        <segue reference="6hE-wT-6fz"/>
+        <segue reference="U7Z-0T-q5a"/>
+        <segue reference="ewV-ld-r17"/>
+        <segue reference="fTs-uL-4c7"/>
+        <segue reference="dQx-gn-V6D"/>
+        <segue reference="2dv-w0-Fn0"/>
         <segue reference="mIf-rX-R8c"/>
-        <segue reference="jCo-jR-4qY"/>
+        <segue reference="9Fu-Kv-DsL"/>
+        <segue reference="d3f-We-iBM"/>
         <segue reference="TTp-sI-Rd8"/>
+        <segue reference="jCo-jR-4qY"/>
     </inferredMetricsTieBreakers>
 </document>

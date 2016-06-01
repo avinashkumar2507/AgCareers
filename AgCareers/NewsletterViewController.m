@@ -78,40 +78,46 @@ BOOL flagSelectCoutry = FALSE;
 
 #pragma mark response
 -(void)receiveJsonResponse:(NSDictionary*)responseDict withSuccess:(BOOL)successBool{
-    
-    if (flagSubmit == TRUE) {
-        flagSubmit = FALSE;
-        [HUD hide:YES];
-        [self.tabBarController.view setUserInteractionEnabled:YES];
-        NSError *error;
-        JSONDict = [NSJSONSerialization JSONObjectWithData: [[responseDict objectForKey:@"d"] dataUsingEncoding:NSUTF8StringEncoding]
-                                                   options: NSJSONReadingMutableContainers
-                                                     error: &error];//ErrorMsg
-        
-        if ([[JSONDict objectForKey:@"Success"]intValue]==1) {
+    if (successBool == YES) {
+        if (flagSubmit == TRUE) {
+            flagSubmit = FALSE;
+            [HUD hide:YES];
+            [self.tabBarController.view setUserInteractionEnabled:YES];
+            NSError *error;
+            JSONDict = [NSJSONSerialization JSONObjectWithData: [[responseDict objectForKey:@"d"] dataUsingEncoding:NSUTF8StringEncoding]
+                                                       options: NSJSONReadingMutableContainers
+                                                         error: &error];//ErrorMsg
             
-            if ([[JSONDict valueForKey:@"ID"]intValue]==0) {
-                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error"
-                                                                message:@"Email already subscribed"
-                                                               delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-                [alert show];
-                //[self showAlertViewWithMessage:@"Email already subscribed" withTitle:@"Error"];
+            if ([[JSONDict objectForKey:@"Success"]intValue]==1) {
+                
+                if ([[JSONDict valueForKey:@"ID"]intValue]==0) {
+                    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error"
+                                                                    message:@"Email already subscribed"
+                                                                   delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+                    [alert show];
+                    //[self showAlertViewWithMessage:@"Email already subscribed" withTitle:@"Error"];
+                }else {
+                    [self showAlertViewWithMessage:@"Subscribed Successfully" withTitle:@"Success"];
+                }
             }else {
-                [self showAlertViewWithMessage:@"Subscribed Successfully" withTitle:@"Success"];
+                [self showAlertViewWithMessage:@"Some error occured. Please try again" withTitle:@"Error"];
             }
-        }else {
-            [self showAlertViewWithMessage:@"Some error occured. Please try again" withTitle:@"Error"];
+        }else{
+            
+            [HUD hide:YES];
+            [self.tabBarController.view setUserInteractionEnabled:YES];
+            NSError *error;
+            JSONDict = [NSJSONSerialization JSONObjectWithData: [[responseDict objectForKey:@"d"] dataUsingEncoding:NSUTF8StringEncoding]
+                                                       options: NSJSONReadingMutableContainers
+                                                         error: &error];//ErrorMsg
+            arrayPickerData = [JSONDict valueForKey:@"Rows"];
+            [pickerCountry reloadAllComponents];
         }
-    }else{
-        
+    }else{ //if (successBool == YES) {
         [HUD hide:YES];
-        [self.tabBarController.view setUserInteractionEnabled:YES];
-        NSError *error;
-        JSONDict = [NSJSONSerialization JSONObjectWithData: [[responseDict objectForKey:@"d"] dataUsingEncoding:NSUTF8StringEncoding]
-                                                   options: NSJSONReadingMutableContainers
-                                                     error: &error];//ErrorMsg
-        arrayPickerData = [JSONDict valueForKey:@"Rows"];
-        [pickerCountry reloadAllComponents];
+        
+        UIAlertView *alertSuccessStatus = [[UIAlertView alloc]initWithTitle:@"Error" message:@"Some error occured. Please try again" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+        [alertSuccessStatus show];
     }
 }
 
@@ -196,24 +202,24 @@ BOOL flagSelectCoutry = FALSE;
                         [alert show];
                     }else{
                         flagSubmit = TRUE;
-//                        jsonParser1 = [APParser sharedParser];
-//                        jsonParser1.delegate = self;
-//                        HUD = [[MBProgressHUD alloc] initWithView:self.view];
-//                        [self.view addSubview:HUD];
-//                        HUD.delegate = self;
-//                        HUD.labelText = @"Loading";
-//                        [HUD show:YES];
-//                        [self.view setUserInteractionEnabled:NO];
-//                        NSString* methodName = @"SubscribeNewsLetter";
-//                        NSString* soapAction = @"http://tempuri.org/SubscribeNewsLetter";
-//                        NSDictionary* parameterDict = [NSDictionary dictionaryWithObjectsAndKeys:textFeildEmailAddress.text,@"email",
-//                                                       stringSelectedCountry,@"CountryID",
-//                                                       @"A",@"subscribetype",
-//                                                       @"true",@"subscribe",
-//                                                       nil];
-//                        NSDictionary* dictToSend = [NSDictionary dictionaryWithObjectsAndKeys:methodName,@"url",soapAction,@"soapAction",parameterDict,@"parameterDict", nil];
-//                        
-//                        [jsonParser1 parseSoapWithJSONSoapContents:dictToSend];
+                        //                        jsonParser1 = [APParser sharedParser];
+                        //                        jsonParser1.delegate = self;
+                        //                        HUD = [[MBProgressHUD alloc] initWithView:self.view];
+                        //                        [self.view addSubview:HUD];
+                        //                        HUD.delegate = self;
+                        //                        HUD.labelText = @"Loading";
+                        //                        [HUD show:YES];
+                        //                        [self.view setUserInteractionEnabled:NO];
+                        //                        NSString* methodName = @"SubscribeNewsLetter";
+                        //                        NSString* soapAction = @"http://tempuri.org/SubscribeNewsLetter";
+                        //                        NSDictionary* parameterDict = [NSDictionary dictionaryWithObjectsAndKeys:textFeildEmailAddress.text,@"email",
+                        //                                                       stringSelectedCountry,@"CountryID",
+                        //                                                       @"A",@"subscribetype",
+                        //                                                       @"true",@"subscribe",
+                        //                                                       nil];
+                        //                        NSDictionary* dictToSend = [NSDictionary dictionaryWithObjectsAndKeys:methodName,@"url",soapAction,@"soapAction",parameterDict,@"parameterDict", nil];
+                        //
+                        //                        [jsonParser1 parseSoapWithJSONSoapContents:dictToSend];
                         
                         
                         

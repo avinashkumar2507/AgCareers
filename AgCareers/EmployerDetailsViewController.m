@@ -250,87 +250,94 @@ BOOL flagForgotPasswordEmpDetails       = FALSE;
 
 #pragma mark response
 -(void)receiveJsonResponse:(NSDictionary*)responseDict withSuccess:(BOOL)successBool{
-    if (flagSaveEmployer == TRUE) {
-        flagSaveEmployer = FALSE;
-        [HUD1 hide:YES];
-        [self.tabBarController.view setUserInteractionEnabled:YES ];
-        NSError *error;
-        JSONDict = [NSJSONSerialization JSONObjectWithData: [[responseDict objectForKey:@"d"] dataUsingEncoding:NSUTF8StringEncoding]
-                                                   options: NSJSONReadingMutableContainers
-                                                     error: &error];
-        if ([[JSONDict valueForKey:@"Success"]intValue]==1) {
-            UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"Success" message:[JSONDict valueForKey:@"ErrorMsg"] delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
-            [alert show];
-        }else{
-            UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"Error" message:[JSONDict valueForKey:@"ErrorMsg"] delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
-            [alert show];
-        }
-    }else if (flagLoginEmployerDetails == TRUE) {
-        [HUD hide:YES];
-        flagLoginEmployerDetails = FALSE;
-        NSError *error;
-        NSDictionary *JSONDict12 =
-        [NSJSONSerialization JSONObjectWithData: [[responseDict objectForKey:@"d"] dataUsingEncoding:NSUTF8StringEncoding]
-                                        options: NSJSONReadingMutableContainers
-                                          error: &error];
-        if ([[[JSONDict12 valueForKey:@"ErrorFlag"]objectAtIndex:0] isEqualToString:@"Success"]==TRUE) {
-            [[NSUserDefaults standardUserDefaults]setObject:[[JSONDict12 valueForKey:@"ErrorFlag"]objectAtIndex:0] forKey:@"SuceessStatus"];
-            [[NSUserDefaults standardUserDefaults]setObject:[[JSONDict12 valueForKey:@"Message"]objectAtIndex:0] forKey:@"UserId"];
-            [[NSUserDefaults standardUserDefaults]setObject:[[JSONDict12 valueForKey:@"Email"]objectAtIndex:0] forKey:@"UserEmail"];
-            [[NSUserDefaults standardUserDefaults]synchronize];
-            [self addToFavourite];
-            
-        }else{
-            UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"Error" message:@"You have entered an incorrect username/password and/or you are not approved to use the site.If you continue to have problems, please contact agcareers@agcareers.com." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
-            [alert show];
-        }
-    }else if (flagForgotPasswordEmpDetails == TRUE){
-        flagForgotPasswordEmpDetails = FALSE;
-        [HUD hide:YES];
-        [self.tabBarController.view setUserInteractionEnabled:YES];
-        NSError *error;
-        JSONDict = [NSJSONSerialization JSONObjectWithData: [[responseDict objectForKey:@"d"] dataUsingEncoding:NSUTF8StringEncoding]
-                                                   options: NSJSONReadingMutableContainers
-                                                     error: &error];
-        if ([[JSONDict valueForKey:@"Success"]intValue]==1) {
-            [self showAlertViewWithMessage:@"New password has been sent to your email id." withTitle:@"Success"];
-        }else {
-            [self showAlertViewWithMessage:[JSONDict valueForKey:@"ErrorMsg"] withTitle:@"Error"];
-        }
-    }else{
-        [HUD hide:YES];
-        [self.tabBarController.view setUserInteractionEnabled:YES ];
-        NSError *error;
-        JSONDict = [NSJSONSerialization JSONObjectWithData: [[responseDict objectForKey:@"d"] dataUsingEncoding:NSUTF8StringEncoding]
-                                                   options: NSJSONReadingMutableContainers
-                                                     error: &error];
-        if ([[JSONDict valueForKey:@"EmployerID"] intValue] == 0) {
-            _labelCurrentJobsListing.text = @"";
-            imageViewLogo.image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:@""]]];
-            alertForNoDetails = [[UIAlertView alloc]initWithTitle:@"Error" message:@"There are no details for this employer" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
-            [alertForNoDetails show];
-        }else {
-            
-            if ([[JSONDict valueForKey:@"Description"] length]==0) {
-                textFieldDescription.text = @"There is no description";
-                stringEmployerDescription = @"There is no description";
-            }else {
-                textFieldDescription.text = [self stringByStrippingHTML:[self decodeHTMLEntities:[JSONDict valueForKey:@"Description"]]];
-                stringEmployerDescription = [self stringByStrippingHTML:[self decodeHTMLEntities:[JSONDict valueForKey:@"Description"]]];
+    if (successBool == YES) {
+        if (flagSaveEmployer == TRUE) {
+            flagSaveEmployer = FALSE;
+            [HUD1 hide:YES];
+            [self.tabBarController.view setUserInteractionEnabled:YES ];
+            NSError *error;
+            JSONDict = [NSJSONSerialization JSONObjectWithData: [[responseDict objectForKey:@"d"] dataUsingEncoding:NSUTF8StringEncoding]
+                                                       options: NSJSONReadingMutableContainers
+                                                         error: &error];
+            if ([[JSONDict valueForKey:@"Success"]intValue]==1) {
+                UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"Success" message:[JSONDict valueForKey:@"ErrorMsg"] delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+                [alert show];
+            }else{
+                UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"Error" message:[JSONDict valueForKey:@"ErrorMsg"] delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+                [alert show];
             }
-            _labelCurrentJobsListing.text = @"Current Jobs Listings";//http://dev.agcareers.farmsstaging.com
-//            NSString *stringImageURL = [NSString stringWithFormat:@"http://agcareers-ws.farmsstaging.com/uploads/companyLogos/%@",[[JSONDict valueForKey:@"LogoName"] stringByReplacingOccurrencesOfString:@" " withString:@"%20"]];
-            NSString *stringImageURL = [NSString stringWithFormat:@"http://%@/uploads/companyLogos/%@",[[NSUserDefaults standardUserDefaults] valueForKey:@"GlobalHost"],[[JSONDict valueForKey:@"LogoName"] stringByReplacingOccurrencesOfString:@" " withString:@"%20"]];
-
-            imageViewLogo.image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:stringImageURL]]];
-            arrayJobsListing = [JSONDict valueForKey:@"JobsList"];
-            stringLogoImageURL = stringImageURL;
-            stringEmployerName = stringEmpTitle;
-            stringEmploperJobCount = [NSString stringWithFormat:@"%lu",(unsigned long)[arrayJobsListing count]];
-            
-            [tableViewCurrentJobs reloadData];
-            
+        }else if (flagLoginEmployerDetails == TRUE) {
+            [HUD hide:YES];
+            flagLoginEmployerDetails = FALSE;
+            NSError *error;
+            NSDictionary *JSONDict12 =
+            [NSJSONSerialization JSONObjectWithData: [[responseDict objectForKey:@"d"] dataUsingEncoding:NSUTF8StringEncoding]
+                                            options: NSJSONReadingMutableContainers
+                                              error: &error];
+            if ([[[JSONDict12 valueForKey:@"ErrorFlag"]objectAtIndex:0] isEqualToString:@"Success"]==TRUE) {
+                [[NSUserDefaults standardUserDefaults]setObject:[[JSONDict12 valueForKey:@"ErrorFlag"]objectAtIndex:0] forKey:@"SuceessStatus"];
+                [[NSUserDefaults standardUserDefaults]setObject:[[JSONDict12 valueForKey:@"Message"]objectAtIndex:0] forKey:@"UserId"];
+                [[NSUserDefaults standardUserDefaults]setObject:[[JSONDict12 valueForKey:@"Email"]objectAtIndex:0] forKey:@"UserEmail"];
+                [[NSUserDefaults standardUserDefaults]synchronize];
+                [self addToFavourite];
+                
+            }else{
+                UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"Error" message:@"You have entered an incorrect username/password and/or you are not approved to use the site.If you continue to have problems, please contact agcareers@agcareers.com." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+                [alert show];
+            }
+        }else if (flagForgotPasswordEmpDetails == TRUE){
+            flagForgotPasswordEmpDetails = FALSE;
+            [HUD hide:YES];
+            [self.tabBarController.view setUserInteractionEnabled:YES];
+            NSError *error;
+            JSONDict = [NSJSONSerialization JSONObjectWithData: [[responseDict objectForKey:@"d"] dataUsingEncoding:NSUTF8StringEncoding]
+                                                       options: NSJSONReadingMutableContainers
+                                                         error: &error];
+            if ([[JSONDict valueForKey:@"Success"]intValue]==1) {
+                [self showAlertViewWithMessage:@"New password has been sent to your email id." withTitle:@"Success"];
+            }else {
+                [self showAlertViewWithMessage:[JSONDict valueForKey:@"ErrorMsg"] withTitle:@"Error"];
+            }
+        }else{
+            [HUD hide:YES];
+            [self.tabBarController.view setUserInteractionEnabled:YES ];
+            NSError *error;
+            JSONDict = [NSJSONSerialization JSONObjectWithData: [[responseDict objectForKey:@"d"] dataUsingEncoding:NSUTF8StringEncoding]
+                                                       options: NSJSONReadingMutableContainers
+                                                         error: &error];
+            if ([[JSONDict valueForKey:@"EmployerID"] intValue] == 0) {
+                _labelCurrentJobsListing.text = @"";
+                imageViewLogo.image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:@""]]];
+                alertForNoDetails = [[UIAlertView alloc]initWithTitle:@"Error" message:@"There are no details for this employer" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+                [alertForNoDetails show];
+            }else {
+                
+                if ([[JSONDict valueForKey:@"Description"] length]==0) {
+                    textFieldDescription.text = @"There is no description";
+                    stringEmployerDescription = @"There is no description";
+                }else {
+                    textFieldDescription.text = [self stringByStrippingHTML:[self decodeHTMLEntities:[JSONDict valueForKey:@"Description"]]];
+                    stringEmployerDescription = [self stringByStrippingHTML:[self decodeHTMLEntities:[JSONDict valueForKey:@"Description"]]];
+                }
+                _labelCurrentJobsListing.text = @"Current Jobs Listings";//http://dev.agcareers.farmsstaging.com
+                //            NSString *stringImageURL = [NSString stringWithFormat:@"http://agcareers-ws.farmsstaging.com/uploads/companyLogos/%@",[[JSONDict valueForKey:@"LogoName"] stringByReplacingOccurrencesOfString:@" " withString:@"%20"]];
+                NSString *stringImageURL = [NSString stringWithFormat:@"http://%@/uploads/companyLogos/%@",[[NSUserDefaults standardUserDefaults] valueForKey:@"GlobalHost"],[[JSONDict valueForKey:@"LogoName"] stringByReplacingOccurrencesOfString:@" " withString:@"%20"]];
+                
+                imageViewLogo.image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:stringImageURL]]];
+                arrayJobsListing = [JSONDict valueForKey:@"JobsList"];
+                stringLogoImageURL = stringImageURL;
+                stringEmployerName = stringEmpTitle;
+                stringEmploperJobCount = [NSString stringWithFormat:@"%lu",(unsigned long)[arrayJobsListing count]];
+                
+                [tableViewCurrentJobs reloadData];
+                
+            }
         }
+    }else{ // if (successBool == YES) {
+        [HUD hide:YES];
+        [HUD1 hide:YES];
+        UIAlertView *alertSuccessStatus = [[UIAlertView alloc]initWithTitle:@"Error" message:@"Some error occured. Please try again." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+        [alertSuccessStatus show];
     }
 }
 
@@ -367,7 +374,7 @@ BOOL flagForgotPasswordEmpDetails       = FALSE;
                 AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication]delegate];
                 appDelegate.stringApplyWhileCreating = @"OnlyCreating";
                 appDelegate.stringATSJob = @"";
-
+                
                 [self performSegueWithIdentifier:@"SegueCreateEpmloyerDetails" sender:self];
             }
         }

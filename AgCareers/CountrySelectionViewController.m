@@ -115,15 +115,21 @@
 
 #pragma mark response
 -(void)receiveJsonResponse:(NSDictionary*)responseDict withSuccess:(BOOL)successBool{
-    
-    [HUD hide:YES];
-    [self.tabBarController.view setUserInteractionEnabled:YES];
-    NSError *error;
-    JSONDict = [NSJSONSerialization JSONObjectWithData: [[responseDict objectForKey:@"d"] dataUsingEncoding:NSUTF8StringEncoding]
-                                               options: NSJSONReadingMutableContainers
-                                                 error: &error];
-    //NSArray* contents = [JSONDict valueForKey:@"CategorysList"];
-    [tableVeiwCountry reloadData];
+    if (successBool == YES) {
+        [HUD hide:YES];
+        [self.tabBarController.view setUserInteractionEnabled:YES];
+        NSError *error;
+        JSONDict = [NSJSONSerialization JSONObjectWithData: [[responseDict objectForKey:@"d"] dataUsingEncoding:NSUTF8StringEncoding]
+                                                   options: NSJSONReadingMutableContainers
+                                                     error: &error];
+        //NSArray* contents = [JSONDict valueForKey:@"CategorysList"];
+        [tableVeiwCountry reloadData];
+    }else{ //if (successBool == YES) {
+        [HUD hide:YES];
+        
+        UIAlertView *alertSuccessStatus = [[UIAlertView alloc]initWithTitle:@"Error" message:@"Some error occured. Please try again." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+        [alertSuccessStatus show];
+    }
 }
 
 /*

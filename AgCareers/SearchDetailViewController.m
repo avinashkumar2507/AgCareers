@@ -80,7 +80,7 @@ BOOL flagdeleteSearch           = FALSE;
 }
 
 -(void)viewWillAppear:(BOOL)animated{
-
+    
     id<GAITracker> tracker = [[GAI sharedInstance] defaultTracker];
     [tracker set:kGAIScreenName value:@"iOS- Search Criteria Details Screen"];
     [tracker send:[[GAIDictionaryBuilder createScreenView] build]];
@@ -248,104 +248,113 @@ BOOL flagdeleteSearch           = FALSE;
 
 #pragma mark response
 -(void)receiveJsonResponse:(NSDictionary*)responseDict withSuccess:(BOOL)successBool{
-    if (flagdeleteSearch == TRUE) {
-        flagdeleteSearch = FALSE;
-        [HUD1 hide:YES];
-        [self.tabBarController.view setUserInteractionEnabled:YES];
-        NSError *error;
-        JSONDict = [NSJSONSerialization JSONObjectWithData: [[responseDict objectForKey:@"d"] dataUsingEncoding:NSUTF8StringEncoding]
-                                                   options: NSJSONReadingMutableContainers
-                                                     error: &error];
-        if ([[JSONDict valueForKey:@"Success"]intValue]==1) {
-            alertDeleteSuccess = [[UIAlertView alloc]initWithTitle:@"Success" message:@"Deleted Successfully" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
-            [alertDeleteSuccess show];
-        }else{
-            alertDeleteFail = [[UIAlertView alloc]initWithTitle:@"Error" message:@"Some error occured. Please try again later." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
-            [alertDeleteFail show];
-        }
-        
-    }else{
-        if (successBool == NO) {
-            [HUD hide:YES];
-            [self.tabBarController.view setUserInteractionEnabled:YES];
-            alertForNoDetails = [[UIAlertView alloc]initWithTitle:@"Error" message:@"Some error occured. Please try again later." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
-            [alertForNoDetails show];
-        }else{
-            [HUD hide:YES];
+    
+    if (successBool == YES) {
+        if (flagdeleteSearch == TRUE) {
+            flagdeleteSearch = FALSE;
+            [HUD1 hide:YES];
             [self.tabBarController.view setUserInteractionEnabled:YES];
             NSError *error;
             JSONDict = [NSJSONSerialization JSONObjectWithData: [[responseDict objectForKey:@"d"] dataUsingEncoding:NSUTF8StringEncoding]
                                                        options: NSJSONReadingMutableContainers
                                                          error: &error];
+            if ([[JSONDict valueForKey:@"Success"]intValue]==1) {
+                alertDeleteSuccess = [[UIAlertView alloc]initWithTitle:@"Success" message:@"Deleted Successfully" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+                [alertDeleteSuccess show];
+            }else{
+                alertDeleteFail = [[UIAlertView alloc]initWithTitle:@"Error" message:@"Some error occured. Please try again later." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+                [alertDeleteFail show];
+            }
             
-            if ([[JSONDict valueForKey:@"ErrorMsg"] isEqualToString:@"No Records Found"]) {
-                alertForNoDetails = [[UIAlertView alloc]initWithTitle:@"Error" message:@"No Records Found" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+        }else{
+            if (successBool == NO) {
+                [HUD hide:YES];
+                [self.tabBarController.view setUserInteractionEnabled:YES];
+                alertForNoDetails = [[UIAlertView alloc]initWithTitle:@"Error" message:@"Some error occured. Please try again later." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
                 [alertForNoDetails show];
             }else{
-                labelTitle.text = searchTitle;
-                if ([searchTitle length]>0) {
-                    labelTitle.text =  searchTitle;
-                }else {
-                    labelTitle.text = @"";
-                }
-                if ([[JSONDict valueForKey:@"IndustrySector"] length]>0) {
-                    strIndustrySector = [JSONDict valueForKey:@"IndustrySector"];
-                    strIndustrySector = [strIndustrySector substringToIndex:strIndustrySector.length-(strIndustrySector.length>0)];
-                    labelIndustorySector.text =  [NSString stringWithFormat:@"Industry Sector: %@",[strIndustrySector stringByReplacingOccurrencesOfString:@"#" withString:@","]];
-                    [labelIndustorySector boldSubstring: @"Industry Sector:"];
-                }else {
-                    labelIndustorySector.text = @"";
-                }
-                if ([[JSONDict valueForKey:@"IndustryType"] length]>0) {
-                    strIndustryTypes = [JSONDict valueForKey:@"IndustryType"];
-                    strIndustryTypes = [strIndustryTypes substringToIndex:strIndustryTypes.length-(strIndustryTypes.length>0)];
-                    labelIndustryType.text =  [NSString stringWithFormat:@"Industry Type: %@",[strIndustryTypes stringByReplacingOccurrencesOfString:@"#" withString:@","]];
-                    [labelIndustryType boldSubstring: @"Industry Type:"];
-                }else {
-                    labelIndustryType.text = @"";
-                }
-                if ([[JSONDict valueForKey:@"CareersType"] length]>0) {
-                    strCarrersType = [JSONDict valueForKey:@"CareersType"];
-                    strCarrersType = [strCarrersType substringToIndex:strCarrersType.length-(strCarrersType.length>0)];
-                    lableCareersType.text =  [NSString stringWithFormat:@"Carrers Type: %@",[strCarrersType stringByReplacingOccurrencesOfString:@"#" withString:@","]];
-                    [lableCareersType boldSubstring: @"Carrers Type:"];
-                }else {
-                    lableCareersType.text = @"";
-                }
-                if ([[JSONDict valueForKey:@"Countrys"] length]>0) {
-                    strCountry = [JSONDict valueForKey:@"Countrys"];
-                    labelCountry.text =  [NSString stringWithFormat:@"Country: %@",[strCountry  stringByReplacingOccurrencesOfString:@"#" withString:@","]];
-                    [labelCountry boldSubstring: @"Country:"];
-                }else{
-                    
-                    labelCountry.text = @"";
-                }
-                if ([[JSONDict valueForKey:@"Regions"] length]>0) {
-                    strRegion = [JSONDict valueForKey:@"Regions"];
-
-                    labelRegion.text =  [NSString stringWithFormat:@"Region: %@",[strRegion stringByReplacingOccurrencesOfString:@"#" withString:@","]];
-                    [labelRegion boldSubstring: @"Region:"];
-                }else{
-                    labelRegion.text = @"";
-                }
-                if ([[JSONDict valueForKey:@"States"] length]>0) {
-                    strState = [JSONDict valueForKey:@"States"];
-                    //strState = [strState substringToIndex:strState.length-(strState.length>0)];
-                    labelState.text =  [NSString stringWithFormat:@"State: %@",[strState stringByReplacingOccurrencesOfString:@"#" withString:@","]];
-                    [labelState boldSubstring: @"State:"];
-                }else {
-                    labelState.text = @"";
-                }
+                [HUD hide:YES];
+                [self.tabBarController.view setUserInteractionEnabled:YES];
+                NSError *error;
+                JSONDict = [NSJSONSerialization JSONObjectWithData: [[responseDict objectForKey:@"d"] dataUsingEncoding:NSUTF8StringEncoding]
+                                                           options: NSJSONReadingMutableContainers
+                                                             error: &error];
                 
-                arrayJobsListing = [JSONDict valueForKey:@"JobsList"];
-                if ([arrayJobsListing count]>0) {
-                    labelCurrentJobs.text = @"Current Jobs Listings";
-                }else {
-                    labelCurrentJobs.text = @"No current Jobs";
+                if ([[JSONDict valueForKey:@"ErrorMsg"] isEqualToString:@"No Records Found"]) {
+                    alertForNoDetails = [[UIAlertView alloc]initWithTitle:@"Error" message:@"No Records Found" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+                    [alertForNoDetails show];
+                }else{
+                    labelTitle.text = searchTitle;
+                    if ([searchTitle length]>0) {
+                        labelTitle.text =  searchTitle;
+                    }else {
+                        labelTitle.text = @"";
+                    }
+                    if ([[JSONDict valueForKey:@"IndustrySector"] length]>0) {
+                        strIndustrySector = [JSONDict valueForKey:@"IndustrySector"];
+                        strIndustrySector = [strIndustrySector substringToIndex:strIndustrySector.length-(strIndustrySector.length>0)];
+                        labelIndustorySector.text =  [NSString stringWithFormat:@"Industry Sector: %@",[strIndustrySector stringByReplacingOccurrencesOfString:@"#" withString:@","]];
+                        [labelIndustorySector boldSubstring: @"Industry Sector:"];
+                    }else {
+                        labelIndustorySector.text = @"";
+                    }
+                    if ([[JSONDict valueForKey:@"IndustryType"] length]>0) {
+                        strIndustryTypes = [JSONDict valueForKey:@"IndustryType"];
+                        strIndustryTypes = [strIndustryTypes substringToIndex:strIndustryTypes.length-(strIndustryTypes.length>0)];
+                        labelIndustryType.text =  [NSString stringWithFormat:@"Industry Type: %@",[strIndustryTypes stringByReplacingOccurrencesOfString:@"#" withString:@","]];
+                        [labelIndustryType boldSubstring: @"Industry Type:"];
+                    }else {
+                        labelIndustryType.text = @"";
+                    }
+                    if ([[JSONDict valueForKey:@"CareersType"] length]>0) {
+                        strCarrersType = [JSONDict valueForKey:@"CareersType"];
+                        strCarrersType = [strCarrersType substringToIndex:strCarrersType.length-(strCarrersType.length>0)];
+                        lableCareersType.text =  [NSString stringWithFormat:@"Carrers Type: %@",[strCarrersType stringByReplacingOccurrencesOfString:@"#" withString:@","]];
+                        [lableCareersType boldSubstring: @"Carrers Type:"];
+                    }else {
+                        lableCareersType.text = @"";
+                    }
+                    if ([[JSONDict valueForKey:@"Countrys"] length]>0) {
+                        strCountry = [JSONDict valueForKey:@"Countrys"];
+                        labelCountry.text =  [NSString stringWithFormat:@"Country: %@",[strCountry  stringByReplacingOccurrencesOfString:@"#" withString:@","]];
+                        [labelCountry boldSubstring: @"Country:"];
+                    }else{
+                        
+                        labelCountry.text = @"";
+                    }
+                    if ([[JSONDict valueForKey:@"Regions"] length]>0) {
+                        strRegion = [JSONDict valueForKey:@"Regions"];
+                        
+                        labelRegion.text =  [NSString stringWithFormat:@"Region: %@",[strRegion stringByReplacingOccurrencesOfString:@"#" withString:@","]];
+                        [labelRegion boldSubstring: @"Region:"];
+                    }else{
+                        labelRegion.text = @"";
+                    }
+                    if ([[JSONDict valueForKey:@"States"] length]>0) {
+                        strState = [JSONDict valueForKey:@"States"];
+                        //strState = [strState substringToIndex:strState.length-(strState.length>0)];
+                        labelState.text =  [NSString stringWithFormat:@"State: %@",[strState stringByReplacingOccurrencesOfString:@"#" withString:@","]];
+                        [labelState boldSubstring: @"State:"];
+                    }else {
+                        labelState.text = @"";
+                    }
+                    
+                    arrayJobsListing = [JSONDict valueForKey:@"JobsList"];
+                    if ([arrayJobsListing count]>0) {
+                        labelCurrentJobs.text = @"Current Jobs Listings";
+                    }else {
+                        labelCurrentJobs.text = @"No current Jobs";
+                    }
+                    [tableSearches reloadData];
                 }
-                [tableSearches reloadData];
             }
         }
+        
+    }else{ //if (successBool == YES) {
+        [HUD hide:YES];
+        [HUD1 hide:YES];
+        UIAlertView *alertSuccessStatus = [[UIAlertView alloc]initWithTitle:@"Error" message:@"Some error occured. Please try again" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+        [alertSuccessStatus show];
     }
 }
 
@@ -393,7 +402,7 @@ BOOL flagdeleteSearch           = FALSE;
         }
         
         searchEditViewController.stringStateId = [JSONDict valueForKey:@"StateIds"];
-
+        
     }
 }
 

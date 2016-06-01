@@ -305,133 +305,139 @@ NSString *stringIdIndustryApplyDetails         = @"";
 }
 
 -(void)receiveJsonResponse:(NSDictionary*)responseDict withSuccess:(BOOL)successBool {
-    
-    if (flagExperienceApplyDetails == TRUE) {
+    if (successBool == YES) {
         
-        [HUD hide:YES];
-        [self.tabBarController.view setUserInteractionEnabled:YES];
-        NSError *error;
-        JSONDict = [NSJSONSerialization JSONObjectWithData: [[responseDict objectForKey:@"d"] dataUsingEncoding:NSUTF8StringEncoding]
-                                                   options: NSJSONReadingMutableContainers
-                                                     error: &error];
-        arrayPickerData = [JSONDict valueForKey:@"Rows"];
-        pickerParentView.hidden = NO;
-        [myPicker reloadAllComponents];
-    } else if (flagOccupationApplyDetails == TRUE) {
-        
-        [HUD hide:YES];
-        [self.tabBarController.view setUserInteractionEnabled:YES];
-        NSError *error;
-        JSONDict = [NSJSONSerialization JSONObjectWithData: [[responseDict objectForKey:@"d"] dataUsingEncoding:NSUTF8StringEncoding]
-                                                   options: NSJSONReadingMutableContainers
-                                                     error: &error];
-        arrayPickerData = [JSONDict valueForKey:@"Rows"];
-        pickerParentView.hidden = NO;
-        [myPicker reloadAllComponents];
-    }
-    else if (flagMinimumExperienceApplyDetails == TRUE) {
-        
-        [HUD hide:YES];
-        [self.tabBarController.view setUserInteractionEnabled:YES];
-        NSError *error;
-        JSONDict = [NSJSONSerialization JSONObjectWithData: [[responseDict objectForKey:@"d"] dataUsingEncoding:NSUTF8StringEncoding]
-                                                   options: NSJSONReadingMutableContainers
-                                                     error: &error];
-        arrayPickerData = [JSONDict valueForKey:@"Rows"];
-        pickerParentView.hidden = NO;
-        [myPicker reloadAllComponents];
-    } else if (flagMaximumExperienceApplyDetails == TRUE) {
-        
-        [HUD hide:YES];
-        [self.tabBarController.view setUserInteractionEnabled:YES];
-        NSError *error;
-        JSONDict = [NSJSONSerialization JSONObjectWithData: [[responseDict objectForKey:@"d"] dataUsingEncoding:NSUTF8StringEncoding]
-                                                   options: NSJSONReadingMutableContainers
-                                                     error: &error];
-        arrayPickerData = [JSONDict valueForKey:@"Rows"];
-        pickerParentView.hidden = NO;
-        [myPicker reloadAllComponents];
-    } else if (flagIndustryTypeApplyDetails == TRUE) {
-        
-        [HUD hide:YES];
-        [self.tabBarController.view setUserInteractionEnabled:YES];
-        NSError *error;
-        JSONDict = [NSJSONSerialization JSONObjectWithData: [[responseDict objectForKey:@"d"] dataUsingEncoding:NSUTF8StringEncoding]
-                                                   options: NSJSONReadingMutableContainers
-                                                     error: &error];
-        arrayPickerData = [JSONDict valueForKey:@"CategorysList"];
-        pickerParentView.hidden = NO;
-        [myPicker reloadAllComponents];
-    } else if (flagCareersTypeApplyDetails == TRUE) {
-        
-        [HUD hide:YES];
-        [self.tabBarController.view setUserInteractionEnabled:YES];
-        NSError *error;
-        JSONDict = [NSJSONSerialization JSONObjectWithData: [[responseDict objectForKey:@"d"] dataUsingEncoding:NSUTF8StringEncoding]
-                                                   options: NSJSONReadingMutableContainers
-                                                     error: &error];
-        arrayPickerData = [JSONDict valueForKey:@"CategorysList"];
-        pickerParentView.hidden = NO;
-        [myPicker reloadAllComponents];
-    } else if (flagSaveMemberDetailsApplyDetails == TRUE) {
-        flagSaveMemberDetailsApplyDetails = FALSE;
-        [HUD hide:YES];
-        [self.tabBarController.view setUserInteractionEnabled:YES];
-        NSError *error;
-        JSONDict = [NSJSONSerialization JSONObjectWithData: [[responseDict objectForKey:@"d"] dataUsingEncoding:NSUTF8StringEncoding]
-                                                   options: NSJSONReadingMutableContainers
-                                                     error: &error];
-        if ([[JSONDict valueForKey:@"Success"]intValue]==1) {
-            [self showAlertViewWithMessage:@"Your profile details have been updated successfully" withTitle:@"Success"];
-        }else{
-            [self showAlertViewWithMessage:@"Some error occured. Please try again later." withTitle:@"Error"];
-        }
-    } else if (flagGetApplyDetails == TRUE){
-        flagGetApplyDetails = FALSE;
-        [HUD hide:YES];
-        [self.tabBarController.view setUserInteractionEnabled:YES];
-        NSError *error;
-        JSONDict = [NSJSONSerialization JSONObjectWithData: [[responseDict objectForKey:@"d"] dataUsingEncoding:NSUTF8StringEncoding]
-                                                   options: NSJSONReadingMutableContainers
-                                                     error: &error];
-        [textFieldExperience setText:[JSONDict valueForKey:@"Experience"]];
-        [textFieldOccupation setText:[JSONDict valueForKey:@"Occupation"]];
-        [textFieldMinimumEducation setText:[JSONDict valueForKey:@"MinEducation"]];
-        [textFieldMejorEducation setText:[JSONDict valueForKey:@"MaxEducation"]];
-        [textFieldCareerType setText:[JSONDict valueForKey:@"CareerType"]];
-        [textFieldIndustryType setText:[JSONDict valueForKey:@"IndustryType"]];
-        
-        stringIdExperienceApplyDetails = [JSONDict valueForKey:@"ExpYearsid"];
-        stringIdOccupationApplyDetails = [JSONDict valueForKey:@"Occupationid"];
-        stringIdMinimumEductionApplyDetails = [JSONDict valueForKey:@"MinEducationID"];
-        stringIdMajorEducationApplyDetails = [JSONDict valueForKey:@"MaxEducationID"];
-        stringIdCareersApplyDetails = [JSONDict valueForKey:@"CareerTypeID"];
-        stringIdIndustryApplyDetails = [JSONDict valueForKey:@"IndustryTypeID"];
-    }else if (flagApplyNewJobDetails == TRUE){
-        flagApplyNewJobDetails = FALSE;
-        [HUD hide:YES];
-        [self.tabBarController.view setUserInteractionEnabled:YES];
-        NSError *error;
-        JSONDict = [NSJSONSerialization JSONObjectWithData: [[responseDict objectForKey:@"d"] dataUsingEncoding:NSUTF8StringEncoding]
-                                                   options: NSJSONReadingMutableContainers
-                                                     error: &error];
-        if ([[JSONDict valueForKey:@"ErrorMsg"]isEqualToString:@"Applied Successfully."]) {
-            AppDelegate *appDelegate = (AppDelegate *) [[UIApplication sharedApplication]delegate];
-            NSString *stringCompanyName = appDelegate.stringCompany;
-            NSString *str = [NSString stringWithFormat:@"%@ requires candidates to submit a resume through their online application site. Please tap below to be redirected to the %@ application page for this job.",stringCompanyName,stringCompanyName];
+        if (flagExperienceApplyDetails == TRUE) {
             
-            alertSuccessApply = [[UIAlertView alloc]initWithTitle:@"Success" message:str delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"OK" , nil];
-            [alertSuccessApply show];
+            [HUD hide:YES];
+            [self.tabBarController.view setUserInteractionEnabled:YES];
+            NSError *error;
+            JSONDict = [NSJSONSerialization JSONObjectWithData: [[responseDict objectForKey:@"d"] dataUsingEncoding:NSUTF8StringEncoding]
+                                                       options: NSJSONReadingMutableContainers
+                                                         error: &error];
+            arrayPickerData = [JSONDict valueForKey:@"Rows"];
+            pickerParentView.hidden = NO;
+            [myPicker reloadAllComponents];
+        } else if (flagOccupationApplyDetails == TRUE) {
             
-        }else{
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error"
-                                                            message:[JSONDict valueForKey:@"ErrorMsg"]
-                                                           delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-            [alert show];
+            [HUD hide:YES];
+            [self.tabBarController.view setUserInteractionEnabled:YES];
+            NSError *error;
+            JSONDict = [NSJSONSerialization JSONObjectWithData: [[responseDict objectForKey:@"d"] dataUsingEncoding:NSUTF8StringEncoding]
+                                                       options: NSJSONReadingMutableContainers
+                                                         error: &error];
+            arrayPickerData = [JSONDict valueForKey:@"Rows"];
+            pickerParentView.hidden = NO;
+            [myPicker reloadAllComponents];
         }
-    }
-    else{
-        
+        else if (flagMinimumExperienceApplyDetails == TRUE) {
+            
+            [HUD hide:YES];
+            [self.tabBarController.view setUserInteractionEnabled:YES];
+            NSError *error;
+            JSONDict = [NSJSONSerialization JSONObjectWithData: [[responseDict objectForKey:@"d"] dataUsingEncoding:NSUTF8StringEncoding]
+                                                       options: NSJSONReadingMutableContainers
+                                                         error: &error];
+            arrayPickerData = [JSONDict valueForKey:@"Rows"];
+            pickerParentView.hidden = NO;
+            [myPicker reloadAllComponents];
+        } else if (flagMaximumExperienceApplyDetails == TRUE) {
+            
+            [HUD hide:YES];
+            [self.tabBarController.view setUserInteractionEnabled:YES];
+            NSError *error;
+            JSONDict = [NSJSONSerialization JSONObjectWithData: [[responseDict objectForKey:@"d"] dataUsingEncoding:NSUTF8StringEncoding]
+                                                       options: NSJSONReadingMutableContainers
+                                                         error: &error];
+            arrayPickerData = [JSONDict valueForKey:@"Rows"];
+            pickerParentView.hidden = NO;
+            [myPicker reloadAllComponents];
+        } else if (flagIndustryTypeApplyDetails == TRUE) {
+            
+            [HUD hide:YES];
+            [self.tabBarController.view setUserInteractionEnabled:YES];
+            NSError *error;
+            JSONDict = [NSJSONSerialization JSONObjectWithData: [[responseDict objectForKey:@"d"] dataUsingEncoding:NSUTF8StringEncoding]
+                                                       options: NSJSONReadingMutableContainers
+                                                         error: &error];
+            arrayPickerData = [JSONDict valueForKey:@"CategorysList"];
+            pickerParentView.hidden = NO;
+            [myPicker reloadAllComponents];
+        } else if (flagCareersTypeApplyDetails == TRUE) {
+            
+            [HUD hide:YES];
+            [self.tabBarController.view setUserInteractionEnabled:YES];
+            NSError *error;
+            JSONDict = [NSJSONSerialization JSONObjectWithData: [[responseDict objectForKey:@"d"] dataUsingEncoding:NSUTF8StringEncoding]
+                                                       options: NSJSONReadingMutableContainers
+                                                         error: &error];
+            arrayPickerData = [JSONDict valueForKey:@"CategorysList"];
+            pickerParentView.hidden = NO;
+            [myPicker reloadAllComponents];
+        } else if (flagSaveMemberDetailsApplyDetails == TRUE) {
+            flagSaveMemberDetailsApplyDetails = FALSE;
+            [HUD hide:YES];
+            [self.tabBarController.view setUserInteractionEnabled:YES];
+            NSError *error;
+            JSONDict = [NSJSONSerialization JSONObjectWithData: [[responseDict objectForKey:@"d"] dataUsingEncoding:NSUTF8StringEncoding]
+                                                       options: NSJSONReadingMutableContainers
+                                                         error: &error];
+            if ([[JSONDict valueForKey:@"Success"]intValue]==1) {
+                [self showAlertViewWithMessage:@"Your profile details have been updated successfully" withTitle:@"Success"];
+            }else{
+                [self showAlertViewWithMessage:@"Some error occured. Please try again later." withTitle:@"Error"];
+            }
+        } else if (flagGetApplyDetails == TRUE){
+            flagGetApplyDetails = FALSE;
+            [HUD hide:YES];
+            [self.tabBarController.view setUserInteractionEnabled:YES];
+            NSError *error;
+            JSONDict = [NSJSONSerialization JSONObjectWithData: [[responseDict objectForKey:@"d"] dataUsingEncoding:NSUTF8StringEncoding]
+                                                       options: NSJSONReadingMutableContainers
+                                                         error: &error];
+            [textFieldExperience setText:[JSONDict valueForKey:@"Experience"]];
+            [textFieldOccupation setText:[JSONDict valueForKey:@"Occupation"]];
+            [textFieldMinimumEducation setText:[JSONDict valueForKey:@"MinEducation"]];
+            [textFieldMejorEducation setText:[JSONDict valueForKey:@"MaxEducation"]];
+            [textFieldCareerType setText:[JSONDict valueForKey:@"CareerType"]];
+            [textFieldIndustryType setText:[JSONDict valueForKey:@"IndustryType"]];
+            
+            stringIdExperienceApplyDetails = [JSONDict valueForKey:@"ExpYearsid"];
+            stringIdOccupationApplyDetails = [JSONDict valueForKey:@"Occupationid"];
+            stringIdMinimumEductionApplyDetails = [JSONDict valueForKey:@"MinEducationID"];
+            stringIdMajorEducationApplyDetails = [JSONDict valueForKey:@"MaxEducationID"];
+            stringIdCareersApplyDetails = [JSONDict valueForKey:@"CareerTypeID"];
+            stringIdIndustryApplyDetails = [JSONDict valueForKey:@"IndustryTypeID"];
+        }else if (flagApplyNewJobDetails == TRUE){
+            flagApplyNewJobDetails = FALSE;
+            [HUD hide:YES];
+            [self.tabBarController.view setUserInteractionEnabled:YES];
+            NSError *error;
+            JSONDict = [NSJSONSerialization JSONObjectWithData: [[responseDict objectForKey:@"d"] dataUsingEncoding:NSUTF8StringEncoding]
+                                                       options: NSJSONReadingMutableContainers
+                                                         error: &error];
+            if ([[JSONDict valueForKey:@"ErrorMsg"]isEqualToString:@"Applied Successfully."]) {
+                AppDelegate *appDelegate = (AppDelegate *) [[UIApplication sharedApplication]delegate];
+                NSString *stringCompanyName = appDelegate.stringCompany;
+                NSString *str = [NSString stringWithFormat:@"%@ requires candidates to submit a resume through their online application site. Please tap below to be redirected to the %@ application page for this job.",stringCompanyName,stringCompanyName];
+                
+                alertSuccessApply = [[UIAlertView alloc]initWithTitle:@"Success" message:str delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"OK" , nil];
+                [alertSuccessApply show];
+                
+            }else{
+                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error"
+                                                                message:[JSONDict valueForKey:@"ErrorMsg"]
+                                                               delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+                [alert show];
+            }
+        }
+        else{
+            
+        }
+    }else{ //if (successBool == YES) {
+        [HUD hide:YES];
+        UIAlertView *alertSuccessStatus = [[UIAlertView alloc]initWithTitle:@"Error" message:@"Some error occured. Please try again" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+        [alertSuccessStatus show];
     }
 }
 

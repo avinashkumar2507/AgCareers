@@ -50,16 +50,16 @@ NSString *Success        = @"";
                                                  name:UIApplicationDidBecomeActiveNotification
                                                object:nil];
     
-    NSUserActivity *newact = [[NSUserActivity alloc]initWithActivityType:@"com.agcareers.iphone"];
-    newact.title = @"AgCareers";
-    newact.eligibleForSearch = YES;
-    
-    NSSet *mySet = [[NSSet alloc]initWithObjects:@"Ag",@"AgCareer",@"Agriculture",@"Resume",@"Dropbox",@"Google Drive", nil];
-    
-    [newact setKeywords:mySet];
-    self.userActivity = newact;
-    newact.eligibleForHandoff = false;
-    [newact becomeCurrent];
+    //    NSUserActivity *newact = [[NSUserActivity alloc]initWithActivityType:@"com.agcareers.iphone"];
+    //    newact.title = @"AgCareers";
+    //    newact.eligibleForSearch = YES;
+    //
+    //    NSSet *mySet = [[NSSet alloc]initWithObjects:@"Ag",@"AgCareer",@"Agriculture",@"Resume",@"Dropbox",@"Google Drive", nil];
+    //
+    //    [newact setKeywords:mySet];
+    //    self.userActivity = newact;
+    //    newact.eligibleForHandoff = false;
+    //    [newact becomeCurrent];
     
     NSError *error;
     NSString *documentsPath = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)[0];
@@ -124,13 +124,13 @@ NSString *Success        = @"";
     [[NSUserDefaults standardUserDefaults]setValue:@"http://mstaging.agcareers.com/" forKey:@"MorePageURL"];
     [[NSUserDefaults standardUserDefaults]setValue:@"staging.agcareers.com" forKey:@"GlobalHost"];
     [[NSUserDefaults standardUserDefaults]setValue:@"216.220.44.186" forKey:@"GlobalFTP"];
-
+    
     /* Production */
-//    [[NSUserDefaults standardUserDefaults]setValue:@"http://www.agcareers.com/mobilewsnative/WebService/newjobsearch.asmx/" forKey:@"GlobalURL"];
-//    [[NSUserDefaults standardUserDefaults]setValue:@"http://www.agcareers.com" forKey:@"JobShare"];
-//    [[NSUserDefaults standardUserDefaults]setValue:@"http://m.agcareers.com/" forKey:@"MorePageURL"];
-//    [[NSUserDefaults standardUserDefaults]setValue:@"www.agcareers.com" forKey:@"GlobalHost"];
-//    [[NSUserDefaults standardUserDefaults]setValue:@"216.220.44.165" forKey:@"GlobalFTP"];
+//        [[NSUserDefaults standardUserDefaults]setValue:@"http://www.agcareers.com/mobilewsnative/WebService/newjobsearch.asmx/" forKey:@"GlobalURL"];
+//        [[NSUserDefaults standardUserDefaults]setValue:@"http://www.agcareers.com" forKey:@"JobShare"];
+//        [[NSUserDefaults standardUserDefaults]setValue:@"http://m.agcareers.com/" forKey:@"MorePageURL"];
+//        [[NSUserDefaults standardUserDefaults]setValue:@"www.agcareers.com" forKey:@"GlobalHost"];
+//        [[NSUserDefaults standardUserDefaults]setValue:@"216.220.44.165" forKey:@"GlobalFTP"];
 }
 
 - (void)getWebDomain{
@@ -284,62 +284,69 @@ NSString *Success        = @"";
     //[HUD hide:YES];
     
     //[HUD hide:YES];
-    
-    [self.tabBarController.view setUserInteractionEnabled:YES];
-    
-    NSError *error;
-    JSONDict3433 = [NSJSONSerialization JSONObjectWithData: [[responseDict objectForKey:@"d"] dataUsingEncoding:NSUTF8StringEncoding]
-                                                   options: NSJSONReadingMutableContainers
-                                                     error: &error];
-    if ([[JSONDict3433 valueForKey:@"IsActive"]intValue]==1)
-        isActive = TRUE;
-    else
-        isActive = FALSE;
-    
-    if (isActive == TRUE) {
-        if ([[JSONDict3433 valueForKey:@"isShowMessage"]intValue]==1)
-            isShowMessage = TRUE;
+    if (successBool == YES) {
+        [self.tabBarController.view setUserInteractionEnabled:YES];
+        
+        NSError *error;
+        JSONDict3433 = [NSJSONSerialization JSONObjectWithData: [[responseDict objectForKey:@"d"] dataUsingEncoding:NSUTF8StringEncoding]
+                                                       options: NSJSONReadingMutableContainers
+                                                         error: &error];
+        if ([[JSONDict3433 valueForKey:@"IsActive"]intValue]==1)
+            isActive = TRUE;
         else
-            isShowMessage = FALSE;
+            isActive = FALSE;
         
-        if ([[JSONDict3433 valueForKey:@"IsCriticalUpdate"]intValue]==1){
-            isCriticalUpdate = TRUE;
-            [[NSUserDefaults standardUserDefaults]setValue:@"TRUE" forKey:@"CriticalUpdateValue"];
+        if (isActive == TRUE) {
+            if ([[JSONDict3433 valueForKey:@"isShowMessage"]intValue]==1)
+                isShowMessage = TRUE;
+            else
+                isShowMessage = FALSE;
             
-        }else{
-            isCriticalUpdate = FALSE;
-            [[NSUserDefaults standardUserDefaults]setValue:@"FALSE" forKey:@"CriticalUpdateValue"];
-        }
-        
-        if ([[JSONDict3433 valueForKey:@"Onetime"]intValue]==1){
-            //[[NSUserDefaults standardUserDefaults] setValue:@"O" forKey:@"ONE_TIME"];
-            isOnetime = TRUE;
-        }else{
-            isOnetime = FALSE;
-            [[NSUserDefaults standardUserDefaults] setValue:@"O" forKey:@"ONE_TIME"];
-        }
-        Message = [JSONDict3433 valueForKey:@"Message"];
-        newVersion = [JSONDict3433 valueForKey:@"Version"];
-        Success = [JSONDict3433 valueForKey:@"Success"];
-        
-        NSString *appVersion = [[[NSBundle mainBundle] infoDictionary]valueForKey:@"CFBundleShortVersionString"];
-        
-        NSString *v1 = appVersion;
-        NSString *v2 = newVersion;
-        
-        NSComparisonResult r = [v1 compare:v2 options:NSNumericSearch];
-        
-        if (r == NSOrderedSame || r == NSOrderedDescending) {
-            NSLog(@"true");
-        }else {
-            NSLog(@"false");
-            if (isShowMessage) {
-                [self ShowAlert];
+            if ([[JSONDict3433 valueForKey:@"IsCriticalUpdate"]intValue]==1){
+                isCriticalUpdate = TRUE;
+                [[NSUserDefaults standardUserDefaults]setValue:@"TRUE" forKey:@"CriticalUpdateValue"];
+                
+            }else{
+                isCriticalUpdate = FALSE;
+                [[NSUserDefaults standardUserDefaults]setValue:@"FALSE" forKey:@"CriticalUpdateValue"];
             }
+            
+            if ([[JSONDict3433 valueForKey:@"Onetime"]intValue]==1){
+                //[[NSUserDefaults standardUserDefaults] setValue:@"O" forKey:@"ONE_TIME"];
+                isOnetime = TRUE;
+            }else{
+                isOnetime = FALSE;
+                [[NSUserDefaults standardUserDefaults] setValue:@"O" forKey:@"ONE_TIME"];
+            }
+            Message = [JSONDict3433 valueForKey:@"Message"];
+            newVersion = [JSONDict3433 valueForKey:@"Version"];
+            Success = [JSONDict3433 valueForKey:@"Success"];
+            
+            NSString *appVersion = [[[NSBundle mainBundle] infoDictionary]valueForKey:@"CFBundleShortVersionString"];
+            
+            NSString *v1 = appVersion;
+            NSString *v2 = newVersion;
+            
+            NSComparisonResult r = [v1 compare:v2 options:NSNumericSearch];
+            
+            if (r == NSOrderedSame || r == NSOrderedDescending) {
+                NSLog(@"true");
+            }else {
+                NSLog(@"false");
+                if (isShowMessage) {
+                    [self ShowAlert];
+                }
+            }
+        }else{
+            
         }
-    }else{
+    }else{ //if (successBool == YES) {
+        [HUD hide:YES];
         
+        UIAlertView *alertSuccessStatus = [[UIAlertView alloc]initWithTitle:@"Error" message:@"Some error occured. Please try again" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+        [alertSuccessStatus show];
     }
+    
 }
 
 -(void)hideHUDandWebservice{
@@ -355,7 +362,7 @@ NSString *Success        = @"";
     }else {
         if (isOnetime == TRUE) {
             if ([[[NSUserDefaults standardUserDefaults] valueForKey:@"ONE_TIME"]isEqualToString:@"ONE"]) {
-
+                
             } else {
                 [[NSUserDefaults standardUserDefaults] setValue:@"ONE" forKey:@"ONE_TIME"];
                 [[NSUserDefaults standardUserDefaults] synchronize];

@@ -47,28 +47,28 @@ NSString *uploadSucessCreate        = @"";
     id<GAITracker> tracker = [[GAI sharedInstance] defaultTracker];
     [tracker set:kGAIScreenName value:@"iOS- Create Profile Three Screen"];
     [tracker send:[[GAIDictionaryBuilder createScreenView] build]];
-//    NSString *documentsDirectory = [NSHomeDirectory() stringByAppendingPathComponent:@"Documents/Resume/"];
-//    NSArray *filePathsArray = [[NSFileManager defaultManager] subpathsOfDirectoryAtPath:documentsDirectory  error:nil];
-//    
-//    //if ([[filePathsArray objectAtIndex:0]containsString:@"DS_Store"]) {  //AvinashCover
-//    if ([filePathsArray count]>0) {
-//        for (int i = 0; i< [filePathsArray count]; i++) {
-//            labelResumeName.text = [filePathsArray objectAtIndex:i];
-//        }
-//    }else {
-//        labelResumeName.text = @"Select resume";
-//    }
-//    
-//    NSString *documentsDirectoryCover = [NSHomeDirectory() stringByAppendingPathComponent:@"Documents/Cover/"];
-//    NSArray *filePathsArrayCover = [[NSFileManager defaultManager] subpathsOfDirectoryAtPath:documentsDirectoryCover  error:nil];
-//    
-//    if ([filePathsArrayCover count]>0) {
-//        for (int i = 0; i< [filePathsArrayCover count]; i++) {
-//            labelCoverLetterName.text = [filePathsArrayCover objectAtIndex:i];
-//        }
-//    }else {
-//        labelCoverLetterName.text = @"Select cover letter";
-//    }
+    //    NSString *documentsDirectory = [NSHomeDirectory() stringByAppendingPathComponent:@"Documents/Resume/"];
+    //    NSArray *filePathsArray = [[NSFileManager defaultManager] subpathsOfDirectoryAtPath:documentsDirectory  error:nil];
+    //
+    //    //if ([[filePathsArray objectAtIndex:0]containsString:@"DS_Store"]) {  //AvinashCover
+    //    if ([filePathsArray count]>0) {
+    //        for (int i = 0; i< [filePathsArray count]; i++) {
+    //            labelResumeName.text = [filePathsArray objectAtIndex:i];
+    //        }
+    //    }else {
+    //        labelResumeName.text = @"Select resume";
+    //    }
+    //
+    //    NSString *documentsDirectoryCover = [NSHomeDirectory() stringByAppendingPathComponent:@"Documents/Cover/"];
+    //    NSArray *filePathsArrayCover = [[NSFileManager defaultManager] subpathsOfDirectoryAtPath:documentsDirectoryCover  error:nil];
+    //
+    //    if ([filePathsArrayCover count]>0) {
+    //        for (int i = 0; i< [filePathsArrayCover count]; i++) {
+    //            labelCoverLetterName.text = [filePathsArrayCover objectAtIndex:i];
+    //        }
+    //    }else {
+    //        labelCoverLetterName.text = @"Select cover letter";
+    //    }
     NSString *documentsDirectory = [NSHomeDirectory() stringByAppendingPathComponent:@"Documents/Resume/"];
     NSArray *filePathsArray = [[NSFileManager defaultManager] subpathsOfDirectoryAtPath:documentsDirectory  error:nil];
     
@@ -236,7 +236,7 @@ NSString *stringCoverFileNameCreateText     = @"";
     }else {
         
         //if ([[filePathsArrayName objectAtIndex:0] rangeOfString:@".rtf"].location==NSNotFound ) {
-          if ([[filePathsArrayName objectAtIndex:0] rangeOfString:@".docx"].location!=NSNotFound ||[[filePathsArrayName objectAtIndex:0] rangeOfString:@".doc"].location!=NSNotFound ||[[filePathsArrayName objectAtIndex:0] rangeOfString:@".pdf"].location!=NSNotFound ||[[filePathsArrayName objectAtIndex:0] rangeOfString:@".txt"].location!=NSNotFound) {  
+        if ([[filePathsArrayName objectAtIndex:0] rangeOfString:@".docx"].location!=NSNotFound ||[[filePathsArrayName objectAtIndex:0] rangeOfString:@".doc"].location!=NSNotFound ||[[filePathsArrayName objectAtIndex:0] rangeOfString:@".pdf"].location!=NSNotFound ||[[filePathsArrayName objectAtIndex:0] rangeOfString:@".txt"].location!=NSNotFound) {
             if (fileSizeInDouble > 5000000) {
                 [self showAlertViewWithMessage:@"Permissible file size is upto 5MB" withTitle:@"Error"];
             }else{
@@ -252,17 +252,17 @@ NSString *stringCoverFileNameCreateText     = @"";
                 
                 NSString *stringUploadName =  [NSString stringWithFormat:@"%@_%@",[[NSUserDefaults standardUserDefaults]valueForKey:@"UserId"],[filePathsArrayName objectAtIndex:0]];
                 
-//                uploadFile.path = [NSString stringWithFormat:@"root\\dev.agcareers.farmsstaging.com\\www\\AgUploads\\%@",stringUploadName]; // Resume path
-//                
-//                uploadFile.hostname = @"192.168.24.45";
-//                uploadFile.username = @"Rohit.singh";
-//                uploadFile.password = @"P@ssw0rd2012";
-
-//                uploadFile.path = [NSString stringWithFormat:@"root\\agcareers.farmsstaging.com\\www\\AgUploads\\%@",stringUploadName]; // Resume path
-//                
-//                uploadFile.hostname = @"216.220.44.186";
-//                uploadFile.username = @"Rohit.singh";
-//                uploadFile.password = @"P@ssw0rd2012";
+                //                uploadFile.path = [NSString stringWithFormat:@"root\\dev.agcareers.farmsstaging.com\\www\\AgUploads\\%@",stringUploadName]; // Resume path
+                //
+                //                uploadFile.hostname = @"192.168.24.45";
+                //                uploadFile.username = @"Rohit.singh";
+                //                uploadFile.password = @"P@ssw0rd2012";
+                
+                //                uploadFile.path = [NSString stringWithFormat:@"root\\agcareers.farmsstaging.com\\www\\AgUploads\\%@",stringUploadName]; // Resume path
+                //
+                //                uploadFile.hostname = @"216.220.44.186";
+                //                uploadFile.username = @"Rohit.singh";
+                //                uploadFile.password = @"P@ssw0rd2012";
                 
                 uploadFile.path = [NSString stringWithFormat:@"aguploads\\%@",stringUploadName]; // Resume path
                 
@@ -323,14 +323,14 @@ NSString *stringCoverFileNameCreateText     = @"";
     if (request == uploadFile) {
         NSLog(@"%@", request.error.message);
         
-//        [HUD1 hide:YES];
-//        
-//        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error"
-//                                                        message:@"Some error occured while uploading the document. Please try again."
-//                                                       delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-//        [alert show];
-//        
-//        uploadFile = nil;
+        //        [HUD1 hide:YES];
+        //
+        //        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error"
+        //                                                        message:@"Some error occured while uploading the document. Please try again."
+        //                                                       delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        //        [alert show];
+        //
+        //        uploadFile = nil;
     }else{
         
         NSLog(@"Avinash unknown error Create profile");
@@ -433,7 +433,7 @@ NSString *stringCoverFileNameCreateText     = @"";
     NSString* soapAction = @"http://tempuri.org/SaveResumeFile";
     AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication]delegate];
     //appDelegate.stringApplyWhileCreating = @"ApplyWhileCreating";
-
+    
     NSDictionary* parameterDict = [NSDictionary dictionaryWithObjectsAndKeys:[[NSUserDefaults standardUserDefaults]valueForKey:@"UserId"],@"MemberID",
                                    stringResumeId,@"ResumeID",
                                    stringResumeFileNameCreateText,@"DescriptiveName",
@@ -475,7 +475,7 @@ NSString *stringCoverFileNameCreateText     = @"";
     dictProfile = appDelegate.applyProfileDictionary;
     dictDetails = appDelegate.applyDetailsDictionary;
     NSString *jobID = appDelegate.stringJobIdCreateProfile;
-   
+    
     
     NSDictionary* parameterDict = [NSDictionary dictionaryWithObjectsAndKeys:jobID,@"JobID",
                                    [[NSUserDefaults standardUserDefaults]valueForKey:@"UserId"],@"MemberID",
@@ -525,63 +525,69 @@ NSString *stringCoverFileNameCreateText     = @"";
 }
 
 -(void)receiveJsonResponse:(NSDictionary*)responseDict withSuccess:(BOOL)successBool {
-    
-    if (flagReferrence == TRUE) {
-        
-        [HUD hide:YES];
-        [self.tabBarController.view setUserInteractionEnabled:YES];
-        NSError *error;
-        JSONDict = [NSJSONSerialization JSONObjectWithData: [[responseDict objectForKey:@"d"] dataUsingEncoding:NSUTF8StringEncoding]
-                                                   options: NSJSONReadingMutableContainers
-                                                     error: &error];
-        arrayPickerData = [JSONDict valueForKey:@"Rows"];
-        pickerParentView.hidden = NO;
-        [myPicker reloadAllComponents];
-    }
-    if (flagSubmitCreate == TRUE) {
-        uploadSucessCreate = @"FALSE";
-        
-        flagSubmitCreate = FALSE;
-        [HUD hide:YES];
-        [self.tabBarController.view setUserInteractionEnabled:YES];
-        NSError *error;
-        JSONDict = [NSJSONSerialization JSONObjectWithData: [[responseDict objectForKey:@"d"] dataUsingEncoding:NSUTF8StringEncoding]
-                                                   options: NSJSONReadingMutableContainers
-                                                     error: &error];
-        if ([[JSONDict valueForKey:@"Success"]intValue]==1) {
+    if (successBool == YES) {
+        if (flagReferrence == TRUE) {
             
-            alertSuccess = [[UIAlertView alloc]initWithTitle:@"Success" message:@"Your profile has been created succesfully." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil , nil];
-            [alertSuccess show];
+            [HUD hide:YES];
+            [self.tabBarController.view setUserInteractionEnabled:YES];
+            NSError *error;
+            JSONDict = [NSJSONSerialization JSONObjectWithData: [[responseDict objectForKey:@"d"] dataUsingEncoding:NSUTF8StringEncoding]
+                                                       options: NSJSONReadingMutableContainers
+                                                         error: &error];
+            arrayPickerData = [JSONDict valueForKey:@"Rows"];
+            pickerParentView.hidden = NO;
+            [myPicker reloadAllComponents];
+        }
+        if (flagSubmitCreate == TRUE) {
+            uploadSucessCreate = @"FALSE";
             
-            AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication]delegate];
-            
-            if ([appDelegate.stringApplyWhileCreating isEqualToString:@"ApplyWhileCreating"]) {
+            flagSubmitCreate = FALSE;
+            [HUD hide:YES];
+            [self.tabBarController.view setUserInteractionEnabled:YES];
+            NSError *error;
+            JSONDict = [NSJSONSerialization JSONObjectWithData: [[responseDict objectForKey:@"d"] dataUsingEncoding:NSUTF8StringEncoding]
+                                                       options: NSJSONReadingMutableContainers
+                                                         error: &error];
+            if ([[JSONDict valueForKey:@"Success"]intValue]==1) {
                 
-                alertForApplySucess = [[UIAlertView alloc]initWithTitle:@"Success" message:@"You have successfully applied to job and created your profile" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil , nil];
-                [alertForApplySucess show];
-                //[self callWebServiceNewJobApply];
+                alertSuccess = [[UIAlertView alloc]initWithTitle:@"Success" message:@"Your profile has been created succesfully." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil , nil];
+                [alertSuccess show];
+                
+                AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication]delegate];
+                
+                if ([appDelegate.stringApplyWhileCreating isEqualToString:@"ApplyWhileCreating"]) {
+                    
+                    alertForApplySucess = [[UIAlertView alloc]initWithTitle:@"Success" message:@"You have successfully applied to job and created your profile" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil , nil];
+                    [alertForApplySucess show];
+                    //[self callWebServiceNewJobApply];
+                }else{
+                    [self.tabBarController setSelectedIndex:0];
+                }
             }else{
-                [self.tabBarController setSelectedIndex:0];
+                [self showAlertViewWithMessage:@"Some error occured. Please try again." withTitle:@"Error"];
             }
-        }else{
-            [self showAlertViewWithMessage:@"Some error occured. Please try again." withTitle:@"Error"];
         }
-    }
-    if (flagApplyWithCreateProfile == TRUE) {
-        flagApplyWithCreateProfile = FALSE;
+        if (flagApplyWithCreateProfile == TRUE) {
+            flagApplyWithCreateProfile = FALSE;
+            [HUD hide:YES];
+            [self.tabBarController.view setUserInteractionEnabled:YES];
+            NSError *error;
+            JSONDict = [NSJSONSerialization JSONObjectWithData: [[responseDict objectForKey:@"d"] dataUsingEncoding:NSUTF8StringEncoding]
+                                                       options: NSJSONReadingMutableContainers
+                                                         error: &error];
+            if ([[JSONDict valueForKey:@"Success"]intValue]==1) {
+                
+                alertForApplySucess = [[UIAlertView alloc]initWithTitle:@"Success" message:@"You have successfully applied to job and created your profile" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil ,nil];
+                [alertForApplySucess show];
+            }else {
+                [self showAlertViewWithMessage:@"Some error occured. Please try again later." withTitle:@"Error"];
+            }
+        }
+    }else{ //if (successBool == YES) {
         [HUD hide:YES];
-        [self.tabBarController.view setUserInteractionEnabled:YES];
-        NSError *error;
-        JSONDict = [NSJSONSerialization JSONObjectWithData: [[responseDict objectForKey:@"d"] dataUsingEncoding:NSUTF8StringEncoding]
-                                                   options: NSJSONReadingMutableContainers
-                                                     error: &error];
-        if ([[JSONDict valueForKey:@"Success"]intValue]==1) {
-            
-            alertForApplySucess = [[UIAlertView alloc]initWithTitle:@"Success" message:@"You have successfully applied to job and created your profile" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil ,nil];
-            [alertForApplySucess show];
-        }else {
-            [self showAlertViewWithMessage:@"Some error occured. Please try again later." withTitle:@"Error"];
-        }
+        [HUD1 hide:YES];
+        UIAlertView *alertSuccessStatus = [[UIAlertView alloc]initWithTitle:@"Error" message:@"Some error occured. Please try again." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+        [alertSuccessStatus show];
     }
 }
 
@@ -750,7 +756,7 @@ BOOL flagSubmitCreate = FALSE;
         }else {
             myCover = @"Select cover letter";
         }
-
+        
         if ([uploadSucessCreate isEqualToString:@"TRUE"]) {
             if ([textFieldReferrence.text length]>0) {
                 if (switchAccept.isOn == TRUE) {
@@ -767,7 +773,7 @@ BOOL flagSubmitCreate = FALSE;
                     stringResumeFileNameCreateText = labelResumeName.text;
                     AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication]delegate];
                     //appDelegate.stringApplyWhileCreating = @"ApplyWhileCreating";
-
+                    
                     if ([appDelegate.stringApplyWhileCreating isEqualToString:@"ApplyWhileCreating"]) {
                         [self callWebServiceNewJobApply];
                     }else{

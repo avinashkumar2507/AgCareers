@@ -308,21 +308,10 @@ loadMetadataFailedWithError:(NSError *)error {
                                     options: NSJSONReadingMutableContainers
                                       error: &error];
     
-    //    NSLog(@">>>%@",[[[JSONDict objectForKey:@"JobList"]objectAtIndex:0]valueForKey:@"Applied"]);
-    
     if ([[JSONDict objectForKey:@"JobList"] count ]==0  ) {
         NSLog(@"empty");
     }
     
-    //    Applied = 0;
-    //    AppliedDate = "";
-    //    Company = "Land O'Lakes";
-    //    DateExpired = "13 May 2015 00:00:00";
-    //    IsExpired = 0;
-    //    JobID = 425144;
-    //    JobTitle = "Regional EHS Manager";
-    //    Location = "Neosho, Missouri";
-    //    SavedOn = "16 Apr 2015 03:31:32";
 }
 
 // For getting application document directory path

@@ -11,7 +11,8 @@
 #import <Google/Analytics.h>
 
 @interface AppDelegate ()
-
+//UA-2331453-3 Live
+//UA-51806388-1 Test
 @end
 
 // http://stackoverflow.com/questions/32137582/how-to-install-ios-7-and-onwards-simulators-in-xcode-7-beta-5

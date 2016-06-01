@@ -342,11 +342,11 @@ NSString *descriptionString;
         
         NSDictionary *dictRoot = [NSDictionary dictionaryWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"ConfigFile" ofType:@"plist" ]];
         NSString *urlStringConfig = [dictRoot objectForKey:@"MorePage"];
-
+        
         SLComposeViewController *controller = [SLComposeViewController composeViewControllerForServiceType:SLServiceTypeFacebook];
         
         NSString *stringFinalURL;
-
+        
         if ([[JSONDict valueForKey:@"isConfidential"]intValue]==1) {
             
             NSArray *itemArr = [urlString componentsSeparatedByString:@"/"];
@@ -440,7 +440,7 @@ NSString *descriptionString;
         [tweetSheet setInitialText:stringTitle];
         
         [tweetSheet addURL:[NSURL URLWithString:stringFinalURL]];
-                
+        
         [tweetSheet addImage:[UIImage imageNamed:[NSString stringWithFormat:@"%@new-skin/creative/assets/logos/logo.png",urlStringConfig]]];
         
         [tweetSheet setCompletionHandler:^(SLComposeViewControllerResult result) {
@@ -485,7 +485,7 @@ NSString *descriptionString;
 }
 
 -(void)emailCall {
-
+    
     NSDictionary *dictRoot = [NSDictionary dictionaryWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"ConfigFile" ofType:@"plist" ]];
     NSString *urlStringConfig = [dictRoot objectForKey:@"MorePage"];
     
@@ -557,7 +557,7 @@ NSString *descriptionString;
             AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication]delegate];
             appDelegate.stringApplyWhileCreating = @"OnlyCreating";
             appDelegate.stringATSJob = @"";
-
+            
             [self performSegueWithIdentifier:@"SegueCreateJobDetails" sender:self];
         }
     }
@@ -832,7 +832,7 @@ NSString *descriptionString;
         parameterDict = [NSDictionary dictionaryWithObjectsAndKeys: stringJobId,@"JobID",[[NSUserDefaults standardUserDefaults]valueForKey:@"UserId"],@"MemberID",@"iOSTest",@"UserIP",@"0",@"LongIP",@"0",@"CountryID",nil];
     }else{
         parameterDict = [NSDictionary dictionaryWithObjectsAndKeys: stringJobId,@"JobID",@"0",@"MemberID",@"iOSTest",@"UserIP",@"0",@"LongIP",@"0",@"CountryID",nil];
-
+        
     }
     NSDictionary* dictToSend = [NSDictionary dictionaryWithObjectsAndKeys:methodName,@"methodName",soapAction,@"soapAction",parameterDict,@"parameterDict", nil];
     [self performSelector:@selector(hideHUDandWebservice) withObject:nil afterDelay:20];
@@ -887,152 +887,160 @@ NSString *descriptionString;
 #pragma mark response
 -(void)receiveJsonResponse:(NSDictionary*)responseDict withSuccess:(BOOL)successBool{
     
-    if (flagLoginDetail == TRUE) {
-        [HUD hide:YES];
-        flagLoginDetail = FALSE;
-        NSError *error;
-        NSDictionary *JSONDict12 =
-        [NSJSONSerialization JSONObjectWithData: [[responseDict objectForKey:@"d"] dataUsingEncoding:NSUTF8StringEncoding]
-                                        options: NSJSONReadingMutableContainers
-                                          error: &error];
-        if ([[[JSONDict12 valueForKey:@"ErrorFlag"]objectAtIndex:0] isEqualToString:@"Success"]==TRUE) {
-            [[NSUserDefaults standardUserDefaults]setObject:[[JSONDict12 valueForKey:@"ErrorFlag"]objectAtIndex:0] forKey:@"SuceessStatus"];
-            [[NSUserDefaults standardUserDefaults]setObject:[[JSONDict12 valueForKey:@"Message"]objectAtIndex:0] forKey:@"UserId"];
-            [[NSUserDefaults standardUserDefaults]setObject:[[JSONDict12 valueForKey:@"Email"]objectAtIndex:0] forKey:@"UserEmail"];
-            [[NSUserDefaults standardUserDefaults]synchronize];
-            [self addToFavourite];
-            
-        }else{
-            UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"Error" message:@"You have entered an incorrect username/password and/or you are not approved to use the site.If you continue to have problems, please contact agcareers@agcareers.com." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
-            [alert show];
-        }
-    }else if (flagSavedJob == TRUE){
-        flagSavedJob = FALSE;
-        [HUD hide:YES];
-        [self.tabBarController.view setUserInteractionEnabled:YES];
-        NSError *error;
-        JSONDict11 = [NSJSONSerialization JSONObjectWithData: [[responseDict objectForKey:@"d"] dataUsingEncoding:NSUTF8StringEncoding]
-                                                     options: NSJSONReadingMutableContainers
-                                                       error: &error];
-        int sucessFlag = [[JSONDict11 objectForKey:@"Success"] intValue];
-        UIAlertView *alertSave ;
-        if (sucessFlag==1) {
-            alertSave = [[UIAlertView alloc]initWithTitle:@"Sucess" message:[JSONDict11 valueForKey:@"ErrorMsg"] delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
-            [alertSave show];
-        }else {
-            alertSave = [[UIAlertView alloc]initWithTitle:@"Error" message:@"Some error has occured. Please try after some time." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
-            [alertSave show];
-        }
-    }else if (flagFacebookCall == TRUE){
+    
+    if (successBool == YES) {
         
-        flagFacebookCall = FALSE;
-        
-        [HUD hide:YES];
-        
-        [self.tabBarController.view setUserInteractionEnabled:YES];
-        
-        NSError *error;
-        
-        JSONDict22 = [NSJSONSerialization JSONObjectWithData: [[responseDict objectForKey:@"d"] dataUsingEncoding:NSUTF8StringEncoding]
-                      
-                                                     options: NSJSONReadingMutableContainers
-                      
-                                                       error: &error];
-        
-        urlString = [JSONDict22 objectForKey:@"ErrorMsg"];  // ErrorMsg having URL Value
-        
-    }else if (flagtwitterCall == TRUE){
-        
-        flagtwitterCall = FALSE;
-        
-        [HUD hide:YES];
-        
-        [self.tabBarController.view setUserInteractionEnabled:YES];
-        
-        NSError *error;
-        
-        JSONDict = [NSJSONSerialization JSONObjectWithData: [[responseDict objectForKey:@"d"] dataUsingEncoding:NSUTF8StringEncoding] options: NSJSONReadingMutableContainers
-                                                     error: &error];
-        urlString = [JSONDict objectForKey:@"ErrorMsg"];  // ErrorMsg having URL Value
-        
-    }else if (flagForgotPasswordJobDetails == TRUE){
-        flagForgotPasswordJobDetails = FALSE;
-        [HUD hide:YES];
-        [self.tabBarController.view setUserInteractionEnabled:YES];
-        NSError *error;
-        JSONDict = [NSJSONSerialization JSONObjectWithData: [[responseDict objectForKey:@"d"] dataUsingEncoding:NSUTF8StringEncoding]
-                                                   options: NSJSONReadingMutableContainers
-                                                     error: &error];
-        if ([[JSONDict valueForKey:@"Success"]intValue]==1) {
-            [self showAlertViewWithMessage:@"New password has been sent to your email id." withTitle:@"Success"];
-        }else {
-            [self showAlertViewWithMessage:[JSONDict valueForKey:@"ErrorMsg"] withTitle:@"Error"];
-        }
-    }else if(flagCheckAlreadyApplied==TRUE){
-        flagCheckAlreadyApplied = FALSE;
-        [HUD hide:YES];
-        [self.tabBarController.view setUserInteractionEnabled:YES];
-        NSError *error;
-        JSONDict = [NSJSONSerialization JSONObjectWithData: [[responseDict objectForKey:@"d"] dataUsingEncoding:NSUTF8StringEncoding] options: NSJSONReadingMutableContainers error: &error];
-        
-        if ([[JSONDict objectForKey:@"Success"] intValue]==1) {
-            alertForAlreadyApplied = [[UIAlertView alloc]initWithTitle:@"Error" message:[JSONDict objectForKey:@"ErrorMsg"] delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
-            [alertForAlreadyApplied show];
-        }else{
-            [self performSegueWithIdentifier:@"SegueDirectApplyWithLogin" sender:self];
-        }
-    }else{
-        [HUD hide:YES];
-        [self.tabBarController.view setUserInteractionEnabled:YES];
-        NSError *error;
-        JSONDict = [NSJSONSerialization JSONObjectWithData: [[responseDict objectForKey:@"d"] dataUsingEncoding:NSUTF8StringEncoding] options: NSJSONReadingMutableContainers error: &error];
-        
-        AppDelegate *appDelegate = (AppDelegate *) [[UIApplication sharedApplication]delegate];
-        if ([[JSONDict valueForKey:@"ApplyLink"]length]>0) {
-            
-            appDelegate.stringATSJob = [JSONDict valueForKey:@"ApplyLink"];
-        }else {
-            
-            appDelegate.stringATSJob = @"";
-        }
-        
-        appDelegate.stringCompany = [JSONDict valueForKey:@"JobCompany"];
-        labelJobTitle.text = [JSONDict objectForKey:@"JobTitle"];
-        NSString *str = [JSONDict objectForKey:@"JobDecsription"];
-        
-        if ((NSNull *)str == [NSNull null]) {
-            str = @"There is no description for this job.";
-        }
-        
-        NSString *strFilter = [self stringByStrippingHTML:str];
-        strFilter = [strFilter stringByReplacingOccurrencesOfString:@"\r" withString:@" "];
-        strFilter = [strFilter stringByReplacingOccurrencesOfString:@"\t" withString:@""];
-        strFilter = [strFilter stringByReplacingOccurrencesOfString:@"\n" withString:@"\t"];
-        descriptionString = [self stringByStrippingHTML:[self decodeHTMLEntities:str]];
-        
-        if ([descriptionString length]==0) {
-            cellheight = 50;
-        }else{
-            if (IDIOM==IPAD) {
-                CGSize size1 = [self findHeightForText:descriptionString havingWidth:768 andFont:[UIFont systemFontOfSize:17]];//(768 *1024
+        if (flagLoginDetail == TRUE) {
+            [HUD hide:YES];
+            flagLoginDetail = FALSE;
+            NSError *error;
+            NSDictionary *JSONDict12 =
+            [NSJSONSerialization JSONObjectWithData: [[responseDict objectForKey:@"d"] dataUsingEncoding:NSUTF8StringEncoding]
+                                            options: NSJSONReadingMutableContainers
+                                              error: &error];
+            if ([[[JSONDict12 valueForKey:@"ErrorFlag"]objectAtIndex:0] isEqualToString:@"Success"]==TRUE) {
+                [[NSUserDefaults standardUserDefaults]setObject:[[JSONDict12 valueForKey:@"ErrorFlag"]objectAtIndex:0] forKey:@"SuceessStatus"];
+                [[NSUserDefaults standardUserDefaults]setObject:[[JSONDict12 valueForKey:@"Message"]objectAtIndex:0] forKey:@"UserId"];
+                [[NSUserDefaults standardUserDefaults]setObject:[[JSONDict12 valueForKey:@"Email"]objectAtIndex:0] forKey:@"UserEmail"];
+                [[NSUserDefaults standardUserDefaults]synchronize];
+                [self addToFavourite];
                 
-                if (size1.height < 100) {
-                    cellheight = 100;
-                }else{
-                    cellheight = 150;
-                }
+            }else{
+                UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"Error" message:@"You have entered an incorrect username/password and/or you are not approved to use the site.If you continue to have problems, please contact agcareers@agcareers.com." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+                [alert show];
+            }
+        }else if (flagSavedJob == TRUE){
+            flagSavedJob = FALSE;
+            [HUD hide:YES];
+            [self.tabBarController.view setUserInteractionEnabled:YES];
+            NSError *error;
+            JSONDict11 = [NSJSONSerialization JSONObjectWithData: [[responseDict objectForKey:@"d"] dataUsingEncoding:NSUTF8StringEncoding]
+                                                         options: NSJSONReadingMutableContainers
+                                                           error: &error];
+            int sucessFlag = [[JSONDict11 objectForKey:@"Success"] intValue];
+            UIAlertView *alertSave ;
+            if (sucessFlag==1) {
+                alertSave = [[UIAlertView alloc]initWithTitle:@"Sucess" message:[JSONDict11 valueForKey:@"ErrorMsg"] delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+                [alertSave show];
             }else {
-                CGSize size1 = [self findHeightForText:descriptionString havingWidth:320 andFont:[UIFont systemFontOfSize:14]];
+                alertSave = [[UIAlertView alloc]initWithTitle:@"Error" message:@"Some error has occured. Please try after some time." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+                [alertSave show];
+            }
+        }else if (flagFacebookCall == TRUE){
+            
+            flagFacebookCall = FALSE;
+            
+            [HUD hide:YES];
+            
+            [self.tabBarController.view setUserInteractionEnabled:YES];
+            
+            NSError *error;
+            
+            JSONDict22 = [NSJSONSerialization JSONObjectWithData: [[responseDict objectForKey:@"d"] dataUsingEncoding:NSUTF8StringEncoding]
+                          
+                                                         options: NSJSONReadingMutableContainers
+                          
+                                                           error: &error];
+            
+            urlString = [JSONDict22 objectForKey:@"ErrorMsg"];  // ErrorMsg having URL Value
+            
+        }else if (flagtwitterCall == TRUE){
+            
+            flagtwitterCall = FALSE;
+            
+            [HUD hide:YES];
+            
+            [self.tabBarController.view setUserInteractionEnabled:YES];
+            
+            NSError *error;
+            
+            JSONDict = [NSJSONSerialization JSONObjectWithData: [[responseDict objectForKey:@"d"] dataUsingEncoding:NSUTF8StringEncoding] options: NSJSONReadingMutableContainers
+                                                         error: &error];
+            urlString = [JSONDict objectForKey:@"ErrorMsg"];  // ErrorMsg having URL Value
+            
+        }else if (flagForgotPasswordJobDetails == TRUE){
+            flagForgotPasswordJobDetails = FALSE;
+            [HUD hide:YES];
+            [self.tabBarController.view setUserInteractionEnabled:YES];
+            NSError *error;
+            JSONDict = [NSJSONSerialization JSONObjectWithData: [[responseDict objectForKey:@"d"] dataUsingEncoding:NSUTF8StringEncoding]
+                                                       options: NSJSONReadingMutableContainers
+                                                         error: &error];
+            if ([[JSONDict valueForKey:@"Success"]intValue]==1) {
+                [self showAlertViewWithMessage:@"New password has been sent to your email id." withTitle:@"Success"];
+            }else {
+                [self showAlertViewWithMessage:[JSONDict valueForKey:@"ErrorMsg"] withTitle:@"Error"];
+            }
+        }else if(flagCheckAlreadyApplied==TRUE){
+            flagCheckAlreadyApplied = FALSE;
+            [HUD hide:YES];
+            [self.tabBarController.view setUserInteractionEnabled:YES];
+            NSError *error;
+            JSONDict = [NSJSONSerialization JSONObjectWithData: [[responseDict objectForKey:@"d"] dataUsingEncoding:NSUTF8StringEncoding] options: NSJSONReadingMutableContainers error: &error];
+            
+            if ([[JSONDict objectForKey:@"Success"] intValue]==1) {
+                alertForAlreadyApplied = [[UIAlertView alloc]initWithTitle:@"Error" message:[JSONDict objectForKey:@"ErrorMsg"] delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+                [alertForAlreadyApplied show];
+            }else{
+                [self performSegueWithIdentifier:@"SegueDirectApplyWithLogin" sender:self];
+            }
+        }else{
+            [HUD hide:YES];
+            [self.tabBarController.view setUserInteractionEnabled:YES];
+            NSError *error;
+            JSONDict = [NSJSONSerialization JSONObjectWithData: [[responseDict objectForKey:@"d"] dataUsingEncoding:NSUTF8StringEncoding] options: NSJSONReadingMutableContainers error: &error];
+            
+            AppDelegate *appDelegate = (AppDelegate *) [[UIApplication sharedApplication]delegate];
+            if ([[JSONDict valueForKey:@"ApplyLink"]length]>0) {
                 
-                if (size1.height < 100) {
-                    cellheight = 100;
+                appDelegate.stringATSJob = [JSONDict valueForKey:@"ApplyLink"];
+            }else {
+                
+                appDelegate.stringATSJob = @"";
+            }
+            
+            appDelegate.stringCompany = [JSONDict valueForKey:@"JobCompany"];
+            labelJobTitle.text = [JSONDict objectForKey:@"JobTitle"];
+            NSString *str = [JSONDict objectForKey:@"JobDecsription"];
+            
+            if ((NSNull *)str == [NSNull null]) {
+                str = @"There is no description for this job.";
+            }
+            
+            NSString *strFilter = [self stringByStrippingHTML:str];
+            strFilter = [strFilter stringByReplacingOccurrencesOfString:@"\r" withString:@" "];
+            strFilter = [strFilter stringByReplacingOccurrencesOfString:@"\t" withString:@""];
+            strFilter = [strFilter stringByReplacingOccurrencesOfString:@"\n" withString:@"\t"];
+            descriptionString = [self stringByStrippingHTML:[self decodeHTMLEntities:str]];
+            
+            if ([descriptionString length]==0) {
+                cellheight = 50;
+            }else{
+                if (IDIOM==IPAD) {
+                    CGSize size1 = [self findHeightForText:descriptionString havingWidth:768 andFont:[UIFont systemFontOfSize:17]];//(768 *1024
+                    
+                    if (size1.height < 100) {
+                        cellheight = 100;
+                    }else{
+                        cellheight = 150;
+                    }
                 }else {
-                    cellheight = 150;
+                    CGSize size1 = [self findHeightForText:descriptionString havingWidth:320 andFont:[UIFont systemFontOfSize:14]];
+                    
+                    if (size1.height < 100) {
+                        cellheight = 100;
+                    }else {
+                        cellheight = 150;
+                    }
                 }
             }
+            [self GetShareURL];
+            [tableViewJobDetails reloadData];
         }
-        [self GetShareURL];
-        [tableViewJobDetails reloadData];
+    }else{ //if (successBool == YES) {
+        [HUD hide:YES];
+        UIAlertView *alertSuccessStatus = [[UIAlertView alloc]initWithTitle:@"Error" message:@"Some error occured. Please try again" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+        [alertSuccessStatus show];
     }
 }
 
@@ -1087,12 +1095,12 @@ NSString *descriptionString;
             
             flagCheckAlreadyApplied = TRUE;
             [self callWebServiceAlreadyApplied];
-    
+            
         }else {
             [self performSegueWithIdentifier:@"SegueApplyForJob" sender:self];
         }
         
-//        }
+        //        }
     }
 }
 
@@ -1109,8 +1117,8 @@ NSString *descriptionString;
     NSString* methodName = @"IsJobApplied";
     NSString* soapAction = @"http://tempuri.org/IsJobApplied";
     NSDictionary* parameterDict = [NSDictionary dictionaryWithObjectsAndKeys:stringJobId,@"JobId",
-                                                                            [[NSUserDefaults standardUserDefaults]valueForKey:@"UserId"],@"memberid",
-                                                                            [[NSUserDefaults standardUserDefaults]valueForKey:@"UserEmail"],@"email",nil];
+                                   [[NSUserDefaults standardUserDefaults]valueForKey:@"UserId"],@"memberid",
+                                   [[NSUserDefaults standardUserDefaults]valueForKey:@"UserEmail"],@"email",nil];
     NSDictionary* dictToSend = [NSDictionary dictionaryWithObjectsAndKeys:methodName,@"methodName",soapAction,@"soapAction",parameterDict,@"parameterDict", nil];
     [self performSelector:@selector(hideHUDandWebservice) withObject:nil afterDelay:20];
     [jsonParser7 parseSoapWithJSONSoapContents:dictToSend];

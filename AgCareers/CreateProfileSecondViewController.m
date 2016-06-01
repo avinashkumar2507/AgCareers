@@ -39,7 +39,7 @@ NSString *stringIdMajorEducation    = @"";
     self.navigationItem.hidesBackButton = YES;
     stringIdCareers           = @"";
     stringIdIndustry          = @"";
-
+    
     pickerParentView.hidden = YES;
     UITapGestureRecognizer *singleFingerTap =
     [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleSingleTap:)];
@@ -333,12 +333,12 @@ NSString *stringIdMajorEducation    = @"";
     }else{
         [buttonApplyOnline setHidden:YES];
     }
-
+    
     //#import <Google/Analytics.h>
     id<GAITracker> tracker = [[GAI sharedInstance] defaultTracker];
     [tracker set:kGAIScreenName value:@"iOS- Create Profile Two Screen"];
     [tracker send:[[GAIDictionaryBuilder createScreenView] build]];
-
+    
     if ([[[NSUserDefaults standardUserDefaults]valueForKey:@"SuceessStatus"]isEqualToString:@"Success"]) {
         // User is already logged in
         
@@ -363,121 +363,127 @@ NSString *stringIdMajorEducation    = @"";
 }
 
 -(void)receiveJsonResponse:(NSDictionary*)responseDict withSuccess:(BOOL)successBool {
-    
-    if (flagExperience == TRUE) {
-        
-        [HUD hide:YES];
-        [self.tabBarController.view setUserInteractionEnabled:YES];
-        NSError *error;
-        JSONDict = [NSJSONSerialization JSONObjectWithData: [[responseDict objectForKey:@"d"] dataUsingEncoding:NSUTF8StringEncoding]
-                                                   options: NSJSONReadingMutableContainers
-                                                     error: &error];
-        arrayPickerData = [JSONDict valueForKey:@"Rows"];
-        pickerParentView.hidden = NO;
-        [myPicker reloadAllComponents];
-    }
-    if (flagOccupation == TRUE) {
-        
-        [HUD hide:YES];
-        [self.tabBarController.view setUserInteractionEnabled:YES];
-        NSError *error;
-        JSONDict = [NSJSONSerialization JSONObjectWithData: [[responseDict objectForKey:@"d"] dataUsingEncoding:NSUTF8StringEncoding]
-                                                   options: NSJSONReadingMutableContainers
-                                                     error: &error];
-        arrayPickerData = [JSONDict valueForKey:@"Rows"];
-        pickerParentView.hidden = NO;
-        [myPicker reloadAllComponents];
-    }
-    if (flagMinimumExperience == TRUE) {
-        
-        [HUD hide:YES];
-        [self.tabBarController.view setUserInteractionEnabled:YES];
-        NSError *error;
-        JSONDict = [NSJSONSerialization JSONObjectWithData: [[responseDict objectForKey:@"d"] dataUsingEncoding:NSUTF8StringEncoding]
-                                                   options: NSJSONReadingMutableContainers
-                                                     error: &error];
-        arrayPickerData = [JSONDict valueForKey:@"Rows"];
-        pickerParentView.hidden = NO;
-        [myPicker reloadAllComponents];
-    }
-    if (flagMaximumExperience == TRUE) {
-        
-        [HUD hide:YES];
-        [self.tabBarController.view setUserInteractionEnabled:YES];
-        NSError *error;
-        JSONDict = [NSJSONSerialization JSONObjectWithData: [[responseDict objectForKey:@"d"] dataUsingEncoding:NSUTF8StringEncoding]
-                                                   options: NSJSONReadingMutableContainers
-                                                     error: &error];
-        arrayPickerData = [JSONDict valueForKey:@"Rows"];
-        pickerParentView.hidden = NO;
-        [myPicker reloadAllComponents];
-    }
-    if (flagIndustryType == TRUE) {
-        
-        [HUD hide:YES];
-        [self.tabBarController.view setUserInteractionEnabled:YES];
-        NSError *error;
-        JSONDict = [NSJSONSerialization JSONObjectWithData: [[responseDict objectForKey:@"d"] dataUsingEncoding:NSUTF8StringEncoding]
-                                                   options: NSJSONReadingMutableContainers
-                                                     error: &error];
-        arrayPickerData = [JSONDict valueForKey:@"CategorysList"];
-        pickerParentView.hidden = NO;
-        [myPicker reloadAllComponents];
-    }
-    if (flagCareersType == TRUE) {
-        
-        [HUD hide:YES];
-        [self.tabBarController.view setUserInteractionEnabled:YES];
-        NSError *error;
-        JSONDict = [NSJSONSerialization JSONObjectWithData: [[responseDict objectForKey:@"d"] dataUsingEncoding:NSUTF8StringEncoding]
-                                                   options: NSJSONReadingMutableContainers
-                                                     error: &error];
-        arrayPickerData = [JSONDict valueForKey:@"CategorysList"];
-        pickerParentView.hidden = NO;
-        [myPicker reloadAllComponents];
-    }
-    if (flagSaveMemberDetails == TRUE) {
-        flagSaveMemberDetails = FALSE;
-        [HUD hide:YES];
-        [self.tabBarController.view setUserInteractionEnabled:YES];
-        NSError *error;
-        JSONDict = [NSJSONSerialization JSONObjectWithData: [[responseDict objectForKey:@"d"] dataUsingEncoding:NSUTF8StringEncoding]
-                                                   options: NSJSONReadingMutableContainers
-                                                     error: &error];
-        stringResumeIdCreate = [JSONDict valueForKey:@"ID2"];
-//        [[NSUserDefaults standardUserDefaults]setObject:[JSONDict valueForKey:@"ID2"] forKey:@"ResumeIdFromCreate"];
-//        [[NSUserDefaults standardUserDefaults]synchronize];
-        
-        if ([[JSONDict valueForKey:@"Success"]intValue]==1) {
-            [self performSegueWithIdentifier:@"SegueCreateProfileSubmit" sender:self];
-        }else{
-            [self showAlertViewWithMessage:@"Some error occured. Please try again later."];
-        }
-    }
-    if (flagApplyNewJobCreate == TRUE){
-        flagApplyNewJobCreate = FALSE;
-        [HUD hide:YES];
-        [self.tabBarController.view setUserInteractionEnabled:YES];
-        NSError *error;
-        JSONDict = [NSJSONSerialization JSONObjectWithData: [[responseDict objectForKey:@"d"] dataUsingEncoding:NSUTF8StringEncoding]
-                                                   options: NSJSONReadingMutableContainers
-                                                     error: &error];
-        if ([[JSONDict valueForKey:@"Success"]intValue]==1) {
-            [buttonApplyOnline setTitle:@"Applied already" forState:UIControlStateNormal];
-            [buttonApplyOnline setEnabled:NO];
-            AppDelegate *appDelegate = (AppDelegate *) [[UIApplication sharedApplication]delegate];
-            NSString *stringCompanyName = appDelegate.stringCompany;
-            NSString *str = [NSString stringWithFormat:@"%@ requires candidates to submit a resume through their online application site. Please click below to be redirected to the %@ application page for this job.",stringCompanyName,stringCompanyName];
+    if (successBool == YES) {
+        if (flagExperience == TRUE) {
             
-            alertSuccessApply = [[UIAlertView alloc]initWithTitle:@"Success" message:str delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"OK" , nil];
-            [alertSuccessApply show];
-            
-        }else{
-            [buttonApplyOnline setEnabled:YES];
-            //[self showAlertViewWithMessage:@"Some error occured. Please try again later." withTitle:@"Error"];
-            alertP = [[UIAlertView alloc]initWithTitle:@"Error" message:@"Some error occured. Please try again later." delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"OK" , nil];
-            [alertP show];
+            [HUD hide:YES];
+            [self.tabBarController.view setUserInteractionEnabled:YES];
+            NSError *error;
+            JSONDict = [NSJSONSerialization JSONObjectWithData: [[responseDict objectForKey:@"d"] dataUsingEncoding:NSUTF8StringEncoding]
+                                                       options: NSJSONReadingMutableContainers
+                                                         error: &error];
+            arrayPickerData = [JSONDict valueForKey:@"Rows"];
+            pickerParentView.hidden = NO;
+            [myPicker reloadAllComponents];
         }
+        if (flagOccupation == TRUE) {
+            
+            [HUD hide:YES];
+            [self.tabBarController.view setUserInteractionEnabled:YES];
+            NSError *error;
+            JSONDict = [NSJSONSerialization JSONObjectWithData: [[responseDict objectForKey:@"d"] dataUsingEncoding:NSUTF8StringEncoding]
+                                                       options: NSJSONReadingMutableContainers
+                                                         error: &error];
+            arrayPickerData = [JSONDict valueForKey:@"Rows"];
+            pickerParentView.hidden = NO;
+            [myPicker reloadAllComponents];
+        }
+        if (flagMinimumExperience == TRUE) {
+            
+            [HUD hide:YES];
+            [self.tabBarController.view setUserInteractionEnabled:YES];
+            NSError *error;
+            JSONDict = [NSJSONSerialization JSONObjectWithData: [[responseDict objectForKey:@"d"] dataUsingEncoding:NSUTF8StringEncoding]
+                                                       options: NSJSONReadingMutableContainers
+                                                         error: &error];
+            arrayPickerData = [JSONDict valueForKey:@"Rows"];
+            pickerParentView.hidden = NO;
+            [myPicker reloadAllComponents];
+        }
+        if (flagMaximumExperience == TRUE) {
+            
+            [HUD hide:YES];
+            [self.tabBarController.view setUserInteractionEnabled:YES];
+            NSError *error;
+            JSONDict = [NSJSONSerialization JSONObjectWithData: [[responseDict objectForKey:@"d"] dataUsingEncoding:NSUTF8StringEncoding]
+                                                       options: NSJSONReadingMutableContainers
+                                                         error: &error];
+            arrayPickerData = [JSONDict valueForKey:@"Rows"];
+            pickerParentView.hidden = NO;
+            [myPicker reloadAllComponents];
+        }
+        if (flagIndustryType == TRUE) {
+            
+            [HUD hide:YES];
+            [self.tabBarController.view setUserInteractionEnabled:YES];
+            NSError *error;
+            JSONDict = [NSJSONSerialization JSONObjectWithData: [[responseDict objectForKey:@"d"] dataUsingEncoding:NSUTF8StringEncoding]
+                                                       options: NSJSONReadingMutableContainers
+                                                         error: &error];
+            arrayPickerData = [JSONDict valueForKey:@"CategorysList"];
+            pickerParentView.hidden = NO;
+            [myPicker reloadAllComponents];
+        }
+        if (flagCareersType == TRUE) {
+            
+            [HUD hide:YES];
+            [self.tabBarController.view setUserInteractionEnabled:YES];
+            NSError *error;
+            JSONDict = [NSJSONSerialization JSONObjectWithData: [[responseDict objectForKey:@"d"] dataUsingEncoding:NSUTF8StringEncoding]
+                                                       options: NSJSONReadingMutableContainers
+                                                         error: &error];
+            arrayPickerData = [JSONDict valueForKey:@"CategorysList"];
+            pickerParentView.hidden = NO;
+            [myPicker reloadAllComponents];
+        }
+        if (flagSaveMemberDetails == TRUE) {
+            flagSaveMemberDetails = FALSE;
+            [HUD hide:YES];
+            [self.tabBarController.view setUserInteractionEnabled:YES];
+            NSError *error;
+            JSONDict = [NSJSONSerialization JSONObjectWithData: [[responseDict objectForKey:@"d"] dataUsingEncoding:NSUTF8StringEncoding]
+                                                       options: NSJSONReadingMutableContainers
+                                                         error: &error];
+            stringResumeIdCreate = [JSONDict valueForKey:@"ID2"];
+            //        [[NSUserDefaults standardUserDefaults]setObject:[JSONDict valueForKey:@"ID2"] forKey:@"ResumeIdFromCreate"];
+            //        [[NSUserDefaults standardUserDefaults]synchronize];
+            
+            if ([[JSONDict valueForKey:@"Success"]intValue]==1) {
+                [self performSegueWithIdentifier:@"SegueCreateProfileSubmit" sender:self];
+            }else{
+                [self showAlertViewWithMessage:@"Some error occured. Please try again later."];
+            }
+        }
+        if (flagApplyNewJobCreate == TRUE){
+            flagApplyNewJobCreate = FALSE;
+            [HUD hide:YES];
+            [self.tabBarController.view setUserInteractionEnabled:YES];
+            NSError *error;
+            JSONDict = [NSJSONSerialization JSONObjectWithData: [[responseDict objectForKey:@"d"] dataUsingEncoding:NSUTF8StringEncoding]
+                                                       options: NSJSONReadingMutableContainers
+                                                         error: &error];
+            if ([[JSONDict valueForKey:@"Success"]intValue]==1) {
+                [buttonApplyOnline setTitle:@"Applied already" forState:UIControlStateNormal];
+                [buttonApplyOnline setEnabled:NO];
+                AppDelegate *appDelegate = (AppDelegate *) [[UIApplication sharedApplication]delegate];
+                NSString *stringCompanyName = appDelegate.stringCompany;
+                NSString *str = [NSString stringWithFormat:@"%@ requires candidates to submit a resume through their online application site. Please click below to be redirected to the %@ application page for this job.",stringCompanyName,stringCompanyName];
+                
+                alertSuccessApply = [[UIAlertView alloc]initWithTitle:@"Success" message:str delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"OK" , nil];
+                [alertSuccessApply show];
+                
+            }else{
+                [buttonApplyOnline setEnabled:YES];
+                //[self showAlertViewWithMessage:@"Some error occured. Please try again later." withTitle:@"Error"];
+                alertP = [[UIAlertView alloc]initWithTitle:@"Error" message:@"Some error occured. Please try again later." delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"OK" , nil];
+                [alertP show];
+            }
+        }
+    }else{ //if (successBool == YES) {
+        [HUD hide:YES];
+        
+        UIAlertView *alertSuccessStatus = [[UIAlertView alloc]initWithTitle:@"Error" message:@"Some error occured. Please try again." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+        [alertSuccessStatus show];
     }
 }
 
@@ -673,7 +679,7 @@ BOOL flagSaveMemberDetails = FALSE;
                                     [localFileManagerCover removeItemAtPath: fullPath error:&error ];
                                 }
                                 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
+                                
                                 flagSaveMemberDetails = TRUE;
                                 jsonParser = [APParser sharedParser];
                                 jsonParser.delegate = self;
@@ -730,7 +736,7 @@ BOOL flagSaveMemberDetails = FALSE;
                                                                @"0",@"ResumeID",
                                                                @"create",@"mode",
                                                                nil];
-
+                                
                                 appDelegate.applyDetailsDictionary = parameterDict;
                                 NSDictionary* dictToSend = [NSDictionary dictionaryWithObjectsAndKeys:methodName,@"methodName",soapAction,@"soapAction",parameterDict,@"parameterDict", nil];
                                 
@@ -766,7 +772,7 @@ BOOL flagApplyNewJobCreate = FALSE;
 - (IBAction)buttonActionApplyOnline:(id)sender {
     
     [self callWebServiceNewJobApply];
-
+    
 }
 
 -(void)callWebServiceNewJobApply {
@@ -795,27 +801,27 @@ BOOL flagApplyNewJobCreate = FALSE;
                         if ([textFieldCareerType.text length]>0) {
                             
                             if ([textFieldIndustryType.text length]>0) {
-
+                                
                                 flagApplyNewJobCreate = TRUE;
                                 NSDictionary* parameterDictDetails = [NSDictionary dictionaryWithObjectsAndKeys:
-                                                               stringIdMinimumEduction,@"EduLevel",
-                                                               stringIdExperience,@"ExpYears",
-                                                               stringIdMajorEducation,@"EduCategory",
-                                                               stringIdOccupation,@"Occupation",
-                                                               @"0",@"CurrentlyEmployed",
-                                                               @"0",@"PreferredJobType",
-                                                               @"",@"CareerObjective",
-                                                               @"",@"RecentJobTitle",
-                                                               @"",@"CurrentEmployer",
-                                                               @"0",@"SalaryMinimum",
-                                                               @"0",@"SalaryMaximum",
-                                                               @"false",@"USEligible",
-                                                               @"false",@"CanadianEligible",
-                                                               @"0",@"Associations",
-                                                               stringIdIndustry,@"iType",
-                                                               stringIdCareers,@"cType",
-                                                               [[NSUserDefaults standardUserDefaults]valueForKey:@"UserId"],@"MemberID",
-                                                               nil];
+                                                                      stringIdMinimumEduction,@"EduLevel",
+                                                                      stringIdExperience,@"ExpYears",
+                                                                      stringIdMajorEducation,@"EduCategory",
+                                                                      stringIdOccupation,@"Occupation",
+                                                                      @"0",@"CurrentlyEmployed",
+                                                                      @"0",@"PreferredJobType",
+                                                                      @"",@"CareerObjective",
+                                                                      @"",@"RecentJobTitle",
+                                                                      @"",@"CurrentEmployer",
+                                                                      @"0",@"SalaryMinimum",
+                                                                      @"0",@"SalaryMaximum",
+                                                                      @"false",@"USEligible",
+                                                                      @"false",@"CanadianEligible",
+                                                                      @"0",@"Associations",
+                                                                      stringIdIndustry,@"iType",
+                                                                      stringIdCareers,@"cType",
+                                                                      [[NSUserDefaults standardUserDefaults]valueForKey:@"UserId"],@"MemberID",
+                                                                      nil];
                                 AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication]delegate];
                                 appDelegate.applyDetailsDictionary = parameterDictDetails;
                                 
@@ -873,7 +879,7 @@ BOOL flagApplyNewJobCreate = FALSE;
                                 
                                 [self performSelector:@selector(hideHUDandWebservice) withObject:nil afterDelay:20];
                                 [jsonParser3 parseSoapWithJSONSoapContents:dictToSend];
-
+                                
                             }else{
                                 [self showAlertViewWithMessage:@"Please select preferred industry type"];
                             }

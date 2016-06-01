@@ -91,7 +91,7 @@ int heightForScrollViewUpdate = 480;
     id<GAITracker> tracker = [[GAI sharedInstance] defaultTracker];
     [tracker set:kGAIScreenName value:@"iOS- Search Criteria Edit Screen"];
     [tracker send:[[GAIDictionaryBuilder createScreenView] build]];
-
+    
     if ([[[NSUserDefaults standardUserDefaults]valueForKey:@"SuceessStatus"]isEqualToString:@"Success"]) {
         // User is already logged in
         
@@ -493,64 +493,35 @@ int heightForScrollViewUpdate = 480;
     [textFieldLocation resignFirstResponder];
     [textFieldKeyword resignFirstResponder];
     [textFieldEmployer resignFirstResponder];
-
+    
     [self hideHUDandWebservice];
 }
 
 #pragma mark response
 -(void)receiveJsonResponse:(NSDictionary*)responseDict withSuccess:(BOOL)successBool{
-    [HUD hide:YES];
-    [self.tabBarController.view setUserInteractionEnabled:YES];
-    NSError *error;
-    JSONDict = [NSJSONSerialization JSONObjectWithData: [[responseDict objectForKey:@"d"] dataUsingEncoding:NSUTF8StringEncoding]
-                                               options: NSJSONReadingMutableContainers
-                                                 error: &error];
-    
-    if ([[JSONDict valueForKey:@"Success"]intValue]==1) {
+    if (successBool == YES) {
+        [HUD hide:YES];
+        [self.tabBarController.view setUserInteractionEnabled:YES];
+        NSError *error;
+        JSONDict = [NSJSONSerialization JSONObjectWithData: [[responseDict objectForKey:@"d"] dataUsingEncoding:NSUTF8StringEncoding]
+                                                   options: NSJSONReadingMutableContainers
+                                                     error: &error];
         
-        alertUpdateSuccess = [[UIAlertView alloc]initWithTitle:@"Success" message:@"Search criteria updated successfully" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
-        [alertUpdateSuccess show];
-    }else{
-        alertUpdateError = [[UIAlertView alloc]initWithTitle:@"Error" message:@"Some error occured. Please try again later." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
-        [alertUpdateError show];
+        if ([[JSONDict valueForKey:@"Success"]intValue]==1) {
+            
+            alertUpdateSuccess = [[UIAlertView alloc]initWithTitle:@"Success" message:@"Search criteria updated successfully" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+            [alertUpdateSuccess show];
+        }else{
+            alertUpdateError = [[UIAlertView alloc]initWithTitle:@"Error" message:@"Some error occured. Please try again later." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+            [alertUpdateError show];
+        }
+    }else{ //if (successBool == YES) {
+        [HUD hide:YES];
+        
+        UIAlertView *alertSuccessStatus = [[UIAlertView alloc]initWithTitle:@"Error" message:@"Some error occured. Please try again" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+        [alertSuccessStatus show];
     }
-    /*
-     if (flagGetCountry == TRUE) {
-     
-     [HUD hide:YES];
-     [self.tabBarController.view setUserInteractionEnabled:YES];
-     NSError *error;
-     JSONDict = [NSJSONSerialization JSONObjectWithData: [[responseDict objectForKey:@"d"] dataUsingEncoding:NSUTF8StringEncoding]
-     options: NSJSONReadingMutableContainers
-     error: &error];
-     arrayPickerData = [JSONDict valueForKey:@"Rows"];
-     myPicker.hidden = NO;
-     [myPicker reloadAllComponents];
-     
-     }if (flagGetRegions == TRUE){
-     
-     [HUD hide:YES];
-     [self.tabBarController.view setUserInteractionEnabled:YES];
-     NSError *error;
-     JSONDict = [NSJSONSerialization JSONObjectWithData: [[responseDict objectForKey:@"d"] dataUsingEncoding:NSUTF8StringEncoding]
-     options: NSJSONReadingMutableContainers
-     error: &error];
-     
-     if ([[JSONDict valueForKey:@"Rows"]count] ==0) {
-     flagGetCountry = FALSE;
-     flagGetRegions = FALSE;
-     
-     myPicker.hidden = YES;
-     UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"Error" message:@"Ther is no region" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
-     [alert show];
-     }else{
-     arrayPickerData = [JSONDict valueForKey:@"Rows"];
-     myPicker.hidden = NO;
-     [myPicker reloadAllComponents];
-     
-     }
-     }
-     */
+    
 }
 
 - (IBAction)buttonActionUpdate:(id)sender {
@@ -558,7 +529,7 @@ int heightForScrollViewUpdate = 480;
     [textFieldLocation resignFirstResponder];
     [textFieldKeyword resignFirstResponder];
     [textFieldEmployer resignFirstResponder];
-
+    
     Reachability *reach = [Reachability reachabilityForInternetConnection];
     NetworkStatus internateStatus = [reach currentReachabilityStatus];
     if ((internateStatus != ReachableViaWiFi) && (internateStatus != ReachableViaWWAN)){
@@ -781,7 +752,7 @@ int heightForScrollViewUpdate = 480;
 }
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField{
-
+    
     [textFieldTital resignFirstResponder];
     [textFieldLocation resignFirstResponder];
     [textFieldKeyword resignFirstResponder];

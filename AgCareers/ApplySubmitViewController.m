@@ -290,23 +290,23 @@ NSString *stringResumeIdUpload                  = @"";
                     stringUploadName =  [NSString stringWithFormat:@"%@_%@",[[NSUserDefaults standardUserDefaults]valueForKey:@"UserId"],[filePathsArrayName objectAtIndex:0]];
                 }
                 
-//                uploadFile1.path = [NSString stringWithFormat:@"root\\dev.agcareers.farmsstaging.com\\www\\AgUploads\\%@",stringUploadName]; // Resume path
-//                uploadFile1.hostname = @"192.168.24.45";
-//                uploadFile1.username = @"Rohit.singh";
-//                uploadFile1.password = @"P@ssw0rd2012";
-
-//                uploadFile1.path = [NSString stringWithFormat:@"root\\agcareers.farmsstaging.com\\www\\AgUploads\\%@",stringUploadName]; // Resume path
-//                
-//                uploadFile1.hostname = @"216.220.44.186";
-//                uploadFile1.username = @"Rohit.singh";
-//                uploadFile1.password = @"P@ssw0rd2012";
+                //                uploadFile1.path = [NSString stringWithFormat:@"root\\dev.agcareers.farmsstaging.com\\www\\AgUploads\\%@",stringUploadName]; // Resume path
+                //                uploadFile1.hostname = @"192.168.24.45";
+                //                uploadFile1.username = @"Rohit.singh";
+                //                uploadFile1.password = @"P@ssw0rd2012";
+                
+                //                uploadFile1.path = [NSString stringWithFormat:@"root\\agcareers.farmsstaging.com\\www\\AgUploads\\%@",stringUploadName]; // Resume path
+                //
+                //                uploadFile1.hostname = @"216.220.44.186";
+                //                uploadFile1.username = @"Rohit.singh";
+                //                uploadFile1.password = @"P@ssw0rd2012";
                 
                 uploadFile1.path = [NSString stringWithFormat:@"aguploads\\%@",stringUploadName]; // Resume path
                 
                 uploadFile1.hostname = [[NSUserDefaults standardUserDefaults] valueForKey:@"GlobalFTP"];//@"216.220.44.186";
                 uploadFile1.username = @"mobileuploads";
                 uploadFile1.password = @"yeuEYrLiBk3OPSMlmLQG!";
-
+                
                 
                 //we start the request
                 [uploadFile1 start];
@@ -537,7 +537,7 @@ NSString *stringResumeIdUpload                  = @"";
     }else{
         stringUserEmail = [[NSUserDefaults standardUserDefaults]valueForKey:@"UserEmail"];
     }
-        
+    
     
     
     NSDictionary* parameterDict = [NSDictionary dictionaryWithObjectsAndKeys:strinJobId,@"JobID",
@@ -588,93 +588,99 @@ NSString *stringResumeIdUpload                  = @"";
 }
 
 -(void)receiveJsonResponse:(NSDictionary*)responseDict withSuccess:(BOOL)successBool {
-    
-    if (flagReferrenceApplySubmit == TRUE) {
-        
-        [HUD hide:YES];
-        [self.tabBarController.view setUserInteractionEnabled:YES];
-        NSError *error;
-        JSONDict = [NSJSONSerialization JSONObjectWithData: [[responseDict objectForKey:@"d"] dataUsingEncoding:NSUTF8StringEncoding]
-                                                   options: NSJSONReadingMutableContainers
-                                                     error: &error];
-        arrayPickerData = [JSONDict valueForKey:@"Rows"];
-        pickerParentView.hidden = NO;
-        [myPicker reloadAllComponents];
-    }
-    //    if (flagSubmitApplySubmit == TRUE) {
-    //        flagSubmitApplySubmit = FALSE;
-    //        [HUD hide:YES];
-    //        [self.tabBarController.view setUserInteractionEnabled:YES];
-    //        NSError *error;
-    //        JSONDict = [NSJSONSerialization JSONObjectWithData: [[responseDict objectForKey:@"d"] dataUsingEncoding:NSUTF8StringEncoding]
-    //                                                   options: NSJSONReadingMutableContainers
-    //                                                     error: &error];
-    //        if ([[JSONDict valueForKey:@"Success"]intValue]==1) {
-    //            [self callWebServiceNewJobApply];
-    //            //            alertSuccess = [[UIAlertView alloc]initWithTitle:@"Success" message:@"You have successfully applied to this job." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil , nil];
-    //            //            [alertSuccess show];
-    //        }else{
-    //            [self showAlertViewWithMessage:@"Some error occured. Please try again later." withTitle:@"Error"];
-    //        }
-    //    }
-    if (flagApplyNewJob == TRUE) {
-        flagApplyNewJob = FALSE;
-        [HUD hide:YES];
-        [self.tabBarController.view setUserInteractionEnabled:YES];
-        NSError *error;
-        JSONDict = [NSJSONSerialization JSONObjectWithData: [[responseDict objectForKey:@"d"] dataUsingEncoding:NSUTF8StringEncoding]
-                                                   options: NSJSONReadingMutableContainers
-                                                     error: &error];
-        if ([[JSONDict valueForKey:@"Success"]intValue]==1) {
-            uploadSucessApplySubmit = @"FALSE";
+    if (successBool == YES) {
+        if (flagReferrenceApplySubmit == TRUE) {
             
-            alertSuccessApply = [[UIAlertView alloc]initWithTitle:@"Success" message:@"You have successfully applied to this job." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil , nil];
-            [alertSuccessApply show];
-            
-        }else{
-            [self showAlertViewWithMessage:@"Some error occured. Please try again later." withTitle:@"Error"];
+            [HUD hide:YES];
+            [self.tabBarController.view setUserInteractionEnabled:YES];
+            NSError *error;
+            JSONDict = [NSJSONSerialization JSONObjectWithData: [[responseDict objectForKey:@"d"] dataUsingEncoding:NSUTF8StringEncoding]
+                                                       options: NSJSONReadingMutableContainers
+                                                         error: &error];
+            arrayPickerData = [JSONDict valueForKey:@"Rows"];
+            pickerParentView.hidden = NO;
+            [myPicker reloadAllComponents];
         }
-    }
-    if (flagGetResumeListApply == TRUE) {
-        flagGetResumeListApply = FALSE;
-        [HUD hide:YES];
-        [self.tabBarController.view setUserInteractionEnabled:YES];
-        NSError *error;
-        JSONDictResumeList = [NSJSONSerialization JSONObjectWithData: [[responseDict objectForKey:@"d"] dataUsingEncoding:NSUTF8StringEncoding]
-                                                             options: NSJSONReadingMutableContainers
-                                                               error: &error];
-        if ([[JSONDictResumeList objectForKey:@"ErrorMsg"]isEqualToString:@"Fail"]) {
-            [switchResumeFrist setHidden:YES];
-            [switchResumeSecond setHidden:YES];
-            [labelResumeFirst setText:@""];
-            [labelResumeSecond setText:@""];
-        }else{
-            
-            if ([[JSONDictResumeList objectForKey:@"ResumesList"]count]== 0) {
-                [labelResumeName setText:@"Select Resume"];
-                buttonBrowse.enabled = YES;
-                buttonUpload.enabled = YES;
+        //    if (flagSubmitApplySubmit == TRUE) {
+        //        flagSubmitApplySubmit = FALSE;
+        //        [HUD hide:YES];
+        //        [self.tabBarController.view setUserInteractionEnabled:YES];
+        //        NSError *error;
+        //        JSONDict = [NSJSONSerialization JSONObjectWithData: [[responseDict objectForKey:@"d"] dataUsingEncoding:NSUTF8StringEncoding]
+        //                                                   options: NSJSONReadingMutableContainers
+        //                                                     error: &error];
+        //        if ([[JSONDict valueForKey:@"Success"]intValue]==1) {
+        //            [self callWebServiceNewJobApply];
+        //            //            alertSuccess = [[UIAlertView alloc]initWithTitle:@"Success" message:@"You have successfully applied to this job." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil , nil];
+        //            //            [alertSuccess show];
+        //        }else{
+        //            [self showAlertViewWithMessage:@"Some error occured. Please try again later." withTitle:@"Error"];
+        //        }
+        //    }
+        if (flagApplyNewJob == TRUE) {
+            flagApplyNewJob = FALSE;
+            [HUD hide:YES];
+            [self.tabBarController.view setUserInteractionEnabled:YES];
+            NSError *error;
+            JSONDict = [NSJSONSerialization JSONObjectWithData: [[responseDict objectForKey:@"d"] dataUsingEncoding:NSUTF8StringEncoding]
+                                                       options: NSJSONReadingMutableContainers
+                                                         error: &error];
+            if ([[JSONDict valueForKey:@"Success"]intValue]==1) {
+                uploadSucessApplySubmit = @"FALSE";
+                
+                alertSuccessApply = [[UIAlertView alloc]initWithTitle:@"Success" message:@"You have successfully applied to this job." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil , nil];
+                [alertSuccessApply show];
+                
+            }else{
+                [self showAlertViewWithMessage:@"Some error occured. Please try again later." withTitle:@"Error"];
+            }
+        }
+        if (flagGetResumeListApply == TRUE) {
+            flagGetResumeListApply = FALSE;
+            [HUD hide:YES];
+            [self.tabBarController.view setUserInteractionEnabled:YES];
+            NSError *error;
+            JSONDictResumeList = [NSJSONSerialization JSONObjectWithData: [[responseDict objectForKey:@"d"] dataUsingEncoding:NSUTF8StringEncoding]
+                                                                 options: NSJSONReadingMutableContainers
+                                                                   error: &error];
+            if ([[JSONDictResumeList objectForKey:@"ErrorMsg"]isEqualToString:@"Fail"]) {
                 [switchResumeFrist setHidden:YES];
                 [switchResumeSecond setHidden:YES];
                 [labelResumeFirst setText:@""];
                 [labelResumeSecond setText:@""];
-            }
-            if([[JSONDictResumeList objectForKey:@"ResumesList"]count]==1){
-                [labelResumeFirst setText:[[[JSONDictResumeList objectForKey:@"ResumesList"]objectAtIndex:0]valueForKey:@"FileName"]];
-                [labelResumeSecond setText:@""];
-                [switchResumeSecond setHidden:YES];
-            }
-            if([[JSONDictResumeList objectForKey:@"ResumesList"]count]==2){
+            }else{
                 
-                [labelResumeName setText:@"Select Resume"];
-                
-                [buttonBrowse setHidden:YES];
-                [buttonUpload setHidden:YES];
-                
-                [labelResumeFirst setText:[[[JSONDictResumeList objectForKey:@"ResumesList"]objectAtIndex:0]valueForKey:@"FileName"]];
-                [labelResumeSecond setText:[[[JSONDictResumeList objectForKey:@"ResumesList"]objectAtIndex:1]valueForKey:@"FileName"]];
+                if ([[JSONDictResumeList objectForKey:@"ResumesList"]count]== 0) {
+                    [labelResumeName setText:@"Select Resume"];
+                    buttonBrowse.enabled = YES;
+                    buttonUpload.enabled = YES;
+                    [switchResumeFrist setHidden:YES];
+                    [switchResumeSecond setHidden:YES];
+                    [labelResumeFirst setText:@""];
+                    [labelResumeSecond setText:@""];
+                }
+                if([[JSONDictResumeList objectForKey:@"ResumesList"]count]==1){
+                    [labelResumeFirst setText:[[[JSONDictResumeList objectForKey:@"ResumesList"]objectAtIndex:0]valueForKey:@"FileName"]];
+                    [labelResumeSecond setText:@""];
+                    [switchResumeSecond setHidden:YES];
+                }
+                if([[JSONDictResumeList objectForKey:@"ResumesList"]count]==2){
+                    
+                    [labelResumeName setText:@"Select Resume"];
+                    
+                    [buttonBrowse setHidden:YES];
+                    [buttonUpload setHidden:YES];
+                    
+                    [labelResumeFirst setText:[[[JSONDictResumeList objectForKey:@"ResumesList"]objectAtIndex:0]valueForKey:@"FileName"]];
+                    [labelResumeSecond setText:[[[JSONDictResumeList objectForKey:@"ResumesList"]objectAtIndex:1]valueForKey:@"FileName"]];
+                }
             }
         }
+    }else{ //if (successBool == YES) {
+        [HUD hide:YES];
+        [HUD1 hide:YES];
+        UIAlertView *alertSuccessStatus = [[UIAlertView alloc]initWithTitle:@"Error" message:@"Some error occured. Please try again" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+        [alertSuccessStatus show];
     }
 }
 

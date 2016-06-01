@@ -144,14 +144,20 @@ NSMutableDictionary *dataDictionary;
 }
 
 -(void)receiveJsonResponse:(NSDictionary*)responseDict withSuccess:(BOOL)successBool{
-    
-    [HUD hide:YES];
-    [self.tabBarController.view setUserInteractionEnabled:YES];
-    NSError *error;
-    JSONDict = [NSJSONSerialization JSONObjectWithData: [[responseDict objectForKey:@"d"] dataUsingEncoding:NSUTF8StringEncoding]
-                                               options: NSJSONReadingMutableContainers
-                                                 error: &error];
-    [tableViewOptions reloadData];
+    if (successBool == YES) {
+        [HUD hide:YES];
+        [self.tabBarController.view setUserInteractionEnabled:YES];
+        NSError *error;
+        JSONDict = [NSJSONSerialization JSONObjectWithData: [[responseDict objectForKey:@"d"] dataUsingEncoding:NSUTF8StringEncoding]
+                                                   options: NSJSONReadingMutableContainers
+                                                     error: &error];
+        [tableViewOptions reloadData];
+    }else{ //if (successBool == YES) {
+        [HUD hide:YES];
+        
+        UIAlertView *alertSuccessStatus = [[UIAlertView alloc]initWithTitle:@"Error" message:@"Some error occured. Please try again" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+        [alertSuccessStatus show];
+    }
 }
 
 -(void)viewWillDisappear:(BOOL)animated{

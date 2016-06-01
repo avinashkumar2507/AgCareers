@@ -192,10 +192,10 @@ NSString *deleteIdSearches;
 }
 
 -(void)viewWillAppear:(BOOL)animated{
-//    [self.navigationController.navigationBar setBackgroundImage:[UIImage imageNamed:@"img_act_2_a.png"]
-//                                                  forBarMetrics:UIBarMetricsDefault];
-//    self.navigationController.navigationBar.shadowImage = [UIImage new];
-//    self.navigationController.navigationBar.translucent = NO;
+    //    [self.navigationController.navigationBar setBackgroundImage:[UIImage imageNamed:@"img_act_2_a.png"]
+    //                                                  forBarMetrics:UIBarMetricsDefault];
+    //    self.navigationController.navigationBar.shadowImage = [UIImage new];
+    //    self.navigationController.navigationBar.translucent = NO;
     
     
     [textFieldUsername setText:@""];
@@ -700,7 +700,7 @@ NSString *stringNoResult = @"";
     AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication]delegate];
     appDelegate.stringApplyWhileCreating = @"OnlyCreating";
     appDelegate.stringATSJob = @"";
-
+    
     [self performSegueWithIdentifier:@"SegueRegisterNowMyProfile" sender:self];
 }
 
@@ -940,134 +940,145 @@ NSString *stringNoResult = @"";
 
 #pragma mark response
 -(void)receiveJsonResponse:(NSDictionary*)responseDict withSuccess:(BOOL)successBool{
-    [textFieldUsername resignFirstResponder];
-    [textfieldPassword resignFirstResponder];
-    
-    if (flagJobs == TRUE) {
-        flagJobs = FALSE;
+    if (successBool == YES) {
+        [textFieldUsername resignFirstResponder];
+        [textfieldPassword resignFirstResponder];
+        
+        if (flagJobs == TRUE) {
+            flagJobs = FALSE;
+            [HUD1 hide:YES];
+            [self.tabBarController.view setUserInteractionEnabled:YES];
+            NSError *error;
+            JSONDict = [NSJSONSerialization JSONObjectWithData: [[responseDict objectForKey:@"d"] dataUsingEncoding:NSUTF8StringEncoding]
+                                                       options: NSJSONReadingMutableContainers
+                                                         error: &error];
+            arrayFavouriteJobs = [JSONDict valueForKey:@"JobList"];
+            
+            if  (arrayFavouriteJobs.count !=0){
+                self.navigationItem.rightBarButtonItem = self.editButtonItem;
+            }else {
+                self.navigationItem.rightBarButtonItem = nil;
+            }//
+            stringNoResult = @"No saved jobs to display";
+            [tableViewJobs reloadData];
+        }
+        if (flagEmpoloyer == TRUE) {
+            flagEmpoloyer = FALSE;
+            [HUD2 hide:YES];
+            [self.tabBarController.view setUserInteractionEnabled:YES];
+            NSError *error;
+            JSONDict = [NSJSONSerialization JSONObjectWithData: [[responseDict objectForKey:@"d"] dataUsingEncoding:NSUTF8StringEncoding]
+                                                       options: NSJSONReadingMutableContainers
+                                                         error: &error];
+            arrayFavouriteEmployer = [JSONDict valueForKey:@"EmployersList"];
+            
+            if  (arrayFavouriteEmployer.count !=0){
+                self.navigationItem.rightBarButtonItem = self.editButtonItem;
+            }else{
+                self.navigationItem.rightBarButtonItem = nil;
+            }
+            stringNoResult = @"No saved employer to display";
+            [tableViewEmployers reloadData];
+        }
+        if (flagSearches == TRUE) {
+            flagSearches = FALSE;
+            
+            [HUD3 hide:YES];
+            [self.tabBarController.view setUserInteractionEnabled:YES];
+            NSError *error;
+            JSONDict = [NSJSONSerialization JSONObjectWithData: [[responseDict objectForKey:@"d"] dataUsingEncoding:NSUTF8StringEncoding]
+                                                       options: NSJSONReadingMutableContainers
+                                                         error: &error];
+            arrayFavouriteSearches = [JSONDict valueForKey:@"searchList"];
+            
+            if  (arrayFavouriteSearches.count !=0){
+                self.navigationItem.rightBarButtonItem = self.editButtonItem;
+            }else{
+                self.navigationItem.rightBarButtonItem = nil;
+            }
+            stringNoResult = @"No saved Searches to display";
+            [tableViewSearches reloadData];
+        }
+        if (flagDelete == TRUE) {
+            flagDelete = FALSE;
+            [HUD5 hide:YES];
+            [self.tabBarController.view setUserInteractionEnabled:YES];
+            NSError *error;
+            JSONDict = [NSJSONSerialization JSONObjectWithData: [[responseDict objectForKey:@"d"] dataUsingEncoding:NSUTF8StringEncoding]
+                                                       options: NSJSONReadingMutableContainers
+                                                         error: &error];
+            
+            if (flagDeleteJobs==TRUE) {
+                flagDeleteJobs = FALSE;
+                UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"Sucess" message:@"Deleted Successfully." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+                [alert show];
+                flagJobs = TRUE;
+                [self callWebService];
+            }
+            if (flagDeleteEmployer==TRUE) {
+                flagDeleteEmployer = FALSE;
+                UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"Sucess" message:@"Deleted Successfully." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+                [alert show];
+                flagEmpoloyer = TRUE;
+                [self callWebServiceEmpolyer];
+            }
+            if (flagDeleteSearches==TRUE) {
+                flagDeleteSearches = FALSE;
+                UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"Sucess" message:@"Deleted Successfully." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+                [alert show];
+                
+                flagSearches = TRUE;
+                [self callWebServiceSearches];
+            }
+        }
+        if (flagLoginMyFavoriteView == TRUE){
+            [HUD hide:YES];
+            flagLoginMyFavoriteView = FALSE;
+            NSError *error;
+            NSDictionary *JSONDict11 =
+            [NSJSONSerialization JSONObjectWithData: [[responseDict objectForKey:@"d"] dataUsingEncoding:NSUTF8StringEncoding]
+                                            options: NSJSONReadingMutableContainers
+                                              error: &error];
+            if ([[[JSONDict11 valueForKey:@"ErrorFlag"]objectAtIndex:0] isEqualToString:@"Success"]==TRUE) {
+                [[NSUserDefaults standardUserDefaults]setObject:[[JSONDict11 valueForKey:@"ErrorFlag"]objectAtIndex:0] forKey:@"SuceessStatus"];
+                [[NSUserDefaults standardUserDefaults]setObject:[[JSONDict11 valueForKey:@"Message"]objectAtIndex:0] forKey:@"UserId"];
+                [[NSUserDefaults standardUserDefaults]setObject:[[JSONDict11 valueForKey:@"Email"]objectAtIndex:0] forKey:@"UserEmail"];
+                [[NSUserDefaults standardUserDefaults]synchronize];
+                
+                [self.navigationItem.rightBarButtonItem setTintColor:[UIColor whiteColor]];
+                [self.navigationItem.rightBarButtonItem setEnabled:YES];
+                [myView setHidden:YES];
+                flagJobs = TRUE;
+                [self callWebService];
+            }else{
+                UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"Error" message:@"You have entered an incorrect username/password and/or you are not approved to use the site.If you continue to have problems, please contact agcareers@agcareers.com." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+                [alert show];
+            }
+        }
+        if (flagForgotPasswordMyFavorites == TRUE){
+            flagForgotPasswordMyFavorites = FALSE;
+            
+            [HUD hide:YES];
+            [self.tabBarController.view setUserInteractionEnabled:YES];
+            NSError *error;
+            JSONDict = [NSJSONSerialization JSONObjectWithData: [[responseDict objectForKey:@"d"] dataUsingEncoding:NSUTF8StringEncoding]
+                                                       options: NSJSONReadingMutableContainers
+                                                         error: &error];
+            if ([[JSONDict valueForKey:@"Success"]intValue]==1) {
+                [self showAlertViewWithMessage:@"New password has been sent to your email id." withTitle:@"Success"];
+            }else {
+                [self showAlertViewWithMessage:@"There is some error. Please try again later." withTitle:@"Error"];
+            }
+        }
+    }else{ //if (successBool == YES) {
+        [HUD hide:YES];
         [HUD1 hide:YES];
-        [self.tabBarController.view setUserInteractionEnabled:YES];
-        NSError *error;
-        JSONDict = [NSJSONSerialization JSONObjectWithData: [[responseDict objectForKey:@"d"] dataUsingEncoding:NSUTF8StringEncoding]
-                                                   options: NSJSONReadingMutableContainers
-                                                     error: &error];
-        arrayFavouriteJobs = [JSONDict valueForKey:@"JobList"];
-        
-        if  (arrayFavouriteJobs.count !=0){
-            self.navigationItem.rightBarButtonItem = self.editButtonItem;
-        }else {
-            self.navigationItem.rightBarButtonItem = nil;
-        }//
-        stringNoResult = @"No saved jobs to display";
-        [tableViewJobs reloadData];
-    }
-    if (flagEmpoloyer == TRUE) {
-        flagEmpoloyer = FALSE;
         [HUD2 hide:YES];
-        [self.tabBarController.view setUserInteractionEnabled:YES];
-        NSError *error;
-        JSONDict = [NSJSONSerialization JSONObjectWithData: [[responseDict objectForKey:@"d"] dataUsingEncoding:NSUTF8StringEncoding]
-                                                   options: NSJSONReadingMutableContainers
-                                                     error: &error];
-        arrayFavouriteEmployer = [JSONDict valueForKey:@"EmployersList"];
-        
-        if  (arrayFavouriteEmployer.count !=0){
-            self.navigationItem.rightBarButtonItem = self.editButtonItem;
-        }else{
-            self.navigationItem.rightBarButtonItem = nil;
-        }
-        stringNoResult = @"No saved employer to display";
-        [tableViewEmployers reloadData];
-    }
-    if (flagSearches == TRUE) {
-        flagSearches = FALSE;
-        
         [HUD3 hide:YES];
-        [self.tabBarController.view setUserInteractionEnabled:YES];
-        NSError *error;
-        JSONDict = [NSJSONSerialization JSONObjectWithData: [[responseDict objectForKey:@"d"] dataUsingEncoding:NSUTF8StringEncoding]
-                                                   options: NSJSONReadingMutableContainers
-                                                     error: &error];
-        arrayFavouriteSearches = [JSONDict valueForKey:@"searchList"];
-        
-        if  (arrayFavouriteSearches.count !=0){
-            self.navigationItem.rightBarButtonItem = self.editButtonItem;
-        }else{
-            self.navigationItem.rightBarButtonItem = nil;
-        }
-        stringNoResult = @"No saved Searches to display";
-        [tableViewSearches reloadData];
-    }
-    if (flagDelete == TRUE) {
-        flagDelete = FALSE;
+        [HUD4 hide:YES];
         [HUD5 hide:YES];
-        [self.tabBarController.view setUserInteractionEnabled:YES];
-        NSError *error;
-        JSONDict = [NSJSONSerialization JSONObjectWithData: [[responseDict objectForKey:@"d"] dataUsingEncoding:NSUTF8StringEncoding]
-                                                   options: NSJSONReadingMutableContainers
-                                                     error: &error];
-        
-        if (flagDeleteJobs==TRUE) {
-            flagDeleteJobs = FALSE;
-            UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"Sucess" message:@"Deleted Successfully." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
-            [alert show];
-            flagJobs = TRUE;
-            [self callWebService];
-        }
-        if (flagDeleteEmployer==TRUE) {
-            flagDeleteEmployer = FALSE;
-            UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"Sucess" message:@"Deleted Successfully." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
-            [alert show];
-            flagEmpoloyer = TRUE;
-            [self callWebServiceEmpolyer];
-        }
-        if (flagDeleteSearches==TRUE) {
-            flagDeleteSearches = FALSE;
-            UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"Sucess" message:@"Deleted Successfully." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
-            [alert show];
-            
-            flagSearches = TRUE;
-            [self callWebServiceSearches];
-        }
-    }
-    if (flagLoginMyFavoriteView == TRUE){
-        [HUD hide:YES];
-        flagLoginMyFavoriteView = FALSE;
-        NSError *error;
-        NSDictionary *JSONDict11 =
-        [NSJSONSerialization JSONObjectWithData: [[responseDict objectForKey:@"d"] dataUsingEncoding:NSUTF8StringEncoding]
-                                        options: NSJSONReadingMutableContainers
-                                          error: &error];
-        if ([[[JSONDict11 valueForKey:@"ErrorFlag"]objectAtIndex:0] isEqualToString:@"Success"]==TRUE) {
-            [[NSUserDefaults standardUserDefaults]setObject:[[JSONDict11 valueForKey:@"ErrorFlag"]objectAtIndex:0] forKey:@"SuceessStatus"];
-            [[NSUserDefaults standardUserDefaults]setObject:[[JSONDict11 valueForKey:@"Message"]objectAtIndex:0] forKey:@"UserId"];
-            [[NSUserDefaults standardUserDefaults]setObject:[[JSONDict11 valueForKey:@"Email"]objectAtIndex:0] forKey:@"UserEmail"];
-            [[NSUserDefaults standardUserDefaults]synchronize];
-            
-            [self.navigationItem.rightBarButtonItem setTintColor:[UIColor whiteColor]];
-            [self.navigationItem.rightBarButtonItem setEnabled:YES];
-            [myView setHidden:YES];
-            flagJobs = TRUE;
-            [self callWebService];
-        }else{
-            UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"Error" message:@"You have entered an incorrect username/password and/or you are not approved to use the site.If you continue to have problems, please contact agcareers@agcareers.com." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
-            [alert show];
-        }
-    }
-    if (flagForgotPasswordMyFavorites == TRUE){
-        flagForgotPasswordMyFavorites = FALSE;
-        
-        [HUD hide:YES];
-        [self.tabBarController.view setUserInteractionEnabled:YES];
-        NSError *error;
-        JSONDict = [NSJSONSerialization JSONObjectWithData: [[responseDict objectForKey:@"d"] dataUsingEncoding:NSUTF8StringEncoding]
-                                                   options: NSJSONReadingMutableContainers
-                                                     error: &error];
-        if ([[JSONDict valueForKey:@"Success"]intValue]==1) {
-            [self showAlertViewWithMessage:@"New password has been sent to your email id." withTitle:@"Success"];
-        }else {
-            [self showAlertViewWithMessage:@"There is some error. Please try again later." withTitle:@"Error"];
-        }
+        UIAlertView *alertSuccessStatus = [[UIAlertView alloc]initWithTitle:@"Error" message:@"Some error occured. Please try again" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+        [alertSuccessStatus show];
     }
 }
 

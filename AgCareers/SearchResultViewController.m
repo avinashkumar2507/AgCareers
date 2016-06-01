@@ -398,153 +398,160 @@ BOOL flagLogin = FALSE;
     //        d = "{\"JobsList\":null,\"EMPJOBCOUNT\":null,\"RECJOBCOUNT\":null,\"ID\":0,\"ID2\":0,\"ReferredBy\":null,\"Success\":false,\"ErrorMsg\":\"Can not convert Integer to String.\"}";
     //    }
     
-    if (SAVE_FLAG==TRUE) {
-        SAVE_FLAG = FALSE;
-        [HUD hide:YES];
-        [self.tabBarController.view setUserInteractionEnabled:YES];
-        NSError *error;
-        JSONDictSave = [NSJSONSerialization JSONObjectWithData: [[responseDict objectForKey:@"d"] dataUsingEncoding:NSUTF8StringEncoding]
+    if (successBool == YES) {
+        
+        if (SAVE_FLAG==TRUE) {
+            SAVE_FLAG = FALSE;
+            [HUD hide:YES];
+            [self.tabBarController.view setUserInteractionEnabled:YES];
+            NSError *error;
+            JSONDictSave = [NSJSONSerialization JSONObjectWithData: [[responseDict objectForKey:@"d"] dataUsingEncoding:NSUTF8StringEncoding]
+                                                           options: NSJSONReadingMutableContainers
+                                                             error: &error];//ErrorMsg
+            int sucessFlag = [[JSONDictSave objectForKey:@"Success"] intValue];
+            UIAlertView *alertSave ;
+            if (sucessFlag==1) {
+                alertSave = [[UIAlertView alloc]initWithTitle:@"Success" message:[JSONDictSave valueForKey:@"ErrorMsg"] delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+                [alertSave show];
+            }else {
+                alertSave = [[UIAlertView alloc]initWithTitle:@"Error" message:[JSONDictSave valueForKey:@"ErrorMsg"] delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+                [alertSave show];
+            }
+        } else if (flagLogin == TRUE){
+            [HUD hide:YES];
+            flagLogin = FALSE;
+            NSError *error;
+            NSDictionary *JSONDict11 =
+            [NSJSONSerialization JSONObjectWithData: [[responseDict objectForKey:@"d"] dataUsingEncoding:NSUTF8StringEncoding]
+                                            options: NSJSONReadingMutableContainers
+                                              error: &error];
+            if ([[[JSONDict11 valueForKey:@"ErrorFlag"]objectAtIndex:0] isEqualToString:@"Success"]==TRUE) {
+                [[NSUserDefaults standardUserDefaults]setObject:[[JSONDict11 valueForKey:@"ErrorFlag"]objectAtIndex:0] forKey:@"SuceessStatus"];
+                [[NSUserDefaults standardUserDefaults]setObject:[[JSONDict11 valueForKey:@"Message"]objectAtIndex:0] forKey:@"UserId"];
+                [[NSUserDefaults standardUserDefaults]setObject:[[JSONDict11 valueForKey:@"Email"]objectAtIndex:0] forKey:@"UserEmail"];
+                [[NSUserDefaults standardUserDefaults]synchronize];
+                [self saveSearchFilter];
+            }else{
+                UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"Error" message:@"You have entered an incorrect username/password and/or you are not approved to use the site.If you continue to have problems, please contact agcareers@agcareers.com." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+                [alert show];
+            }
+        }else if (flagForgotPasswordSearchResult == TRUE){
+            flagForgotPasswordSearchResult = FALSE;
+            [HUD hide:YES];
+            [self.tabBarController.view setUserInteractionEnabled:YES];
+            NSError *error;
+            JSONDict = [NSJSONSerialization JSONObjectWithData: [[responseDict objectForKey:@"d"] dataUsingEncoding:NSUTF8StringEncoding]
                                                        options: NSJSONReadingMutableContainers
-                                                         error: &error];//ErrorMsg
-        int sucessFlag = [[JSONDictSave objectForKey:@"Success"] intValue];
-        UIAlertView *alertSave ;
-        if (sucessFlag==1) {
-            alertSave = [[UIAlertView alloc]initWithTitle:@"Success" message:[JSONDictSave valueForKey:@"ErrorMsg"] delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
-            [alertSave show];
-        }else {
-            alertSave = [[UIAlertView alloc]initWithTitle:@"Error" message:[JSONDictSave valueForKey:@"ErrorMsg"] delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
-            [alertSave show];
-        }
-    } else if (flagLogin == TRUE){
-        [HUD hide:YES];
-        flagLogin = FALSE;
-        NSError *error;
-        NSDictionary *JSONDict11 =
-        [NSJSONSerialization JSONObjectWithData: [[responseDict objectForKey:@"d"] dataUsingEncoding:NSUTF8StringEncoding]
-                                        options: NSJSONReadingMutableContainers
-                                          error: &error];
-        if ([[[JSONDict11 valueForKey:@"ErrorFlag"]objectAtIndex:0] isEqualToString:@"Success"]==TRUE) {
-            [[NSUserDefaults standardUserDefaults]setObject:[[JSONDict11 valueForKey:@"ErrorFlag"]objectAtIndex:0] forKey:@"SuceessStatus"];
-            [[NSUserDefaults standardUserDefaults]setObject:[[JSONDict11 valueForKey:@"Message"]objectAtIndex:0] forKey:@"UserId"];
-            [[NSUserDefaults standardUserDefaults]setObject:[[JSONDict11 valueForKey:@"Email"]objectAtIndex:0] forKey:@"UserEmail"];
-            [[NSUserDefaults standardUserDefaults]synchronize];
-            [self saveSearchFilter];
+                                                         error: &error];
+            if ([[JSONDict valueForKey:@"Success"]intValue]==1) {
+                [self showAlertViewWithMessage:@"New password has been sent to your email id." withTitle:@"Success"];
+            }else {
+                [self showAlertViewWithMessage:[JSONDict valueForKey:@"ErrorMsg"] withTitle:@"Error"];
+            }
         }else{
-            UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"Error" message:@"You have entered an incorrect username/password and/or you are not approved to use the site.If you continue to have problems, please contact agcareers@agcareers.com." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
-            [alert show];
-        }
-    }else if (flagForgotPasswordSearchResult == TRUE){
-        flagForgotPasswordSearchResult = FALSE;
-        [HUD hide:YES];
-        [self.tabBarController.view setUserInteractionEnabled:YES];
-        NSError *error;
-        JSONDict = [NSJSONSerialization JSONObjectWithData: [[responseDict objectForKey:@"d"] dataUsingEncoding:NSUTF8StringEncoding]
-                                                   options: NSJSONReadingMutableContainers
-                                                     error: &error];
-        if ([[JSONDict valueForKey:@"Success"]intValue]==1) {
-            [self showAlertViewWithMessage:@"New password has been sent to your email id." withTitle:@"Success"];
-        }else {
-            [self showAlertViewWithMessage:[JSONDict valueForKey:@"ErrorMsg"] withTitle:@"Error"];
+            [HUD hide:YES];
+            [self.tabBarController.view setUserInteractionEnabled:YES];
+            NSError *error;
+            JSONDict = [NSJSONSerialization JSONObjectWithData: [[responseDict objectForKey:@"d"] dataUsingEncoding:NSUTF8StringEncoding]
+                                                       options: NSJSONReadingMutableContainers
+                                                         error: &error];
+            
+            
+            if ([[JSONDict valueForKey:@"Success"]intValue]==1){
+                
+                
+                if ([stringEmpRec isEqualToString:@"0"]) {
+                    [arrayResult addObjectsFromArray:[JSONDict valueForKey:@"JobsList"]];
+                    if ([arrayResult count]==0) {
+                        
+                        NSString *stringEmployer = [NSString stringWithFormat:@"Employer Jobs (%@)", [JSONDict valueForKey:@"EMPJOBCOUNT"]];
+                        NSString *stringRecruiter = [NSString stringWithFormat:@"Recruiter Jobs (%@)", [JSONDict valueForKey:@"RECJOBCOUNT"]];
+                        
+                        [segmentControl  setTitle:stringEmployer forSegmentAtIndex:0];
+                        [segmentControl setTitle:stringRecruiter forSegmentAtIndex:1];
+                        
+                        int totalJobCount = [[JSONDict valueForKey:@"EMPJOBCOUNT"] intValue]+ [[JSONDict valueForKey:@"RECJOBCOUNT"] intValue];
+                        
+                        self.title = [NSString stringWithFormat:@" %d Results ",totalJobCount];//@"Results";
+                    }else {
+                        
+                        int empoloyerJobCount = [[[arrayResult objectAtIndex:0]valueForKey:@"EMPJOBCOUNT"] intValue];
+                        int recruiterJobCount = [[[arrayResult objectAtIndex:0]valueForKey:@"RECJOBCOUNT"] intValue];
+                        
+                        if (empoloyerJobCount == 0 && recruiterJobCount == 0) {
+                            NSString *employerCountString = @"Employer Jobs";
+                            NSString *recruiterCountString = [NSString stringWithFormat:@"Recruiter Jobs (%d)",recruiterJobCount];
+                            
+                            [segmentControl  setTitle:employerCountString forSegmentAtIndex:0];
+                            [segmentRecruiter setTitle:recruiterCountString forSegmentAtIndex:1];
+                        }else {
+                            NSString *employerCountString = [NSString stringWithFormat:@"Employer Jobs (%d)",empoloyerJobCount];
+                            NSString *recruiterCountString = [NSString stringWithFormat:@"Recruiter Jobs (%d)",recruiterJobCount];
+                            
+                            [segmentControl  setTitle:employerCountString forSegmentAtIndex:0];
+                            [segmentControl setTitle:recruiterCountString forSegmentAtIndex:1];
+                        }
+                        
+                        long resultCount = empoloyerJobCount+recruiterJobCount;
+                        
+                        if (resultCount == 0) {
+                            self.title = @"Results";
+                        }else {
+                            self.title = [NSString stringWithFormat:@"%ld Results",resultCount];
+                        }
+                        
+                        [tableViewResult reloadData];
+                    }
+                }else {
+                    
+                    [arrayRecruiter addObjectsFromArray:[JSONDict valueForKey:@"JobsList"]];
+                    
+                    if ([arrayRecruiter count]==0) {
+                        
+                        NSString *stringEmployer = [NSString stringWithFormat:@"Employer Jobs (%@)", [JSONDict valueForKey:@"EMPJOBCOUNT"]];
+                        NSString *stringRecruiter = [NSString stringWithFormat:@"Recruiter Jobs (%@)", [JSONDict valueForKey:@"RECJOBCOUNT"]];
+                        
+                        [segmentRecruiter  setTitle:stringEmployer forSegmentAtIndex:0];
+                        [segmentRecruiter setTitle:stringRecruiter forSegmentAtIndex:1];
+                        int totalJobCount = [[JSONDict valueForKey:@"EMPJOBCOUNT"] intValue]+ [[JSONDict valueForKey:@"RECJOBCOUNT"] intValue];
+                        self.title = [NSString stringWithFormat:@" %d Results ",totalJobCount];//@"Results";
+                    }else {
+                        
+                        int empoloyerJobCount = [[[arrayRecruiter objectAtIndex:0]valueForKey:@"EMPJOBCOUNT"]intValue];
+                        int recruiterJobCount = [[[arrayRecruiter objectAtIndex:0]valueForKey:@"RECJOBCOUNT"]intValue];
+                        
+                        if (empoloyerJobCount == 0 && recruiterJobCount == 0) {
+                            NSString *employerCountString = @"Employer Jobs";
+                            NSString *recruiterCountString = [NSString stringWithFormat:@"Recruiter Jobs (%d)",recruiterJobCount];
+                            
+                            [segmentControl  setTitle:employerCountString forSegmentAtIndex:0];
+                            [segmentRecruiter setTitle:recruiterCountString forSegmentAtIndex:1];
+                        }else{
+                            NSString *employerCountString = [NSString stringWithFormat:@"Employer Jobs (%d)",empoloyerJobCount];
+                            NSString *recruiterCountString = [NSString stringWithFormat:@"Recruiter Jobs (%d)",recruiterJobCount];
+                            
+                            [segmentRecruiter  setTitle:employerCountString forSegmentAtIndex:0];
+                            [segmentRecruiter setTitle:recruiterCountString forSegmentAtIndex:1];
+                        }
+                        
+                        long resultCount = empoloyerJobCount+recruiterJobCount;
+                        if (resultCount == 0) {
+                            self.title = @"Results";
+                        }else {
+                            self.title = [NSString stringWithFormat:@"%ld Results",resultCount];
+                        }
+                        [tableViewRecruiter reloadData];
+                    }
+                }
+            }else{
+                
+            }
+            
         }
     }else{
         [HUD hide:YES];
-        [self.tabBarController.view setUserInteractionEnabled:YES];
-        NSError *error;
-        JSONDict = [NSJSONSerialization JSONObjectWithData: [[responseDict objectForKey:@"d"] dataUsingEncoding:NSUTF8StringEncoding]
-                                                   options: NSJSONReadingMutableContainers
-                                                     error: &error];
-        
-        
-        if ([[JSONDict valueForKey:@"Success"]intValue]==1){
-            
-            
-            if ([stringEmpRec isEqualToString:@"0"]) {
-                [arrayResult addObjectsFromArray:[JSONDict valueForKey:@"JobsList"]];
-                if ([arrayResult count]==0) {
-                    
-                    NSString *stringEmployer = [NSString stringWithFormat:@"Employer Jobs (%@)", [JSONDict valueForKey:@"EMPJOBCOUNT"]];
-                    NSString *stringRecruiter = [NSString stringWithFormat:@"Recruiter Jobs (%@)", [JSONDict valueForKey:@"RECJOBCOUNT"]];
-                    
-                    [segmentControl  setTitle:stringEmployer forSegmentAtIndex:0];
-                    [segmentControl setTitle:stringRecruiter forSegmentAtIndex:1];
-                    
-                    int totalJobCount = [[JSONDict valueForKey:@"EMPJOBCOUNT"] intValue]+ [[JSONDict valueForKey:@"RECJOBCOUNT"] intValue];
-                    
-                    self.title = [NSString stringWithFormat:@" %d Results ",totalJobCount];//@"Results";
-                }else {
-                    
-                    int empoloyerJobCount = [[[arrayResult objectAtIndex:0]valueForKey:@"EMPJOBCOUNT"] intValue];
-                    int recruiterJobCount = [[[arrayResult objectAtIndex:0]valueForKey:@"RECJOBCOUNT"] intValue];
-                    
-                    if (empoloyerJobCount == 0 && recruiterJobCount == 0) {
-                        NSString *employerCountString = @"Employer Jobs";
-                        NSString *recruiterCountString = [NSString stringWithFormat:@"Recruiter Jobs (%d)",recruiterJobCount];
-                        
-                        [segmentControl  setTitle:employerCountString forSegmentAtIndex:0];
-                        [segmentRecruiter setTitle:recruiterCountString forSegmentAtIndex:1];
-                    }else {
-                        NSString *employerCountString = [NSString stringWithFormat:@"Employer Jobs (%d)",empoloyerJobCount];
-                        NSString *recruiterCountString = [NSString stringWithFormat:@"Recruiter Jobs (%d)",recruiterJobCount];
-                        
-                        [segmentControl  setTitle:employerCountString forSegmentAtIndex:0];
-                        [segmentControl setTitle:recruiterCountString forSegmentAtIndex:1];
-                    }
-                    
-                    long resultCount = empoloyerJobCount+recruiterJobCount;
-                    
-                    if (resultCount == 0) {
-                        self.title = @"Results";
-                    }else {
-                        self.title = [NSString stringWithFormat:@"%ld Results",resultCount];
-                    }
-                    
-                    [tableViewResult reloadData];
-                }
-            }else {
-                
-                [arrayRecruiter addObjectsFromArray:[JSONDict valueForKey:@"JobsList"]];
-                
-                if ([arrayRecruiter count]==0) {
-                    
-                    NSString *stringEmployer = [NSString stringWithFormat:@"Employer Jobs (%@)", [JSONDict valueForKey:@"EMPJOBCOUNT"]];
-                    NSString *stringRecruiter = [NSString stringWithFormat:@"Recruiter Jobs (%@)", [JSONDict valueForKey:@"RECJOBCOUNT"]];
-                    
-                    [segmentRecruiter  setTitle:stringEmployer forSegmentAtIndex:0];
-                    [segmentRecruiter setTitle:stringRecruiter forSegmentAtIndex:1];
-                    int totalJobCount = [[JSONDict valueForKey:@"EMPJOBCOUNT"] intValue]+ [[JSONDict valueForKey:@"RECJOBCOUNT"] intValue];
-                    self.title = [NSString stringWithFormat:@" %d Results ",totalJobCount];//@"Results";
-                }else {
-                    
-                    int empoloyerJobCount = [[[arrayRecruiter objectAtIndex:0]valueForKey:@"EMPJOBCOUNT"]intValue];
-                    int recruiterJobCount = [[[arrayRecruiter objectAtIndex:0]valueForKey:@"RECJOBCOUNT"]intValue];
-                    
-                    if (empoloyerJobCount == 0 && recruiterJobCount == 0) {
-                        NSString *employerCountString = @"Employer Jobs";
-                        NSString *recruiterCountString = [NSString stringWithFormat:@"Recruiter Jobs (%d)",recruiterJobCount];
-                        
-                        [segmentControl  setTitle:employerCountString forSegmentAtIndex:0];
-                        [segmentRecruiter setTitle:recruiterCountString forSegmentAtIndex:1];
-                    }else{
-                        NSString *employerCountString = [NSString stringWithFormat:@"Employer Jobs (%d)",empoloyerJobCount];
-                        NSString *recruiterCountString = [NSString stringWithFormat:@"Recruiter Jobs (%d)",recruiterJobCount];
-                        
-                        [segmentRecruiter  setTitle:employerCountString forSegmentAtIndex:0];
-                        [segmentRecruiter setTitle:recruiterCountString forSegmentAtIndex:1];
-                    }
-                    
-                    long resultCount = empoloyerJobCount+recruiterJobCount;
-                    if (resultCount == 0) {
-                        self.title = @"Results";
-                    }else {
-                        self.title = [NSString stringWithFormat:@"%ld Results",resultCount];
-                    }
-                    [tableViewRecruiter reloadData];
-                }
-            }
-        }else{
-            
-        }
-        
+        UIAlertView *alertSuccessStatus = [[UIAlertView alloc]initWithTitle:@"Error" message:@"Some error occured. Please try again" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+        [alertSuccessStatus show];
     }
 }
 

@@ -201,7 +201,7 @@ NSString *stringCoverFileNameText   = @"";
         
         
         //if ([[filePathsArrayName objectAtIndex:0] rangeOfString:@".rtf"].location==NSNotFound ) {
-          if ([[filePathsArrayName objectAtIndex:0] rangeOfString:@".docx"].location!=NSNotFound ||[[filePathsArrayName objectAtIndex:0] rangeOfString:@".doc"].location!=NSNotFound ||[[filePathsArrayName objectAtIndex:0] rangeOfString:@".pdf"].location!=NSNotFound ||[[filePathsArrayName objectAtIndex:0] rangeOfString:@".txt"].location!=NSNotFound) {  
+        if ([[filePathsArrayName objectAtIndex:0] rangeOfString:@".docx"].location!=NSNotFound ||[[filePathsArrayName objectAtIndex:0] rangeOfString:@".doc"].location!=NSNotFound ||[[filePathsArrayName objectAtIndex:0] rangeOfString:@".pdf"].location!=NSNotFound ||[[filePathsArrayName objectAtIndex:0] rangeOfString:@".txt"].location!=NSNotFound) {
             
             if (fileSizeInDouble > 5000000) {
                 [self showAlertViewWithMessage:@"Permissible file size is upto 5MB" withTitle:@"Error"];
@@ -220,23 +220,23 @@ NSString *stringCoverFileNameText   = @"";
                 
                 NSString *stringUploadName =  [NSString stringWithFormat:@"%@_%@",[[NSUserDefaults standardUserDefaults]valueForKey:@"UserId"],[filePathsArrayName objectAtIndex:0]];
                 
-//                uploadFile.path = [NSString stringWithFormat:@"root\\dev.agcareers.farmsstaging.com\\www\\AgUploads\\%@",stringUploadName]; // Resume path
-//                uploadFile.hostname = @"192.168.24.45";
-//                uploadFile.username = @"Rohit.singh";
-//                uploadFile.password = @"P@ssw0rd2012";
+                //                uploadFile.path = [NSString stringWithFormat:@"root\\dev.agcareers.farmsstaging.com\\www\\AgUploads\\%@",stringUploadName]; // Resume path
+                //                uploadFile.hostname = @"192.168.24.45";
+                //                uploadFile.username = @"Rohit.singh";
+                //                uploadFile.password = @"P@ssw0rd2012";
                 
-//                uploadFile.path = [NSString stringWithFormat:@"root\\agcareers.farmsstaging.com\\www\\AgUploads\\%@",stringUploadName]; // Resume path
-//                
-//                uploadFile.hostname = @"216.220.44.186";
-//                uploadFile.username = @"Rohit.singh";
-//                uploadFile.password = @"P@ssw0rd2012";
+                //                uploadFile.path = [NSString stringWithFormat:@"root\\agcareers.farmsstaging.com\\www\\AgUploads\\%@",stringUploadName]; // Resume path
+                //
+                //                uploadFile.hostname = @"216.220.44.186";
+                //                uploadFile.username = @"Rohit.singh";
+                //                uploadFile.password = @"P@ssw0rd2012";
                 
                 uploadFile.path = [NSString stringWithFormat:@"aguploads\\%@",stringUploadName]; // Resume path
                 
                 uploadFile.hostname = [[NSUserDefaults standardUserDefaults] valueForKey:@"GlobalFTP"];//@"216.220.44.186";
                 uploadFile.username = @"mobileuploads";
                 uploadFile.password = @"yeuEYrLiBk3OPSMlmLQG!";
-
+                
                 //we start the request
                 [uploadFile start];
             }
@@ -457,86 +457,88 @@ NSString *stringCoverFileNameText   = @"";
 }
 
 -(void)receiveJsonResponse:(NSDictionary*)responseDict withSuccess:(BOOL)successBool {
-    
-    if (flagReferrenceMyProfile == TRUE) {
-        
-        [HUD hide:YES];
-        [self.tabBarController.view setUserInteractionEnabled:YES];
-        NSError *error;
-        JSONDict = [NSJSONSerialization JSONObjectWithData: [[responseDict objectForKey:@"d"] dataUsingEncoding:NSUTF8StringEncoding]
-                                                   options: NSJSONReadingMutableContainers
-                                                     error: &error];
-        arrayPickerData = [JSONDict valueForKey:@"Rows"];
-        pickerParentView.hidden = NO;
-        [myPicker reloadAllComponents];
-    }
-    if (flagSubmitMyProfile == TRUE) {
-        flagSubmitMyProfile = FALSE;
-        [HUD hide:YES];
-        [self.tabBarController.view setUserInteractionEnabled:YES];
-        NSError *error;
-        JSONDict = [NSJSONSerialization JSONObjectWithData: [[responseDict objectForKey:@"d"] dataUsingEncoding:NSUTF8StringEncoding]
-                                                   options: NSJSONReadingMutableContainers
-                                                     error: &error];
-        if ([[JSONDict valueForKey:@"Success"]intValue]==1) {
+    if (successBool == YES) {
+        if (flagReferrenceMyProfile == TRUE) {
             
-            uploadSucess = @"FALSE";
-            
-            alertSuccess = [[UIAlertView alloc]initWithTitle:@"Success" message:@"Your profile has been updated succesfully." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil,nil];
-            [alertSuccess show];
-        }else {
-            [self showAlertViewWithMessage:@"Some error occured. Please try again later." withTitle:@"Error"];
+            [HUD hide:YES];
+            [self.tabBarController.view setUserInteractionEnabled:YES];
+            NSError *error;
+            JSONDict = [NSJSONSerialization JSONObjectWithData: [[responseDict objectForKey:@"d"] dataUsingEncoding:NSUTF8StringEncoding]
+                                                       options: NSJSONReadingMutableContainers
+                                                         error: &error];
+            arrayPickerData = [JSONDict valueForKey:@"Rows"];
+            pickerParentView.hidden = NO;
+            [myPicker reloadAllComponents];
         }
-    }
-    if (flagGetResumeList == TRUE) {
-        flagGetResumeList = FALSE;
-        [HUD hide:YES];
-        [self.tabBarController.view setUserInteractionEnabled:YES];
-        NSError *error;
-        JSONDictResumeList = [NSJSONSerialization JSONObjectWithData: [[responseDict objectForKey:@"d"] dataUsingEncoding:NSUTF8StringEncoding]
-                                                             options: NSJSONReadingMutableContainers
-                                                               error: &error];
-        [textFieldReferrence setText:[JSONDictResumeList valueForKey:@"ReferredBy"]];
-        if ([[JSONDictResumeList objectForKey:@"ErrorMsg"]isEqualToString:@"Fail"]) {
-            //            [switchResumeFrist setHidden:YES];
-            //            [switchResumeSecond setHidden:YES];
-            [labelResumeFirst setText:@""];
-            [labelResumeSecond setText:@""];
-        }else{
-            if ([[JSONDictResumeList objectForKey:@"ResumesList"]count]== 0) {
-                [labelResumeName setText:@"Select Resume"];
-                buttonBrowse.enabled = YES;
-                buttonUpload.enabled = YES;
-                //                [switchResumeFrist setHidden:YES];
-                //                [switchResumeSecond setHidden:YES];
+        if (flagSubmitMyProfile == TRUE) {
+            flagSubmitMyProfile = FALSE;
+            [HUD hide:YES];
+            [self.tabBarController.view setUserInteractionEnabled:YES];
+            NSError *error;
+            JSONDict = [NSJSONSerialization JSONObjectWithData: [[responseDict objectForKey:@"d"] dataUsingEncoding:NSUTF8StringEncoding]
+                                                       options: NSJSONReadingMutableContainers
+                                                         error: &error];
+            if ([[JSONDict valueForKey:@"Success"]intValue]==1) {
+                
+                uploadSucess = @"FALSE";
+                
+                alertSuccess = [[UIAlertView alloc]initWithTitle:@"Success" message:@"Your profile has been updated succesfully." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil,nil];
+                [alertSuccess show];
+            }else {
+                [self showAlertViewWithMessage:@"Some error occured. Please try again later." withTitle:@"Error"];
+            }
+        }
+        if (flagGetResumeList == TRUE) {
+            flagGetResumeList = FALSE;
+            [HUD hide:YES];
+            [self.tabBarController.view setUserInteractionEnabled:YES];
+            NSError *error;
+            JSONDictResumeList = [NSJSONSerialization JSONObjectWithData: [[responseDict objectForKey:@"d"] dataUsingEncoding:NSUTF8StringEncoding]
+                                                                 options: NSJSONReadingMutableContainers
+                                                                   error: &error];
+            [textFieldReferrence setText:[JSONDictResumeList valueForKey:@"ReferredBy"]];
+            if ([[JSONDictResumeList objectForKey:@"ErrorMsg"]isEqualToString:@"Fail"]) {
+                //            [switchResumeFrist setHidden:YES];
+                //            [switchResumeSecond setHidden:YES];
                 [labelResumeFirst setText:@""];
                 [labelResumeSecond setText:@""];
-                [labelFirstNumber setText:@""];
-                [labelSecondNumber setText:@""];
+            }else{
+                if ([[JSONDictResumeList objectForKey:@"ResumesList"]count]== 0) {
+                    [labelResumeName setText:@"Select Resume"];
+                    buttonBrowse.enabled = YES;
+                    buttonUpload.enabled = YES;
+                    //                [switchResumeFrist setHidden:YES];
+                    //                [switchResumeSecond setHidden:YES];
+                    [labelResumeFirst setText:@""];
+                    [labelResumeSecond setText:@""];
+                    [labelFirstNumber setText:@""];
+                    [labelSecondNumber setText:@""];
+                }
+                if([[JSONDictResumeList objectForKey:@"ResumesList"]count]==1){
+                    [labelResumeFirst setText:[[[JSONDictResumeList objectForKey:@"ResumesList"]objectAtIndex:0]valueForKey:@"FileName"]];
+                    [labelResumeSecond setText:@""];
+                    //                [switchResumeSecond setHidden:YES];
+                    
+                    [labelSecondNumber setText:@""];
+                    
+                }
+                if([[JSONDictResumeList objectForKey:@"ResumesList"]count]==2){
+                    
+                    [labelResumeName setText:@"Recent resumes:"];
+                    
+                    [buttonBrowse setHidden:YES];
+                    [buttonUpload setHidden:YES];
+                    
+                    [labelResumeFirst setText:[[[JSONDictResumeList objectForKey:@"ResumesList"]objectAtIndex:0]valueForKey:@"FileName"]];
+                    [labelResumeSecond setText:[[[JSONDictResumeList objectForKey:@"ResumesList"]objectAtIndex:1]valueForKey:@"FileName"]];
+                }
             }
-            if([[JSONDictResumeList objectForKey:@"ResumesList"]count]==1){
-                [labelResumeFirst setText:[[[JSONDictResumeList objectForKey:@"ResumesList"]objectAtIndex:0]valueForKey:@"FileName"]];
-                [labelResumeSecond setText:@""];
-                //                [switchResumeSecond setHidden:YES];
-                
-                [labelSecondNumber setText:@""];
-                
-            }
-            if([[JSONDictResumeList objectForKey:@"ResumesList"]count]==2){
-                
-                [labelResumeName setText:@"Recent resumes:"];
-                
-                [buttonBrowse setHidden:YES];
-                [buttonUpload setHidden:YES];
-                
-                [labelResumeFirst setText:[[[JSONDictResumeList objectForKey:@"ResumesList"]objectAtIndex:0]valueForKey:@"FileName"]];
-                [labelResumeSecond setText:[[[JSONDictResumeList objectForKey:@"ResumesList"]objectAtIndex:1]valueForKey:@"FileName"]];
-            }
-            //            [switchResumeFrist setHidden:YES];
-            //            [switchResumeSecond setHidden:YES];
         }
-        
-        
+    }else{ //if (successBool == YES) {
+        [HUD hide:YES];
+        [HUD1 hide:YES];
+        UIAlertView *alertSuccessStatus = [[UIAlertView alloc]initWithTitle:@"Error" message:@"Some error occured. Please try again" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+        [alertSuccessStatus show];
     }
 }
 
